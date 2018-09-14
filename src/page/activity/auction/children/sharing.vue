@@ -70,6 +70,7 @@
                 showShare: false,
                 data: {
                     helpState: true,
+                    helpNum: 0
                 },
                 auctionId: this.$route.params.auctionId,
                 helpPic: '',
@@ -121,6 +122,7 @@
         margin-bottom: .35rem;
         .header {
             background: $fc;
+            min-height: 2.37rem;
         }
         .content {
             .statistics {
