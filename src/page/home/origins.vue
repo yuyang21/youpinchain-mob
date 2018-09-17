@@ -2,18 +2,22 @@
   <div class="origins">
     <div class="header">
       <div class="info">
-        <p>品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;种
+        <p>
+          <span>品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;种</span>
           <span>苏淮猪</span>
         </p>
-        <p>生&nbsp;长&nbsp;周&nbsp;期
+        <p class="margin-b-2">
+          <span>生&nbsp;长&nbsp;周&nbsp;期</span>
           <span>2018.1-2018.9</span>
         </p>
-        <p>住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址   
+        <p>
+          <span>住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址</span>   
           <span>南农大淮安研究院猪场</span>
         </p>
-        <p>区块链地址   
-          <span>xxxx</span>
-        </p>
+        <div>
+          <span>区块链地址</span>
+          <p>96e4d64ea35bd5ae1a97506b0ffba5efd7753bbcb84b0966f648738b3078243c</p>
+        </div>
       </div>
     </div>
   </div>
@@ -48,17 +52,29 @@
         background-color: $fc;
         border: solid .04rem #a7d646;
         margin: 0 auto;
-        padding: .54rem .12rem 0 .34rem;
+        padding: .5rem .12rem 0 .34rem;
         p {
-          font-weight: bold;
-          line-height: 1.49;
           margin-bottom: .15rem;
-          @include sc(.128rem,#a7d646);
-          span {
+          // overflow: hidden;
+          width: 100%;
+          span:nth-child(1) {
+            @include sc(.128rem,#a7d646);
+            font-weight: bold;
+            line-height: 1.49;
+            clear: both;
+            float: left;
+          }
+          span:nth-child(2) {
             @include sc(.118rem,$g3);
             line-height: 1.62;
             font-weight: bold;
+            margin-left: .225rem;
+            float: left;
+            width: 60%;
           }
+        }
+        .margin-b-2 {
+          margin-bottom: .22rem;
         }
       }
     }
