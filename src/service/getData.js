@@ -385,3 +385,8 @@ export const congigJsApi = (url) => fetch('/oa/jsapiSignature', {
  * 竞拍图片获取
  */
 export const goodsPic = (auctionId) => fetch('/auction/home/goodsPic/'+auctionId, {});
+
+/**
+ * 溯源
+ */
+export const source = () => fetch('/source', {});
