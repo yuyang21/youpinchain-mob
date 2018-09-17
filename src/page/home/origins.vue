@@ -48,7 +48,7 @@
         <p class="text_cn">黑猪界的贵族，不含抗生素</p>
       </div>
       <div class="video">
-        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox"></video>
+        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox" controls="controls"></video>
         <p class="desr">无抗养殖技术</p>
       </div>
       <div class="text">
@@ -102,7 +102,7 @@
         <p class="subject_e subtitle">TEST PROOF</p>
       </div>
       <div class="video_box">
-        <img src="../../images/origins/audio-bg.png" alt="">
+        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox"></video>
         <p>生长环境</p>
       </div>
       <ul>
@@ -220,6 +220,7 @@
           @include sc(.128rem,#a7d646);
           font-weight: bold;
           line-height: 1.49;
+          display: flex;
           p {
             @include sc(.118rem,$g3);
             line-height: 1.62;
@@ -436,8 +437,10 @@
       padding: 0 .2rem .22rem;
       .video_box{
         width: 100%;
-        img{
+        video{
           width: 100%;
+          height: 1.56rem;
+          margin-top: .08rem;
           display: block;
         }
         p{
