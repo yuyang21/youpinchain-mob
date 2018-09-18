@@ -1,6 +1,13 @@
 <template>
   <div class="origins">
     <div class="header">
+      <div class="card">
+        <img src="../../images/origins/ball-white.png" alt="">
+        <p class="title">区块苏淮猪身份证</p>
+        <p class="en">BLOCK CHAIN SUHUAI PIG IDENTITY CARD</p>
+        <hr>
+        <p class="support">技术支持:重庆数资区块链研究院 &nbsp;|&nbsp; 南京农业大学淮安研究院</p>
+      </div>
       <ul class="info">
         <li>
           品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;种
@@ -32,7 +39,7 @@
           <div class="left">
             <div class="step">{{item.stage}}</div>
             <p class="text">{{item.text}}</p>
-            <p class="time">{{item.time}}</p>
+            <p class="time">{{item.startTime}}-{{item.endTime}}</p>
           </div>
           <div class="right">
             <img :src="item.imgUrl" alt="">
@@ -47,8 +54,9 @@
         <p class="text_en">BRAND DESCRIPTION</p>
         <p class="text_cn">黑猪界的贵族，不含抗生素</p>
       </div>
-      <div class="video">
-        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox" @click="playVideo('tech')" id="tech" width="100%" height="1.56rem"></video>
+      <div class="video" @click="playVideo('tech')">
+        <video src="https://zhenpin.datbc.com/video/tech.mp4" id="tech" preload width="100%" height="1.56rem"></video>
+        <img :src="videoBox" alt="">
         <p class="desr">无抗养殖技术</p>
       </div>
       <div class="text">
@@ -68,8 +76,9 @@
         <p class="text_cn">饲料配方</p>
         <p class="text_en">FEED FORMULA</p>
       </div>
-      <div class="video">
-        <video src="https://zhenpin.datbc.com/video/feed.mp4" :poster="videoBox" @click="playVideo('feed')" id="feed" controls="controls" width="100%" height="1.56rem"></video>
+      <div class="video" @click="playVideo('feed')">
+        <video src="https://zhenpin.datbc.com/video/feed.mp4" id="feed" preload width="100%" height="1.56rem"></video>
+        <img :src="videoBox" alt="">
         <p class="desr bg-green ft-white">无抗饲料</p>
       </div>
       <div class="text">
@@ -101,8 +110,9 @@
         <p class="subject_c">生长环境</p>
         <p class="subject_e subtitle">GROWTH ENVIRONMENT</p>
       </div>
-      <div class="video_box">
-        <video src="https://zhenpin.datbc.com/video/env.mp4" :poster="videoBox"></video>
+      <div class="video_box" @click="playVideo('env')">
+        <video src="https://zhenpin.datbc.com/video/env.mp4" id="env" preload  width="100%" height="1.56rem"></video>
+        <img :src="videoBox" alt="">
         <p>生长环境</p>
       </div>
       <ul>
@@ -141,6 +151,7 @@
   </div>
 </template>
 <script>
+ import {Utils} from '../../service/Utils'
  import {
    source
  } from '../../service/getData';
@@ -164,48 +175,71 @@
           url: require('../../images/origins/growth_06.png'),
           text: '猪场养殖环境'
         }],
-        growth: [
+        growth: [],
+        videoBox: require('../../images/origins/audio-bg.png'),
+        blockChainHS: '',
+        isPlay: false
+      }
+    },
+    mounted () {
+      Utils.isIos() ? document.querySelectorAll('video')[0].setAttribute('controls', 'controls') : null
+      Utils.isIos() ? document.querySelectorAll('video')[1].setAttribute('controls', 'controls') : null
+      Utils.isIos() ? document.querySelectorAll('video')[2].setAttribute('controls', 'controls') : null
+      var that = this
+      source().then(function (res) {
+        that.blockChainHS = res.data.blockChainHS
+        var time = res.data  
+        that.growth = [
           {
             stage: '出生保育',
             text: '淮阴种猪场',
-            time: '1月15日-6月2日',
+            startTime: time.birth.split('.')[1] + '月' + time.birth.split('.')[2] + '日',
+            endTime: time.fatten.split('.')[1] + '月' + time.fatten.split('.')[2] + '日',
             imgUrl: require('../../images/origins/growth_source_01.png')
           },
           {
             stage: '育肥出栏',
             text: '南农大淮安研究院猪场',
-            time: '6月2日-9月16日',
+            startTime: time.fatten.split('.')[1] + '月' + time.fatten.split('.')[2] + '日',
+            endTime: time.outPigsty.split('.')[1] + '月' + time.outPigsty.split('.')[2] + '日',
             imgUrl: require('../../images/origins/growth_source_02.png')
           },
           {
             stage: '屠宰排酸',
             text: '江苏淮安苏食肉品有限公司',
-            time: '9月17日-9月18日',
+            startTime: time.acidExcretion.split('.')[1] + '月' + time.acidExcretion.split('.')[2] + '日',
+            endTime: time.slaughter.split('.')[1] + '月' + time.slaughter.split('.')[2] + '日',
             imgUrl: require('../../images/origins/growth_source_03.png')
           },
           {
             stage: '分割包装',
             text: '南农大淮安研究院',
-            time: '9月18日-9月19日',
+            startTime: time.slaughter.split('.')[1] + '月' + time.slaughter.split('.')[2] + '日',
+            endTime: time.pack.split('.')[1] + '月' + time.pack.split('.')[2] + '日',
             imgUrl: require('../../images/origins/growth_source_04.png')
           }
-        ],
-        videoBox: require('../../images/origins/audio-bg.png'),
-        blockChainHS: ''
-      }
-    },
-    mounted () {
-      var that = this
-      source().then(function (res) {
-        // this.growth = res.data
-        that.blockChainHS = res.data.blockChainHS
+        ]
       })
     },
     methods: {
       playVideo (id) {
+        var tech = document.getElementById('tech')
+        var feed = document.getElementById('feed')
+        var env = document.getElementById('env')
         var video = document.getElementById(id);
-        video.removeAttribute('poster');
+        video.nextElementSibling.style.display = 'none'
         video.play();
+        video.style.width = '100%'
+        if (id === 'tech') {
+          feed.nextElementSibling.style.display = 'block'
+          env.nextElementSibling.style.display = 'block'
+        } else if (id === 'feed') {
+          tech.nextElementSibling.style.display = 'block'
+          env.nextElementSibling.style.display = 'block'
+        } else {
+          tech.nextElementSibling.style.display = 'block'
+          feed.nextElementSibling.style.display = 'block'
+        }
       }
     }
   }
@@ -213,14 +247,59 @@
 <style scoped lang="scss">
   @import '../../style/mixin';
   div{ word-wrap: break-word; word-break: normal; }
+  video::-webkit-media-controls-panel {
+    background: rgba(0,0,0,.6);
+    height: .23rem;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+  }
   .origins {
     .header {
       @include wh(100%,6.095rem);
       background: #1d1b1c url('../../images/origins/header.png') no-repeat 0 0;
       background-size: 100%;
-      padding-top: 3.5rem;
+      padding: .5rem .22rem;
+      .card {
+        border-radius: .1rem;
+        background-color: rgba(0,0,0,.6);
+        @include wh(100%,2.06rem);
+        margin: 0 auto .85rem;
+        text-align: center;
+        padding: .14rem 0 .29rem;
+        .title {
+          @include sc(.3rem,$fc);
+          letter-spacing: .024rem;
+          margin-top: .32rem;
+        }
+        .en {
+          @include sc(.07rem,rgba(255, 255, 255, 0.78));
+          letter-spacing: .034rem;
+          text-shadow: 0px 1.5px 9px #504d4b;
+          transform: scale(.67) translate(-15%,-.08rem);
+          width: 120%;
+        }
+        hr {
+          @include wh(2.045rem,.01rem);
+          background: rgba(255,255,255,.15);
+          border: none;
+          margin-top: -.02rem;
+        }
+        .support {
+          @include sc(.11rem,$fc);
+          line-height: 1.73;
+          transform: scale(.92) translate(-5%,-.02rem);
+          width: 110%;
+        }
+        img {
+          width: .42rem;
+          border: 1px solid $fc;
+          border-radius: 50%;
+          padding: .02rem;
+        }
+      }
       .info {
-        @include wh(3.36rem,2.315rem);
+        @include wh(100%,2.315rem);
         border-radius: .1rem;
         background-color: $fc;
         border: solid .04rem #a7d646;
@@ -331,6 +410,13 @@
       }
     }
     .video {
+      position: relative;
+      img {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        // pointer-events: none;
+      }
       video {
         @include wh(100%,1.56rem);
         margin-top: .08rem;
@@ -453,7 +539,15 @@
       text-align: center;
       padding: 0 .2rem .22rem;
       .video_box{
+        position: relative;
         width: 100%;
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          // pointer-events: none;
+        }
         video{
           width: 100%;
           height: 1.56rem;
