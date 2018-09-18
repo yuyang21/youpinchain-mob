@@ -1,7 +1,18 @@
 import wx from 'weixin-js-sdk'
 import {Utils} from './Utils.js'
 import { congigJsApi } from './getData'
+import { domainUrl, appid, redirect } from '../config/env'
 let WechatShareUtils = {
+  redirectToAuth: function(toPath) {
+    let url = encodeURIComponent(domainUrl + toPath);
+    let redirect_uri = encodeURIComponent(redirect);
+    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
+        "appid=" + appid +
+        "&redirect_uri=" + redirect_uri +
+        "&response_type=code&scope=snsapi_userinfo" +
+        "&state=" + url +
+        "&connect_redirect=1#wechat_redirect"
+  },
   configJsApi: function (url) {
     var currentUrl = location.href.split('#')[0]
     if (Utils.isIos()) {
