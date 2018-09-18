@@ -16,7 +16,7 @@
         </li>
         <li>
           区块链地址
-          <p class="overflow-hi">96e4d64ea35bd5ae1a97506b0ffba5efd7753bbcb84b0966f648738b3078243c</p>
+          <p class="overflow-hi">{{blockChainHS}}</p>
         </li>
         <img src="../../images/origins/pig-avatar.png" alt="">
       </ul>
@@ -48,7 +48,7 @@
         <p class="text_cn">黑猪界的贵族，不含抗生素</p>
       </div>
       <div class="video">
-        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox"></video>
+        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox" @click="playVideo('tech')" id="tech" width="100%" height="1.56rem"></video>
         <p class="desr">无抗养殖技术</p>
       </div>
       <div class="text">
@@ -69,31 +69,31 @@
         <p class="text_en">TRACEABILITY OF GENEALOGY</p>
       </div>
       <div class="video">
-        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox"></video>
+        <video src="https://zhenpin.datbc.com/video/feed.mp4" :poster="videoBox" @click="playVideo('feed')" id="feed" controls="controls" width="100%" height="1.56rem"></video>
         <p class="desr bg-green ft-white">无抗饲料</p>
-        <div class="text">
-          <p>微生物发酵饲料</p>
-          <div class="desr_text">采用微生物发酵饲料原料加工而成的饲料为微生物发酵饲料。微生物发酵饲料益于动物的消化、促进动物健康。苏淮猪食用的饲料均为微生物发酵、低蛋白、高纤维、低矿物元素的无抗生素饲料。</div>
-        </div>
-        <ul>
-          <li>
-            <img src="../../images/origins/feed_01.png" alt="">
-            <span></span>
-            <p>超微沸石粉</p>
-          </li>
-          <li>
-            <img src="../../images/origins/feed_02.png" alt="">
-            <span></span>
-            <p>蛋白配方</p>
-          </li>
-          <li>
-            <img src="../../images/origins/feed_03.png" alt="">
-            <span></span>
-            <p>米糠配方</p>
-          </li>
-        </ul>
-        <p class="tip">严格选用配方原料，饲料企业定制加工</p>
       </div>
+      <div class="text">
+        <p>微生物发酵饲料</p>
+        <div class="desr_text">采用微生物发酵饲料原料加工而成的饲料为微生物发酵饲料。微生物发酵饲料益于动物的消化、促进动物健康。苏淮猪食用的饲料均为微生物发酵、低蛋白、高纤维、低矿物元素的无抗生素饲料。</div>
+      </div>
+      <ul>
+        <li>
+          <img src="../../images/origins/feed_01.png" alt="">
+          <span></span>
+          <p>超微沸石粉</p>
+        </li>
+        <li>
+          <img src="../../images/origins/feed_02.png" alt="">
+          <span></span>
+          <p>蛋白配方</p>
+        </li>
+        <li>
+          <img src="../../images/origins/feed_03.png" alt="">
+          <span></span>
+          <p>米糠配方</p>
+        </li>
+      </ul>
+      <p class="tip">严格选用配方原料，饲料企业定制加工</p>
     </div>
   </div>
 </template>
@@ -130,14 +130,24 @@
             imgUrl: require('../../images/origins/growth_source_04.png')
           }
         ],
-        videoBox: require('../../images/origins/audio-bg.png')
+        videoBox: require('../../images/origins/audio-bg.png'),
+        blockChainHS: ''
       }
     },
     mounted () {
+      var that = this
       source().then(function (res) {
         // this.growth = res.data
+        that.blockChainHS = res.data.blockChainHS
       })
     },
+    methods: {
+      playVideo (id) {
+        var video = document.getElementById(id);
+        video.removeAttribute('poster');
+        video.play();
+      }
+    }
   }
 </script>
 <style scoped lang="scss">
@@ -155,10 +165,10 @@
         background-color: $fc;
         border: solid .04rem #a7d646;
         margin: 0 auto;
-        padding: .5rem 0 0 .1rem;
+        padding: .45rem 0 0 .1rem;
         position: relative;
         li {
-          margin-bottom: .15rem;
+          margin-bottom: .12rem;
           @include sc(.128rem,#a7d646);
           font-weight: bold;
           line-height: 1.49;
@@ -169,6 +179,7 @@
             margin-left: .225rem;
             display: inline-block;
             width: 60%;
+            vertical-align: top;
           }
         }
         .margin-b-2 {
@@ -176,7 +187,7 @@
         }
         img {
           position: absolute;
-          top: .14rem;
+          top: .1rem;
           right: .14rem;
           @include wh(1.16rem,1.07rem);
         }
@@ -290,12 +301,16 @@
           color: rgba(255, 255, 255, 0.6);
         }
       }
+      .video {
+        margin-top: .15rem;
+      }
       .text {
         margin-top: .25rem;
         p {
           @include sc(.15rem, $fc);
           line-height: 1.39;
-          margin-bottom: .025rem;
+          margin-bottom: .02rem;
+          font-weight: bold;
         }
         .ft-18 {
           font-size: .18rem;
@@ -315,18 +330,19 @@
           color: #7eaf17;
         }
       }
+      .text {
+        margin-bottom: .4rem;
+        p {
+          @include sc(.15rem,$g3);
+          font-weight: bold;
+        }
+        .desr_text {
+          @include sc(.13rem,$g6);
+          line-height: 1.8;
+        }
+      }
       .video {
         margin-top: .25rem;
-        .text {
-          p {
-            @include sc(.15rem,$g3);
-            font-weight: bold;
-          }
-          .desr_text {
-            @include sc(.13rem,$g6);
-            line-height: 1.8;
-          }
-        }
       }
       ul {
         width: 100%;
@@ -334,7 +350,7 @@
         overflow: hidden;
         li {
           float: left;
-          width: 27.33%;
+          width: 27%;
           text-align: center;
           margin: 0 auto;
           img {
@@ -346,9 +362,9 @@
             margin-bottom: .025rem;
           }
           span {
-            background: url('../../images/origins/formula_1.png') no-repeat 0.03rem .01rem;
+            background: url('../../images/origins/formula_1.png') no-repeat 0.035rem .01rem;
             background-size: 100%;
-            @include wh(100%,.12rem);
+            @include wh(100%,.14rem);
             border-radius: .35rem;
             display: block;
             margin: 0 auto;
@@ -356,12 +372,12 @@
           p {
             line-height: 1.5;
             @include sc(.12rem,$g6);
-            margin-top: .06rem;
+            margin-top: .045rem;
             padding-left: .1rem;
           }
         }
         li:nth-child(2) {
-          margin: 0 .26rem;
+          margin: 0 8.2%;
         }
       }
       .tip {
