@@ -193,7 +193,7 @@
             url: require('../../images/origins/growth_05.png'),
             text: '24小时监控系统'
           },{
-            url: require('../../images/origins/growth_01.png'),
+            url: require('../../images/store/growth_01.png'),
             text: '猪场养殖环境'
           }
         ],
