@@ -15,7 +15,7 @@
         </li>
         <li class="margin-b-2">
           生&nbsp;长&nbsp;周&nbsp;期
-          <p>2018.1-2018.9</p>
+          <p>{{birth}}-{{pack}}</p>
         </li>
         <li class="margin-b-2">
           住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 
@@ -55,7 +55,7 @@
         <p class="text_cn">黑猪界的贵族，不含抗生素</p>
       </div>
       <div class="video" @click="playVideo('tech')">
-        <video src="https://zhenpin.datbc.com/video/tech.mp4" id="tech" preload width="100%" height="1.56rem"></video>
+        <video src="https://zhenpin.datbc.com/video/tech.mp4" id="tech" width="100%" height="1.56rem"></video>
         <img :src="videoBox" alt="">
         <p class="desr">无抗养殖技术</p>
       </div>
@@ -77,7 +77,7 @@
         <p class="text_en">FEED FORMULA</p>
       </div>
       <div class="video" @click="playVideo('feed')">
-        <video src="https://zhenpin.datbc.com/video/feed.mp4" id="feed" preload width="100%" height="1.56rem"></video>
+        <video src="https://zhenpin.datbc.com/video/feed.mp4" id="feed" width="100%" height="1.56rem"></video>
         <img :src="videoBox" alt="">
         <p class="desr bg-green ft-white">无抗饲料</p>
       </div>
@@ -111,7 +111,7 @@
         <p class="subject_e subtitle">GROWTH ENVIRONMENT</p>
       </div>
       <div class="video_box" @click="playVideo('env')">
-        <video src="https://zhenpin.datbc.com/video/env.mp4" id="env" preload  width="100%" height="1.56rem"></video>
+        <video src="https://zhenpin.datbc.com/video/env.mp4" id="env"  width="100%" height="1.56rem"></video>
         <img :src="videoBox" alt="">
         <p>生长环境</p>
       </div>
@@ -158,27 +158,30 @@
   export default {
     data () {
       return {
-        growth_list: [{
-          url: require('../../images/origins/growth_02.png'),
-          text: '生长性能测定站'
-        },
-        {
-          url: require('../../images/origins/growth_03.png'),
-          text: '超声波雾化消毒机'
-        },{
-          url: require('../../images/origins/growth_04.png'),
-          text: '空气源热泵地暖'
-        },{
-          url: require('../../images/origins/growth_05.png'),
-          text: '24小时监控系统'
-        },{
-          url: require('../../images/origins/growth_06.png'),
-          text: '猪场养殖环境'
-        }],
+        growth_list: [
+          {
+            url: require('../../images/origins/growth_02.png'),
+            text: '生长性能测定站'
+          },
+          {
+            url: require('../../images/origins/growth_03.png'),
+            text: '超声波雾化消毒机'
+          },{
+            url: require('../../images/origins/growth_04.png'),
+            text: '空气源热泵地暖'
+          },{
+            url: require('../../images/origins/growth_05.png'),
+            text: '24小时监控系统'
+          },{
+            url: require('../../images/origins/growth_06.png'),
+            text: '猪场养殖环境'
+          }
+        ],
         growth: [],
         videoBox: require('../../images/origins/audio-bg.png'),
         blockChainHS: '',
-        isPlay: false
+        birth: '',
+        pack: ''
       }
     },
     mounted () {
@@ -188,34 +191,36 @@
       var that = this
       source().then(function (res) {
         that.blockChainHS = res.data.blockChainHS
-        var time = res.data  
+        var time = res.data
+        that.birth = time.birth ? (time.birth.split('.')[0] + '.' + time.birth.split('.')[1]) : '2018.1'
+        that.pack = time.pack ? time.pack.split('.')[0] + '.' + time.pack.split('.')[1] : '2018.9'
         that.growth = [
           {
             stage: '出生保育',
             text: '淮阴种猪场',
-            startTime: time.birth.split('.')[1] + '月' + time.birth.split('.')[2] + '日',
-            endTime: time.fatten.split('.')[1] + '月' + time.fatten.split('.')[2] + '日',
+            startTime: time.birth ? (time.birth.split('.')[1] + '月' + time.birth.split('.')[2] + '日') : '1月15日',
+            endTime: time.fatten ? (time.fatten.split('.')[1] + '月' + time.fatten.split('.')[2] + '日') : '6月2日',
             imgUrl: require('../../images/origins/growth_source_01.png')
           },
           {
             stage: '育肥出栏',
             text: '南农大淮安研究院猪场',
-            startTime: time.fatten.split('.')[1] + '月' + time.fatten.split('.')[2] + '日',
-            endTime: time.outPigsty.split('.')[1] + '月' + time.outPigsty.split('.')[2] + '日',
+            startTime: time.fatten ? (time.fatten.split('.')[1] + '月' + time.fatten.split('.')[2] + '日') : '6月2日',
+            endTime: time.outPigsty ? (time.outPigsty.split('.')[1] + '月' + time.outPigsty.split('.')[2] + '日') : '9月16日',
             imgUrl: require('../../images/origins/growth_source_02.png')
           },
           {
             stage: '屠宰排酸',
             text: '江苏淮安苏食肉品有限公司',
-            startTime: time.acidExcretion.split('.')[1] + '月' + time.acidExcretion.split('.')[2] + '日',
-            endTime: time.slaughter.split('.')[1] + '月' + time.slaughter.split('.')[2] + '日',
+            startTime: time.acidExcretion ? (time.acidExcretion.split('.')[1] + '月' + time.acidExcretion.split('.')[2] + '日') : '9月17日',
+            endTime: time.slaughter ? (time.slaughter.split('.')[1] + '月' + time.slaughter.split('.')[2] + '日') : '9月18日',
             imgUrl: require('../../images/origins/growth_source_03.png')
           },
           {
             stage: '分割包装',
             text: '南农大淮安研究院',
-            startTime: time.slaughter.split('.')[1] + '月' + time.slaughter.split('.')[2] + '日',
-            endTime: time.pack.split('.')[1] + '月' + time.pack.split('.')[2] + '日',
+            startTime: time.slaughter ? (time.slaughter.split('.')[1] + '月' + time.slaughter.split('.')[2] + '日') : '9月18日',
+            endTime: time.pack ? (time.pack.split('.')[1] + '月' + time.pack.split('.')[2] + '日') : '9月19日',
             imgUrl: require('../../images/origins/growth_source_04.png')
           }
         ]
@@ -270,26 +275,24 @@
         .title {
           @include sc(.3rem,$fc);
           letter-spacing: .024rem;
-          margin-top: .32rem;
+          margin-top: .3rem;
         }
         .en {
           @include sc(.07rem,rgba(255, 255, 255, 0.78));
-          letter-spacing: .034rem;
+          letter-spacing: 3.4px;
           text-shadow: 0px 1.5px 9px #504d4b;
-          transform: scale(.67) translate(-15%,-.08rem);
-          width: 120%;
+          transform: scale(.95) translateX(-4.2%);
+          width: 110%;
         }
         hr {
           @include wh(2.045rem,.01rem);
           background: rgba(255,255,255,.15);
           border: none;
-          margin-top: -.02rem;
+          margin-top: .07rem;
         }
         .support {
           @include sc(.11rem,$fc);
           line-height: 1.73;
-          transform: scale(.92) translate(-5%,-.02rem);
-          width: 110%;
         }
         img {
           width: .42rem;
