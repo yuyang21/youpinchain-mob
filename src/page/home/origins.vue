@@ -133,8 +133,8 @@
         <p class="subject_e subtitle">TEST PROOF</p>
       </div>
       <div class="imgBox">
-        <img src="../../images/origins/testProof_1.jpg" alt="">
-        <img src="../../images/origins/testProof_2.jpg" alt="">
+        <img src="../../images/store/test_report.png" alt="">
+        <img src="../../images/store/feeding_09.png" alt="">
       </div>
       <p class="tip">综合无抗养殖技术，确保舌尖上的美味安全</p>
     </div>
