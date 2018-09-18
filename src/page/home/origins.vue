@@ -135,10 +135,21 @@
       <div class="imgBox">
         <img src="../../images/origins/testProof_1.jpg" alt="">
         <img src="../../images/origins/testProof_2.jpg" alt="">
-        <img src="../../images/store/certificates_01.png" alt="">
-        <img src="../../images/store/certificates_02.png" alt="">
       </div>
       <p class="tip">综合无抗养殖技术，确保舌尖上的美味安全</p>
+    </div>
+    <div class="test-proof">
+      <div class="abstract">
+        <img src="../../images/origins/ball-white.png" alt="" class="padding-top-20">
+        <p class="subject_c">检疫合格证明</p>
+        <p class="subject_e subtitle">TEST PROOF</p>
+      </div>
+      <div class="imgBox" style="margin-bottom: 0;">
+        <img src="../../images/store/certificates_01.png" alt="">
+        <p class="tip">动物检疫合格证明，确保舌尖上的美味安全</p>
+        <img src="../../images/store/certificates_02.png" alt="">
+        <p class="tip">肉品品质检验合格证，确保舌尖上的美味安全</p>
+      </div>
     </div>
     <div class="pork-segmentation">
       <div style="position: relative; z-index: 1;" class="abstract">
