@@ -223,9 +223,11 @@
     mounted() {
       this.getAuctionInfo()
       var that = this
-      wx.ready(function () {
-          var shareLink = process.env.DOMAIN + '/auction'
-          WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, that.auctionInfo.goodsPic.homeAndtakePrize)
+      auction().then(function (res) {
+        wx.ready(function () {
+            var shareLink = process.env.DOMAIN + '/auction'
+            WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, res.data.goodsPic.homeAndtakePrize)
+        })
       })
     },
     created() {
