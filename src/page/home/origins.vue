@@ -44,7 +44,7 @@
       <div class="title">
         <img src="../../images/origins/ball-grey.png" alt="">
         <p class="text_cn">品牌描述</p>
-        <p class="text_en">TRACEABILITY OF GENEALOGY</p>
+        <p class="text_en">BRAND DESCRIPTION</p>
         <p class="text_cn">黑猪界的贵族，不含抗生素</p>
       </div>
       <div class="video">
@@ -66,7 +66,7 @@
       <div class="title">
         <img src="../../images/origins/ball-green.png" alt="">
         <p class="text_cn">饲料配方</p>
-        <p class="text_en">TRACEABILITY OF GENEALOGY</p>
+        <p class="text_en">FEED FORMULA</p>
       </div>
       <div class="video">
         <video src="https://zhenpin.datbc.com/video/feed.mp4" :poster="videoBox" @click="playVideo('feed')" id="feed" controls="controls" width="100%" height="1.56rem"></video>
@@ -98,11 +98,11 @@
     <div class="growth-environment">
       <div class="abstract">
         <img src="../../images/origins/ball-grey.png" alt="" class="padding-top-20">
-        <p class="subject_c">猪肉分割</p>
-        <p class="subject_e subtitle">TEST PROOF</p>
+        <p class="subject_c">生长环境</p>
+        <p class="subject_e subtitle">GROWTH ENVIRONMENT</p>
       </div>
       <div class="video_box">
-        <video src="https://zhenpin.datbc.com/video/tech.mp4" :poster="videoBox"></video>
+        <video src="https://zhenpin.datbc.com/video/env.mp4" :poster="videoBox"></video>
         <p>生长环境</p>
       </div>
       <ul>
@@ -119,12 +119,14 @@
     <div class="test-proof">
       <div class="abstract">
         <img src="../../images/origins/ball-white.png" alt="" class="padding-top-20">
-        <p class="subject_c">猪肉分割</p>
+        <p class="subject_c">无抗检验证明</p>
         <p class="subject_e subtitle">TEST PROOF</p>
       </div>
       <div class="imgBox">
         <img src="../../images/origins/testProof_1.jpg" alt="">
         <img src="../../images/origins/testProof_2.jpg" alt="">
+        <img src="../../images/store/certificates_01.png" alt="">
+        <img src="../../images/store/certificates_02.png" alt="">
       </div>
       <p class="tip">综合无抗养殖技术，确保舌尖上的美味安全</p>
     </div>
@@ -267,12 +269,11 @@
       }
       .text_en {
         line-height: 1.63;
-        letter-spacing: 1px;
         font-size: .12rem;
       }
     }
     .growth {
-      padding: .32rem .3rem 0.15rem .18rem;
+      padding: .32rem .3rem 0.1rem .18rem;
       .title {
         .text_cn, .text_en {
           color: #7eaf17;
@@ -351,7 +352,7 @@
     }
     .genealogy, .feed {
       background-color: #272626;
-      padding: .2rem .2rem 0.02rem;
+      padding: .2rem .2rem 0.05rem;
       .title {
         .text_cn {
           color: $fc;
@@ -444,7 +445,7 @@
         @include sc(.13rem,$g3);
         font-weight: bold;
         text-align: center;
-        margin: .2rem auto .3rem;
+        margin: .2rem auto .23rem;
       }
     }
     .growth-environment{
