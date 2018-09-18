@@ -174,6 +174,8 @@
   import { ModalHelper } from '../../../../service/Utils'
   import { Carousel, Slide } from 'vue-carousel';
   import { auction, offer } from '../../../../service/getData'
+  import { WechatShareUtils } from '../../../../service/WechatShareUtils'
+  import wx from 'weixin-js-sdk'
   export default {
     data () {
       return {
@@ -220,6 +222,11 @@
     },
     mounted() {
       this.getAuctionInfo()
+      var that = this
+      wx.ready(function () {
+          var shareLink = process.env.DOMAIN + '/auction'
+          WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, that.auctionInfo.goodsPic.homeAndtakePrize)
+      })
     },
     created() {
     },
