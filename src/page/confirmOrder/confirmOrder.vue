@@ -89,6 +89,12 @@
                     <p><span class="RMB">￥</span>{{totalPrice + fare}}</p>
                 </div>
             </div>
+            <div class="shop_info">
+                <div class="input-new">
+                    <span>留言</span>
+                    <input type="text" maxlength="50" style="width: 100%;" placeholder="建议留言前先与客服进行确认,50字以内" v-model="message">
+                </div>
+            </div>
         </div>
     </nav>
     <ul class="settlement">
@@ -132,7 +138,8 @@ export default {
 				tipText: '', // 送餐地址
             	address: '', // 地址
             },
-            orderId: 0
+            orderId: 0,
+            message: ''
         }
     },
     props: ['showErrMsg'],
@@ -189,7 +196,7 @@ export default {
             });
             let addressId = this.choosedAddress.id;
             let that = this;
-            submitOrder(cartIds, addressId).then(res => {
+            submitOrder(cartIds, addressId, message).then(res => {
                 if(res.errno !== 0) {
                     return;
                 }

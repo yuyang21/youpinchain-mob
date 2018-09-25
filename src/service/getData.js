@@ -172,9 +172,10 @@ export const login_oa = () => fetch('/oa/login_oa');
  * 提交订单
  */
 
-export const submitOrder = (cartIds,addressId) => fetch('/orders', {
+export const submitOrder = (cartIds,addressId,message) => fetch('/orders', {
 	cartIds: cartIds,
-	addressId: addressId
+	addressId: addressId,
+    message: message
 }, 'POST');
 
 
