@@ -196,7 +196,7 @@ export default {
             });
             let addressId = this.choosedAddress.id;
             let that = this;
-            submitOrder(cartIds, addressId, message).then(res => {
+            submitOrder(cartIds, addressId, that.message).then(res => {
                 if(res.errno !== 0) {
                     return;
                 }
