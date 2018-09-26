@@ -1,7 +1,7 @@
 <template>
     <div class="sharingLanding">
         <img :src="goodsPic.shareBig" width="100%">
-        <p class="text">关注公众号“链上臻品”，点击底部菜单【限时竞拍】即可参与竞拍活动</p>
+        <!--<p class="text">关注公众号“链上臻品”，点击底部菜单【限时竞拍】即可参与竞拍活动</p>-->
         <div class="btn" @click="partIn">我也要参与</div>
     </div>
 </template>

@@ -70,6 +70,7 @@
                 showShare: false,
                 data: {
                     helpState: true,
+                    helpNum: 0
                 },
                 auctionId: this.$route.params.auctionId,
                 helpPic: '',
@@ -99,7 +100,7 @@
                         that.shareSmallPic = response.data.goodsPic.shareSmall
                         wx.ready(function () {
                             var shareLink = process.env.DOMAIN + '/auction/sharingLanding/' + that.auctionId + '/' + that.data.vipId
-                            WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, shareSmallPic)
+                            WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, that.shareSmallPic)
                         })
                     } else {
                         that.data.helpState = false
@@ -121,6 +122,7 @@
         margin-bottom: .35rem;
         .header {
             background: $fc;
+            min-height: 2.37rem;
         }
         .content {
             .statistics {
