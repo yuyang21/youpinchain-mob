@@ -32,7 +32,7 @@
       <div class="title">
         <img src="../../images/origins/ball-green.png" alt="">
         <p class="text_cn">成长溯源</p>
-        <p class="text_en">THT SOURCE OF GROWTH</p>
+        <p class="text_en">THE SOURCE OF GROWTH</p>
       </div>
       <ul>
         <li v-for="(item,index) in growth" :key="index">
