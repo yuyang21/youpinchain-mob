@@ -263,6 +263,13 @@ export const expresses = (expCode,expNo) => fetch('/expresses/'+ expCode + '/' +
 export const brandsPics = (dataId) => fetch('/brands/'+dataId+"/pics", {});
 
 /**
+ * 查询品牌资料列表
+ * @param brandId
+ * @returns {Promise<*>}
+ */
+export const brands = (brandId) => fetch('/brands/'+brandId, {});
+
+/**
  * 再来一单
  * @param orderId
  * @returns {Promise<*>}

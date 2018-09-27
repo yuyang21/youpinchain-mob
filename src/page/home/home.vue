@@ -5,7 +5,7 @@
             <loading v-show="showLoading"></loading>
         </transition>
         <div v-show="!showLoading">
-            <router-link tag="div" class="header_image" :to="{path:'/introduce'}">
+            <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ brand.id}">
                 <img :src="brand.pictureUrl" alt="" width="100%" class="show">
             </router-link>
             <!-- <ul class="product_nav">

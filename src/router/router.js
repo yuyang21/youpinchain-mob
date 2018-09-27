@@ -69,12 +69,12 @@ export default [{
         },
         //生产环境、饲养情况、健康指标、商品介绍
         {
-            path: '/introduce',
+            path: '/introduce/:brandId',
             component: introduce,
             name: 'introduce',
             children: [
                 {
-                    path: '',
+                    path: 'introduceHome',
                     name: 'introduceHome',
                     component: introduceHome,
                     meta: {title: '黑猪界的贵族，舌尖上的美味！'}
