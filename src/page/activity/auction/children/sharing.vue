@@ -1,7 +1,7 @@
 <template>
     <div class="sharing">
         <div class="header">
-            <img src="https://heizhu360.datbc.com/pic/storage/storage/fetch?key=6qmpq4g6eyuk1lxhngw7" alt="" width="100%">
+            <img :src="helpPic" alt="" width="100%">
         </div>
         <div class="content">
             <ul class="statistics">
@@ -70,8 +70,11 @@
                 showShare: false,
                 data: {
                     helpState: true,
+                    helpNum: 0
                 },
-                auctionId: this.$route.params.auctionId
+                auctionId: this.$route.params.auctionId,
+                helpPic: '',
+                shareSmallPic: ''
             }
         },  
         watch: {
@@ -93,9 +96,11 @@
                 helpDetail(auctionId).then(function (response) {
                     if (response && response.errno === 0) {
                         that.data = response.data
+                        that.helpPic = response.data.goodsPic.help
+                        that.shareSmallPic = response.data.goodsPic.shareSmall
                         wx.ready(function () {
                             var shareLink = process.env.DOMAIN + '/auction/sharingLanding/' + that.auctionId + '/' + that.data.vipId
-                            WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, 'https://heizhu360.datbc.com/pic/storage/storage/fetch?key=ekhy5kmwgvi27o7w1oiu')
+                            WechatShareUtils.onMenuShareAppMessage('我在链上臻品抢到免费大礼，快来一起参与！', '上链上臻品参与赏金计划赢取“金条”，免费竞拍大奖！', shareLink, that.shareSmallPic)
                         })
                     } else {
                         that.data.helpState = false
@@ -117,6 +122,7 @@
         margin-bottom: .35rem;
         .header {
             background: $fc;
+            min-height: 2.37rem;
         }
         .content {
             .statistics {

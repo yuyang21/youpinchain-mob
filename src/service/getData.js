@@ -172,9 +172,10 @@ export const login_oa = () => fetch('/oa/login_oa');
  * 提交订单
  */
 
-export const submitOrder = (cartIds,addressId) => fetch('/orders', {
+export const submitOrder = (cartIds,addressId,message) => fetch('/orders', {
 	cartIds: cartIds,
-	addressId: addressId
+	addressId: addressId,
+    message: message
 }, 'POST');
 
 
@@ -260,6 +261,13 @@ export const expresses = (expCode,expNo) => fetch('/expresses/'+ expCode + '/' +
  * @returns {Promise<*>}
  */
 export const brandsPics = (dataId) => fetch('/brands/'+dataId+"/pics", {});
+
+/**
+ * 查询品牌资料列表
+ * @param brandId
+ * @returns {Promise<*>}
+ */
+export const brands = (brandId) => fetch('/brands/'+brandId, {});
 
 /**
  * 再来一单
@@ -380,3 +388,13 @@ export const congigJsApi = (url) => fetch('/oa/jsapiSignature', {
  	wxNum: wxNum,
  	phoneNum: phoneNum
  } , 'PUT');
+
+/**
+ * 竞拍图片获取
+ */
+export const goodsPic = (auctionId) => fetch('/auction/home/goodsPic/'+auctionId, {});
+
+/**
+ * 溯源
+ */
+export const source = () => fetch('/source', {});
