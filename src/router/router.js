@@ -9,6 +9,12 @@ const feeding = r => require.ensure([], () => r(require('../page/home/introduce/
 const goods = r => require.ensure([], () => r(require('../page/goods/goods')), 'goods')
 const credentials = r => require.ensure([], () => r(require('../page/goods/credentials')), 'credentials')
 const cart = r => require.ensure([], () => r(require('../page/cart/cart')), 'cart')
+const group = r => require.ensure([], () => r(require('../page/group/group')), 'group')
+const groupDet = r => require.ensure([], () => r(require('../page/group/groupDet')), 'groupDet')
+const groupMy = r => require.ensure([], () => r(require('../page/group/groupMy')), 'groupMy')
+const confirmGroup = r => require.ensure([], () => r(require('../page/group/confirmGroup')), 'confirmGroup')
+const current = r => require.ensure([], () => r(require('../page/group/children/current')), 'current')
+const preview = r => require.ensure([], () => r(require('../page/group/children/preview')), 'preview')
 const profile = r => require.ensure([], () => r(require('../page/profile/profile')), 'profile')
 const order = r => require.ensure([], () => r(require('../page/order/order')), 'order')
 const allOrder = r => require.ensure([], () => r(require('../page/order/children/all')), 'order')
@@ -98,6 +104,16 @@ export default [{
             path: '/goods/:goodsid',
             component: goods
         },
+        //拼团详情
+        {
+            path: '/groupDet/:suitId',
+            component: groupDet
+        },
+        //我的拼团
+        {
+            path: '/groupMy/:groupMyId',
+            component: groupMy
+        },
         // 证件资质
         {
             path: '/credentials',
@@ -109,10 +125,29 @@ export default [{
             path: '/cart',
             component: cart
         },
+        //秒拼
+        {
+            path: '/group',
+            component: group,
+            children: [{
+                path: '',
+                component: current, //拼团进行中
+                name: 'current'
+            },{
+                path: 'preview',
+                component: preview, //拼团预告
+                name: 'preview'
+            }]
+        },
         //确认订单页
         {
             path: '/confirmOrder',
             component: confirmOrder
+        },
+        //拼团确认
+        {
+            path: '/confirmGroup',
+            component: confirmGroup
         },
         //个人信息页
         {

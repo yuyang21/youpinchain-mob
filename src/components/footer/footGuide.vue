@@ -4,6 +4,10 @@
         	<a></a>
           <span>首页</span>
         </section>
+        <section @click = "gotoAddress({path: '/group'})" class="guide_item" :class="[$route.path.indexOf('group') !== -1 ? 'icon2_style' : 'icon2_style2']">
+            <a></a>
+            <span>秒拼</span>
+        </section>
         <section @click = "gotoAddress({path: '/cart'})" class="guide_item" :class="[$route.path.indexOf('cart') !== -1 ? 'icon2_style' : 'icon2_style2']">
         	<a class="position-re"><b class="red-points" v-if="cartNum > 0">{{cartNum}}</b></a>
           <span>购物车</span>

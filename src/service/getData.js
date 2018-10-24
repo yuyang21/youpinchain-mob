@@ -178,6 +178,22 @@ export const submitOrder = (cartIds,addressId,message) => fetch('/orders', {
     message: message
 }, 'POST');
 
+/**
+ * 提交拼团订单
+ * @param suitId 拼团id
+ * @param addressId 地址id
+ * @param message 备注
+ * @param type 类型：0：拼团直接购买，1：我要开团
+ * @param groupMyId 我的拼团id,如果是我要开团传null
+ * @returns {Promise<*>}
+ */
+export const submitGroup = (suitId,addressId,message,type,groupMyId) => fetch('/group/submit', {
+    suitId: suitId,
+    addressId: addressId,
+    message: message,
+	type: type,
+    groupMyId: groupMyId
+}, 'POST');
 
 /**
  * 确认收货
@@ -398,3 +414,29 @@ export const goodsPic = (auctionId) => fetch('/auction/home/goodsPic/'+auctionId
  * 溯源
  */
 export const source = () => fetch('/source', {});
+
+/**
+ * 拼团
+ * @param page
+ * @param size
+ * @returns {Promise<*>}
+ */
+export const groupList = (page, size) => fetch('/group', {
+    page: page,
+    size: size
+});
+
+/**
+ * 根据拼团id查询商品详情
+ * @param {拼团id} suitId
+ */
+export const groupDet = (suitId) => fetch('/group/' + suitId, {
+});
+
+/**
+ * 我的拼团详情
+ * @param groupMyId
+ * @returns {Promise<*>}
+ */
+export const groupMy = (groupMyId) => fetch('/group/my/' + groupMyId, {
+});
