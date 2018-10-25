@@ -133,7 +133,7 @@
                     that.rules = res.data.rules;
                     that.groupMy = res.data.groupMy;
                     wx.ready(function () {
-                        var shareLink = process.env.DOMAIN + '/group/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId
+                        var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId
                         WechatShareUtils.onMenuShareAppMessage('一起来拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                     })
                 });

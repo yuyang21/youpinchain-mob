@@ -79,7 +79,7 @@
             </ul>
         </div>
         <div class="add_cart_container">
-            <div class="cart_btn right" v-if="this.groupMyId" @click="toSubmitOrder(1)">加入团购</div>
+            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">加入团购</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">我要开团</div>
             <div class="cart_btn_alone right" @click="toSubmitOrder(0)">单独购买</div>
         </div>
