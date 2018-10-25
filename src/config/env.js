@@ -11,7 +11,7 @@ let baseUrl = '';
 let domainUrl = 'http://192.168.0.146:8889';
 let routerMode = 'hash';
 let imgBaseUrl;
-let appid = 'wxe19619102f5296e3';
+let appid = 'wx14392deaf538dfef';
 let redirect = 'http://youpinlian.datbc.com/youpin/wx/oa/wxCallBack';
 
 if (process.env.NODE_ENV == 'development') {
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV == 'development') {
 	imgBaseUrl = 'http://cangdu.org:8001/img/';
 	baseUrl = '/zhenpin/wx';
 	domainUrl = 'https://zhenpin.datbc.com';
-	appid = 'wx14392deaf538dfef';
+	appid = 'wxe19619102f5296e3';
 	redirect = 'https://zhenpin.datbc.com/zhenpin/wx/oa/wxCallBack';
 	
 }
