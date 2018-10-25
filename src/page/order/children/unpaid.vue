@@ -12,11 +12,13 @@
                         </p>
                     </header>
                     <template v-for="group in groupOrder">
-                        <router-link v-if="group.groupMyId == item.groupMyId" :to="{path:'/groupMy/' + item.groupMyId}" class="order_item_top_header" tag="header">
-                            <p class="order_time" style="color: #dd3333">{{group.suitName}}拼团中 已有{{group.groupNum}}人参与</p>
-                            <p class="order_status" style="color: #dd3333">
-                                {{group.suitEntTime | timeformat}}结束
-                            </p>
+                        <router-link v-if="group.groupMyId == item.groupMyId" :to="{path:'/groupMy/' + item.groupMyId}" class="order_item_top_header_group" tag="header">
+                            <ul>
+                                <li><p class="order_time" style="color: #dd3333">{{group.suitName}}拼团中</p></li>
+                                <li><p class="order_status" style="color: #dd3333">
+                                    已有{{group.groupNum}}人参与 当前拼团将在{{group.suitEntTime | timeformat}}结束
+                                </p></li>
+                            </ul>
                             <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use></svg>
                         </router-link>
                     </template>

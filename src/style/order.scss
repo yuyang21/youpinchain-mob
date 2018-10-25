@@ -32,6 +32,17 @@
                     margin-right: .1rem;
                 }
             }
+            .order_item_top_header_group {
+                border-bottom: 0.005rem solid $f5;
+                padding-bottom: .06rem;
+                @include fj;
+                height: .45rem;
+                line-height: .25rem;
+                @include sc(.15rem, $g6);
+                .order_status {
+                    margin-right: .1rem;
+                }
+            }
             .goods_img {
                 display: flex;
                 padding: .1rem 0;
