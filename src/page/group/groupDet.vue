@@ -136,7 +136,7 @@
         },
         mounted() {
             this.goodsid = this.$route.params.suitId;
-            this.groupMyId = this.$route.params.groupMyId;
+            this.groupMyId = this.$route.query.groupMyId;
             this.initData();
             this.initCartCount();
         },
