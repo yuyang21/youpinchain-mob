@@ -213,7 +213,7 @@
                 let suitId = that.groupSuit.id
                 let addressId = that.choosedAddress.id;
                 let type = that.groupType;
-                let groupMyId = that.groupMyId
+                let groupMyId = that.groupMyId ? that.groupMyId : null
 
                 submitGroup(suitId, addressId, that.message, type, groupMyId).then(res => {
                     if (res.errno !== 0) {

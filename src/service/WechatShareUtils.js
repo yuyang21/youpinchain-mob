@@ -19,7 +19,7 @@ let WechatShareUtils = {
       currentUrl = url
     }
     congigJsApi(encodeURIComponent(currentUrl)).then(function(apiConfig) {
-      console.log('apiConfig: ' + apiConfig.appId)
+      //console.log('apiConfig: ' + apiConfig.appId)
       wx.config({
         debug: false,
         appId: apiConfig.appId, // 必填，公众号的唯一标识
