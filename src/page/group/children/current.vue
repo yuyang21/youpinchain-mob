@@ -12,8 +12,8 @@
                                 <!--<p class="coupon" :class="[item.useCoupon === 0 ? 'unuseCoupon' : 'useCoupon']">{{item.useCoupon === 0 ? '优惠券不可使用' : '优惠券可使用'}}</p>-->
                                 <p class="price"><span class="RMB">￥</span>{{item.suitPrice}} <s>￥{{item.originalPrice}}</s></p>
                             </div>
+                            <div class="shopping_cart"><p>立即拼团</p></div>
                         </router-link>
-                        <div class="shopping_cart" @touchstart="addToGroup(item.id, $event)"><p>立即拼团</p></div>
                     </li>
                 </ul>
                 <transition appear @after-appear='afterEnter' @before-appear="beforeEnter" v-for="(item,index) in showMoveDot" :key="index">

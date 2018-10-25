@@ -164,10 +164,10 @@
         mounted() {
             if (localStorage.getItem('choosedAddress') != 'undefined') {
                 this.choosedAddress = JSON.parse(localStorage.getItem('choosedAddress'));
-                if (!this.choosedAddress) {
-                    this.setRegions();
-                    this.getDefaultAddress()
-                }
+            }
+            if (!this.choosedAddress) {
+                this.setRegions();
+                this.getDefaultAddress()
             }
         },
         created() {
@@ -349,6 +349,7 @@
             getDefaultAddress() {
                 // 默认用户地址
                 getDefaultAddress().then(res => {
+                    console.info(res)
                     if (res.errno == 0 && res.data) {
                         let address = res.data;
                         let index = -1;
