@@ -11,6 +11,15 @@
                                 {{item.orderStatusText}}
                             </p>
                         </header>
+                        <template v-for="group in groupOrder">
+                            <router-link v-if="group.groupMyId == item.groupMyId" :to="{path:'/groupMy/' + item.groupMyId}" class="order_item_top_header" tag="header">
+                                <p class="order_time" style="color: #dd3333">{{group.suitName}}拼团中 已有{{group.groupNum}}人参与</p>
+                                <p class="order_status" style="color: #dd3333">
+                                    {{group.suitEntTime | timeformat}}结束
+                                </p>
+                                <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use></svg>
+                            </router-link>
+                        </template>
                         <router-link :to="{path:'/orderDetail/' + item.id}" tag="div">
 	                        <section class="goods_img">
 	                        	<div class="goods_box">
@@ -49,7 +58,7 @@ import computeTime from "src/components/common/computeTime";
 import loading from "src/components/common/loading";
 import { loadMore } from "src/components/common/mixin";
 import alertTip from "src/components/common/alertTip";
-import {getOrderList,cancelOrder,confirmOrder,prepayOrder,rebuy} from "../../../service/getData";
+import {getOrderList,cancelOrder,confirmOrder,prepayOrder,rebuy,myGroupOrder} from "../../../service/getData";
 
 export default {
   data() {
@@ -59,7 +68,8 @@ export default {
       showLoading: true, //显示加载动画
       page: 1, //当前页码
       pageSize: 5, //每次加载5个订单
-      orderList: []
+      orderList: [],
+      groupOrder: []
     };
   },
   props: ["sendData", "showErrMsg"],
@@ -70,6 +80,7 @@ export default {
           }
           this.orderList = res.data.orderVoList;
           this.showLoading = false;
+          this.getGroupOrder();
       })
   },
   created() {
@@ -151,6 +162,14 @@ export default {
                   JSON.stringify(res.data)
               );
               this.$router.push("/cart?rebuyKey=proIds_" + currentTime);
+          })
+      },
+      getGroupOrder(){
+          myGroupOrder().then(res => {
+              if (res.errno !== 0){
+                  return;
+              }
+              this.groupOrder = res.data;
           })
       }
   },

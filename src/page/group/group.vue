@@ -35,7 +35,7 @@
         },
         props: ['showErrMsg'],
         created () {
-            this.routerPath = window.location.href.toString().split('order/')[1]
+            this.routerPath = window.location.href.toString().split('group/')[1]
             for(var i = 0; i <= this.tabList.length - 1; i++){
                 if(this.tabList[i].name === this.routerPath){
                     this.activeTab = i;

@@ -440,3 +440,8 @@ export const groupDet = (suitId) => fetch('/group/' + suitId, {
  */
 export const groupMy = (groupMyId) => fetch('/group/my/' + groupMyId, {
 });
+
+/**
+ * 我的拼团数据查询
+ */
+export const myGroupOrder = () => fetch('/group/myOrder', {});
