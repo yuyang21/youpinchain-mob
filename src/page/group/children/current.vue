@@ -236,6 +236,7 @@
                 p {
                     line-height: 1.5;
                     @include sc(0.15rem, $fc);
+                    text-align: center;
                 }
             }
         }

@@ -12,6 +12,7 @@
                 <div class="left_price left">
                     <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
                     <!--<p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>-->
+                    <p class="tip">剩余{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p>
                 </div>
                 <div class="right_tip right">
                     <p>预售</p>
@@ -126,12 +127,25 @@
                     activeColor: "#e4372e",
                     color: "#fff"
                 },
-                preview: ''
+                preview: '',
+                endTimeDown: null,
+                timer: null,
+                timer2: null,
+                timer3: null,
             };
         },
         watch: {
             showShare: function (newVal, oldVal) {
                 newVal ? ModalHelper.afterOpen() : ModalHelper.beforeClose();
+            },
+            endTimeDown: function (val) {
+                var that = this
+                if (!val) {
+                    clearInterval(that.timer3)
+                    that.timer3 = setTimeout(function () {
+                        that.initData()
+                    },1000)
+                }
             }
         },
         mounted() {
@@ -161,6 +175,7 @@
                     that.groupSuit = res.data.groupSuit;
                     that.suitDet = res.data.suitDet;
                     that.rules = res.data.rules;
+                    that.endTimeDown = 9000;
                     !res.data.preSaleDelivery ?
                         (that.groupSuit.preSaleDelivery = "2018-09-18T00:58:28") :
                         null;
@@ -168,6 +183,7 @@
                         var shareLink = window.location.href
                         WechatShareUtils.onMenuShareAppMessage('超值拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                     })
+                    that.computeNumber()
                 });
 
                 //开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
@@ -207,6 +223,35 @@
                     JSON.stringify(groupSuit)
                 );
                 this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&groupMyId="+groupMyId);
+            },
+            // 倒计时
+            computeNumber () {
+                var that = this
+                var time = that.endTimeDown
+                var start_time = new Date().getTime(); //获取开始时间的毫秒数
+                if(that.endTimeDown){
+                    this.timer = setInterval(function () {
+                        if(that.endTimeDown >= 1){
+                            var end_time = new Date().getTime();
+                            var diff_time = Math.floor((end_time - start_time) / 1000);
+                            //拿到时间差作为时间标记（行走时间）
+                            document.addEventListener('visibilitychange',function() {
+                                if(document.visibilityState=='visible') {
+                                    that.endTimeDown = time - diff_time
+                                } else {
+                                }
+                            })
+                            that.endTimeDown -= 1
+                            that.luckDrawTime -= 1
+                            if(that.endTimeDown < 1){
+                                that.endTimeDown = 0
+                            }
+                        } else {
+                            clearInterval(that.timer)
+                            return
+                        }
+                    },1000)
+                }
             }
         }
     };
