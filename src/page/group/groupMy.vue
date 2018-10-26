@@ -19,13 +19,13 @@
             </ul>
         </div>
         <div class="aid_friend">
-            <div class="title">拼团成员</div>
+            <div class="title"><p v-if="endTimeDown > 0">距离结束还剩：{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p></div>
             <ul class="friend_list">
                 <li><img :src="groupMy.hheadImgUrl"><p>团长</p></li>
                 <li v-for="(item,index) in groupMy.members" :key="index"><img :src="item.cheadImgUrl"></li>
             </ul>
         </div>
-        <div class="invite_btn" @click="showShare = true;">邀请好友拼团</div>
+        <div class="invite_btn" v-if="endTimeDown > 0" @click="showShare = true;">邀请好友拼团</div>
         <div class="certificates">
             <p class="abstract">奖励规则</p>
             <ul>
@@ -98,7 +98,11 @@
                 pagination: {
                     activeColor: "#e4372e",
                     color: "#fff"
-                }
+                },
+                endTimeDown: null,
+                timer: null,
+                timer2: null,
+                timer3: null,
             };
         },
         mounted() {
@@ -108,6 +112,15 @@
         watch: {
             showShare: function (newVal, oldVal) {
                 newVal ? ModalHelper.afterOpen() : ModalHelper.beforeClose();
+            },
+            endTimeDown: function (val) {
+                var that = this
+                if (!val) {
+                    clearInterval(that.timer3)
+                    that.timer3 = setTimeout(function () {
+                        that.initData()
+                    },1000)
+                }
             }
         },
         components: {
@@ -141,6 +154,35 @@
                 showBack(status => {
                     that.headTitle = status ? that.groupSuit.name : "";
                 });
+            },
+            // 倒计时
+            computeNumber () {
+                var that = this
+                var time = that.endTimeDown
+                var start_time = new Date().getTime(); //获取开始时间的毫秒数
+                if(that.endTimeDown){
+                    this.timer = setInterval(function () {
+                        if(that.endTimeDown >= 1){
+                            var end_time = new Date().getTime();
+                            var diff_time = Math.floor((end_time - start_time) / 1000);
+                            //拿到时间差作为时间标记（行走时间）
+                            document.addEventListener('visibilitychange',function() {
+                                if(document.visibilityState=='visible') {
+                                    that.endTimeDown = time - diff_time
+                                } else {
+                                }
+                            })
+                            that.endTimeDown -= 1
+                            that.luckDrawTime -= 1
+                            if(that.endTimeDown < 1){
+                                that.endTimeDown = 0
+                            }
+                        } else {
+                            clearInterval(that.timer)
+                            return
+                        }
+                    },1000)
+                }
             }
         }
     }
