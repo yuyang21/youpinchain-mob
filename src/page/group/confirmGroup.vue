@@ -155,7 +155,8 @@
                 orderId: 0,
                 message: '',
                 groupType: '',
-                groupMyId: null
+                groupMyId: null,
+                payButton: false
             }
         },
         props: ['showErrMsg'],
@@ -192,8 +193,13 @@
             },
             async paymentCall() {
                 var that = this;
+                if (that.payButton){
+                    return;
+                }
+                that.payButton = true;
                 if (!that.choosedAddress) {
                     if (!that.checkAddress(that.address)) {
+                        that.payButton = false;
                         return;
                     }
                     that.submitAddress(that.address, function () {
@@ -217,6 +223,8 @@
 
                 submitGroup(suitId, addressId, that.message, type, groupMyId).then(res => {
                     if (res.errno !== 0) {
+                        this.showErrMsg(res.errmsg)
+                        that.payButton = false;
                         return;
                     }
                     that.orderId = res.data.orderId;
@@ -243,6 +251,7 @@
                                 "paySign": resp.data.paySign //微信签名
                             },
                             function (res) {
+                                that.payButton = false;
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                                     that.$router.push('/order/undelivery');
                                 }
