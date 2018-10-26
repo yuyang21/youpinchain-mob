@@ -12,7 +12,7 @@
                 <div class="left_price left">
                     <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
                     <!--<p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>-->
-                    <p class="tip">剩余{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p>
+                    <p class="tip" v-if="endTimeDown>0">剩余{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p>
                 </div>
                 <div class="right_tip right">
                     <p>预售</p>
@@ -79,7 +79,7 @@
                 </li>
             </ul>
         </div>
-        <div class="add_cart_container">
+        <div class="add_cart_container" v-if="endTimeDown>0">
             <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">加入团购</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">我要开团</div>
             <div class="cart_btn_alone right" @click="toSubmitOrder(0)">单独购买</div>
