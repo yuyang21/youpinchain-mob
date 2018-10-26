@@ -175,7 +175,7 @@
                     that.groupSuit = res.data.groupSuit;
                     that.suitDet = res.data.suitDet;
                     that.rules = res.data.rules;
-                    that.endTimeDown = 9000;
+                    that.endTimeDown = res.data.endTimeDown;
                     !res.data.preSaleDelivery ?
                         (that.groupSuit.preSaleDelivery = "2018-09-18T00:58:28") :
                         null;
