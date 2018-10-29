@@ -150,6 +150,7 @@
                         var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId
                         WechatShareUtils.onMenuShareAppMessage('一起来拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                     })
+                    that.computeNumber()
                 });
                 //开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
                 showBack(status => {

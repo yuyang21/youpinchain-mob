@@ -8,6 +8,8 @@
                         <header class="order_item_top_header">
                             <p class="order_time">{{item.addTime | timeformat}}</p>
                             <p class="order_status">
+                                <template v-if="item.groupMyType == 2">(拼团成功)</template>
+                                <template v-if="item.groupMyType == 3">(拼团失败)</template>
                                 {{item.orderStatusText}}
                             </p>
                         </header>
