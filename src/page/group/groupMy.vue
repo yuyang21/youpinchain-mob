@@ -145,6 +145,7 @@
                     that.groupSuit = res.data.groupSuit;
                     that.rules = res.data.rules;
                     that.groupMy = res.data.groupMy;
+                    that.endTimeDown = res.data.endTimeDown;
                     wx.ready(function () {
                         var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId
                         WechatShareUtils.onMenuShareAppMessage('一起来拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
@@ -173,7 +174,6 @@
                                 }
                             })
                             that.endTimeDown -= 1
-                            that.luckDrawTime -= 1
                             if(that.endTimeDown < 1){
                                 that.endTimeDown = 0
                             }
