@@ -5,8 +5,6 @@
                 <div class="page-top-red"></div>
                 <section class="order_titel border_radius" @click="goTrack">
                     <div class="status-img" :class="'status_0'"></div>
-                    <template v-if="item.groupMyType == 2">(拼团成功)</template>
-                    <template v-if="item.groupMyType == 3">(拼团失败)</template>
                     <div>{{orderData.orderStatusText}}</div>
                     <svg fill="#333" class="arrow_right" v-show="orderData.handleOption.confirm">
                         <!--v-show="orderData.handleOption.confirm"-->
