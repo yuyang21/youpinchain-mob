@@ -445,3 +445,11 @@ export const groupMy = (groupMyId) => fetch('/group/my/' + groupMyId, {
  * 我的拼团数据查询
  */
 export const myGroupOrder = () => fetch('/group/myOrder', {});
+
+/**
+ * 我的优惠卷查询
+ */
+export const couponList = (page, pageSize) => fetch('/coupon', {
+    page: page,
+    pageSize: pageSize
+});
