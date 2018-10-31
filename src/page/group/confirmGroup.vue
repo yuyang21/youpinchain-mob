@@ -78,10 +78,11 @@
                             <p>商品总价</p>
                             <p><span class="RMB">￥</span>{{goodsPrice}}</p>
                         </li>
-                        <li>
-                            <p>优惠价格</p>
-                            <p class="coupon">- <span class="RMB">￥</span>0.00</p>
-                        </li>
+                        <router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">
+                            <p>优惠券</p>
+                            <p class="RMB" v-if="coupon">￥-{{coupon.money}}</p>
+                            <p class="coupon" v-else>不使用</p>
+                        </router-link>
                         <li>
                             <p>运费</p>
                             <p><span class="RMB">￥</span>{{fare}}</p>
@@ -156,7 +157,9 @@
                 message: '',
                 groupType: '',
                 groupMyId: null,
-                payButton: false
+                payButton: false,
+                coupon: '',
+                couponId: ''
             }
         },
         props: ['showErrMsg'],
@@ -169,6 +172,11 @@
             if (!this.choosedAddress) {
                 this.setRegions();
                 this.getDefaultAddress()
+            }
+            this.coupon = JSON.parse(sessionStorage.getItem('choosedCoupon'));
+            if (this.coupon) {
+                this.totalPrice -= this.coupon.money
+                this.couponId = this.coupon.id
             }
         },
         created() {
@@ -184,6 +192,7 @@
             this.goodsPrice = this.groupType == 1 ? this.groupSuit.suitPrice : this.groupSuit.originalPrice;
             this.totalPrice = this.groupType == 1 ? this.groupSuit.suitPrice : this.groupSuit.originalPrice;
             this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
+            sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
         },
         methods: {
             // ...mapMutations(["CHOOSE_ADDRESS"]),
@@ -193,7 +202,7 @@
             },
             async paymentCall() {
                 var that = this;
-                if (that.payButton){
+                if (that.payButton) {
                     return;
                 }
                 that.payButton = true;
@@ -221,7 +230,7 @@
                 let type = that.groupType;
                 let groupMyId = that.groupMyId ? that.groupMyId : null
 
-                submitGroup(suitId, addressId, that.message, type, groupMyId).then(res => {
+                submitGroup(suitId, addressId, that.couponId, that.message, type, groupMyId).then(res => {
                     if (res.errno !== 0) {
                         this.showErrMsg(res.errmsg)
                         that.payButton = false;

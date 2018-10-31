@@ -206,6 +206,7 @@ export default [{
         {
             path: '/coupon',
             component: coupon,
+            name: 'couponList'
         },
         {
             path: '/bountyPlan',

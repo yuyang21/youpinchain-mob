@@ -27,10 +27,6 @@
                         <p><span class="RMB">￥</span>{{goodsPrice | number}}</p>
                     </li>
                     <li>
-                        <p>优惠券</p>
-                        <p class="coupon">无可用</p>
-                    </li>
-                    <li>
                         <p>商品实付</p>
                         <p><span class="RMB">￥</span>{{payment | number}}</p>
                     </li>
