@@ -238,7 +238,9 @@ export const cancelOrder = (orderId) => fetch('/orders/' + orderId, {}, 'DELETE'
  * 申请退款
  */
 
-export const refundOrder = (orderId) => fetch('/orders/' + orderId + 'refund', {}, 'POST');
+export const refundOrder = (orderId, refund) => fetch('/orders/' + orderId + '/refund', {
+    refund: refund
+}, 'POST');
 
 
 /**

@@ -12,7 +12,7 @@
             </div>
             <ul class="addresslist">
                 <li v-for='(item, index) in coupons'
-                    :class="{unavailable: goodsPrice < item.money || goodsPrice < item.condition}"
+                    :class="{unavailable: goodsPrice && (goodsPrice < item.money || goodsPrice < item.condition)}"
                     @click="selectOrEdit(item, index)" :key="index">
                     <span class="default-address" v-show="choosedCoupon && choosedCoupon.id === item.id"></span>
                     <div class="address-detail">
