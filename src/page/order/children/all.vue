@@ -114,20 +114,6 @@
         props: ["sendData", "showErrMsg"],
         mounted() {
             this.list()
-            var that = this
-            that.mescroll = new MeScroll(that.$refs.mescroll, {
-                down: {
-                    use: true,
-                },
-                up: {
-                    callback: that.upCallback,
-                    page: {
-                        num: 0,
-                        size: 4,
-                    }
-                }
-            });
-            that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
         },
         created() {
         },
@@ -141,14 +127,20 @@
         computed: {},
         methods: {
             list() {
-                getOrderList(this.page, this.pageSize).then(res => {
-                    if (res.errno !== 0) {
-                        return;
+                var that = this
+                that.mescroll = new MeScroll(that.$refs.mescroll, {
+                    down: {
+                        use: true,
+                    },
+                    up: {
+                        callback: that.upCallback,
+                        page: {
+                            num: 0,
+                            size: 4,
+                        }
                     }
-                    this.orderList = res.data.orderVoList;
-                    this.showLoading = false;
-                    this.getGroupOrder();
-                })
+                });
+                that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
             },
             // 取消订单
             cancelOrder(orderId) {
