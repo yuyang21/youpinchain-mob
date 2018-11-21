@@ -5,9 +5,20 @@
             <loading v-show="showLoading"></loading>
         </transition>
         <div v-show="!showLoading">
-            <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ brand.id}">
-                <img :src="brand.pictureUrl" alt="" width="100%" class="show">
-            </router-link>
+
+            <carousel :loop="true" :autoplay="true" :minSwipeDistance="6" :scrollPerPage="true" :speed="500"
+                      :perPage="1" :paginationPadding="5" :paginationSize="8"
+                      :paginationActiveColor="pagination.activeColor" :paginationColor="pagination.color">
+                <slide v-for="item in brand" :key="item.id">
+                    <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                        <img :src="item.pictureUrl" alt="" width="100%" class="show">
+                    </router-link>
+                </slide>
+            </carousel>
+
+            <!--<router-link tag="div" class="header_image" :to="{path:'/introduce/'+ brand.id}">-->
+                <!--<img :src="brand.pictureUrl" alt="" width="100%" class="show">-->
+            <!--</router-link>-->
             <!-- <ul class="product_nav">
             <li v-for="(tab, index) in product_nav" :key="index" :class="{'active': index === activeTab}" v-if="tab.name !== 'brand'"
                 @click="toggleTab(tab.id,index)">{{tab.name}}</li>
@@ -39,6 +50,10 @@
 </template>
 
 <script>
+import {
+    Carousel,
+    Slide
+} from "vue-carousel";
 import footGuide from '../../components/footer/footGuide'
 import {
     homeIndex,
@@ -66,13 +81,17 @@ export default {
             page: 1,
             pageSize: 4,
             datasBrandId: "",
-            mescroll: null
+            mescroll: null,
+            pagination: {
+                activeColor: "#e4372e",
+                color: "#fff"
+            }
         }
     },
     mounted() {
         //获取商品列表
         homeIndex().then(res => {
-            this.product_nav = res.data.brandDatas
+            // this.product_nav = res.data.brandDatas
             this.brand = res.data.brand
             this.showLoading = false;
             this.getDatasBrandId(res.data.brandDatas)
@@ -99,7 +118,9 @@ export default {
     },
     components: {
         footGuide,
-        loading
+        loading,
+        Carousel,
+        Slide
     },
     computed: {},
     methods: {
