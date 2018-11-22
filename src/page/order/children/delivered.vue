@@ -17,7 +17,7 @@
                             <section class="goods_img">
                                 <div class="goods_box">
                                     <img class="restaurant_image" v-for="(goods,index) in item.productList"
-                                         :src="goods.picUrl" v-if="index < 4" :key="index">
+                                         :src="goods.pictureUrl" v-if="index < 4" :key="index">
                                     <!-- <p class="" v-if="item.productList.length == 1">{{item.productList[0].productName}}</p> -->
                                 </div>
                                 <p>共{{item.productList.length}}件</p>
@@ -125,7 +125,7 @@
                 })
             },
             upCallback(page) {
-                getOrderList(page.num, page.size, 3).then(res => {
+                getOrderList(page.num, page.size, 301).then(res => {
                     this.showLoading = false;
                     let arr = res.data.orderVoList;
                     if (page.num == 1) this.orderList = [];

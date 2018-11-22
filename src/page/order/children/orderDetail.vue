@@ -34,7 +34,7 @@
                     </div>
                     <ul class="goods">
                         <li v-for="item in orderProduct" :key="item.id">
-                            <img :src="item.picUrl" alt="" class="img">
+                            <img :src="item.pictureUrl" alt="" class="img">
                             <div class="goods_info">
                                 <p class="name">{{item.productName}}</p>
                                 <p class="price"><span>￥</span>{{item.retailPrice}}</p>
