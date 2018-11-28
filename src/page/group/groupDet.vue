@@ -11,12 +11,13 @@
             <div class="presell_box">
                 <div class="left_price left">
                     <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
-                    <!--<p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>-->
-                    <p class="tip" v-if="endTimeDown>0 && startTimeDown<1">剩余 {{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p>
+                    <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
                 </div>
-                <div class="right_tip right">
-                    <p>预售</p>
-                    <p>江浙沪北京地区专供</p>
+                <div class="right_tip right" v-if="endTimeDown>0 && startTimeDown<1">
+                    <p>距开团结束</p>
+                    <p>
+                        <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
+                    </p>
                 </div>
             </div>
             <div class="title">
@@ -26,26 +27,52 @@
                 <p class="desr">{{groupSuit.describe}}</p>
             </div>
         </div>
+        <!-- 拼团流程 -->
+        <div class="assembling_process">
+            <div class="info_title">拼团流程</div>
+            <div class="content">
+                <ul class="process">
+                    <li>
+                        <img src="../../images/group/process01.png" alt="">
+                        <p class="text">团长开团</p>
+                    </li>
+                    <li>
+                        <img src="../../images/group/process02.png" alt="">
+                        <p class="text">邀请好友</p>
+                    </li>
+                    <li>
+                        <img src="../../images/group/process03.png" alt="">
+                        <p class="text">拼团成功</p>
+                    </li>
+                    <li>
+                        <img src="../../images/group/process04.png" alt="">
+                        <p class="text">等待发货</p>
+                    </li>
+                </ul>
+                <p class="mode">模式一：<span>普通拼团，享受价格优惠</span></p>
+                <p class="mode">模式二：<span>社区拼团，团长选择收货地址，团员线下与团长进行后续收货服务。团员享受更高的价格优惠，团长获得现金返利。</span></p><br>
+            </div>
+        </div>
+        <!-- 拼团详情 -->
         <div class="goods_info">
-            <div class="info_title">商品详情</div>
+            <div class="info_title">拼团详情</div>
             <ul class="goodslistul clear">
                 <li v-for="item in suitDet" :key="item.id">
                     <router-link tag="div" :to="'/goods/' + item.productId">
                         <img :src="item.productThumbnailPic" alt="" class="left"
                              :class="{'noImage': !item.productThumbnailPic}">
-                        <div class="left goods_info">
+                        <div class="left goods_li">
                             <p class="name">{{item.productName + ' ' +
                                 item.productNetContent}}*1{{item.productPacking}}</p>
                             <p class="desr">{{item.productDescribe}}</p>
-                            <!--<p class="coupon" :class="[item.useCoupon === 0 ? 'unuseCoupon' : 'useCoupon']">{{item.useCoupon === 0 ? '优惠券不可使用' : '优惠券可使用'}}</p>-->
-                            <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}} <s>￥{{item.productOriginalPrice}}</s>
-                            </p>
+                            <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
+                            <p class="single_price">单买价￥{{item.productOriginalPrice}}</p>
                         </div>
                     </router-link>
                 </li>
             </ul>
         </div>
-        <div class="certificates">
+        <!-- <div class="certificates">
             <p class="abstract">奖励规则</p>
             <ul>
                 <li v-for="item in rules">
@@ -78,7 +105,7 @@
                     </p>
                 </li>
             </ul>
-        </div>
+        </div> -->
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
             <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">加入团购</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">我要开团</div>
@@ -264,6 +291,7 @@
 
     .goods {
         padding: 0.45rem 0 0.5rem;
+        background-color: $bc;
         .top_main {
             .show {
                 @include wh(100%, 3.75rem);
@@ -294,28 +322,42 @@
             }
             .right_tip {
                 position: relative;
-                width: 1.35rem;
+                width: .9rem;
                 text-align: center;
+                background-color: #FB9D1C;
+                height: .64rem;
+                margin-top: -.08rem;
                 p:first-child {
-                    @include sc(0.18rem, $fc);
-                    padding-top: 0.04rem;
+                    @include sc(0.14rem, $fc);
+                    padding: 0.09rem 0 .05rem;
                 }
                 p:last-child {
-                    @include sc(0.13rem, rgba(255, 255, 255, 0.6));
+                    @include sc(.14rem, $fc);
                 }
                 &:before {
                     content: "";
                     position: absolute;
-                    top: 0.1rem;
-                    left: 0;
-                    @include wh(0.01rem, 0.33rem);
-                    background-color: $fc;
+                    display: block;
+                    top: .28rem;
+                    left: -.05rem;
+                    border-top: .05rem solid transparent;
+                    border-right: .05rem solid #FB9D1C;
+                    border-bottom: .05rem solid transparent;
+                }
+                .shadow_box {
+                    @include wh(.18rem, .18rem);
+                    @include sc(.14rem, $fc);
+                    background-color: #912714;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: .025rem;
                 }
             }
         }
         .title {
             background-color: $fc;
-            padding: 0.02rem 0.15rem 0.1rem;
+            padding: 0.1rem 0.15rem 0.1rem;
             border-radius: 0.12rem 0.12rem 0 0;
             .price {
                 @include sc(0.238rem, $red);
@@ -331,7 +373,7 @@
             }
             .name {
                 @include sc(0.18rem, $g3);
-                padding: 0.01rem 0 0.02rem;
+                padding: 0.01rem 0 0.0rem;
                 .presell_text {
                     @include sc(0.18rem, $g3);
                     margin: 0.08rem 0 0 -0.1rem;
@@ -342,17 +384,17 @@
                 @include sc(0.12rem, $g6);
             }
         }
+        .info_title {
+            padding-left: 0.16rem;
+            border-left: 7px solid $red;
+            line-height: 0.45rem;
+            border-bottom: 1px solid #f7f7fa;
+            @include wh(100%, 0.45rem);
+            @include sc(0.15rem, $g6);
+        }
         .goods_info {
-            margin-top: 0.15rem;
             background-color: $fc;
-            .info_title {
-                padding-left: 0.16rem;
-                border-left: 7px solid $red;
-                line-height: 0.45rem;
-                border-bottom: 1px solid #f7f7fa;
-                @include wh(100%, 0.45rem);
-                @include sc(0.15rem, $g6);
-            }
+            margin: .15rem 0 .5rem;
             .info_content {
                 p {
                     @include sc(0.13rem, $g6);
@@ -360,6 +402,9 @@
                     border-bottom: 1px solid #f7f7fa;
                     padding: 0rem 0.21rem;
                 }
+            }
+            .single_price {
+                @include sc(.12rem, $g9);
             }
         }
         .certificates {
@@ -448,14 +493,63 @@
                 @include sc(0.15rem, $fc);
             }
         }
+        .assembling_process {
+            background-color: $fc;
+            margin: .15rem 0;
+            .process {
+                overflow: hidden;
+                margin: .335rem auto .25rem;
+                text-align: center;
+                width: 86%;
+                li {
+                    float: left;
+                    width: 25%;
+                    position: relative;
+                    &:before {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        right: -.22rem;
+                        top: .18rem;
+                        @include wh(.45rem, .01rem);
+                        background-color:#E9EAEB;
+                    }
+                }
+                li:last-child {
+                    &:before {
+                        content: '';
+                        display: none;
+                    }
+                }
+                img {
+                    @include wh(.335rem, .35rem);
+                    border: .01rem dashed $g3;
+                }
+                .text {
+                    @include sc(.14rem, $g3);
+                }
+            }
+            .mode {
+                width: 85%;
+                margin: 0 auto .12rem;
+                overflow: hidden;
+                clear: both;
+                @include sc(.13rem, $g6);
+                span {
+                    float: right;
+                    width: 83.6%;
+                    @include sc(.13rem, $g6);
+                }
+            }
+        }
     }
 
     .goodslistul {
         padding: .25rem .15rem 0rem;
         img {
             margin-right: .12rem;
-            width: 1.4rem;
-            height: 1.4rem;
+            width: .95rem;
+            height: .95rem;
             border-radius: 5px;
         }
         img.noImage {
@@ -473,15 +567,14 @@
         li:last-child {
             margin-bottom: 0;
         }
-        .goods_info {
+        .goods_li {
             width: 55%;
             .name {
                 @include sc(.15rem, $g3);
-                padding: .05rem 0 .03rem;
+                padding: .02rem 0 .03rem;
             }
             .desr {
                 @include sc(.12rem, $g6);
-                height: .75rem;
             }
             .coupon {
                 border-radius: 10px;

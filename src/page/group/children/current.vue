@@ -5,20 +5,22 @@
                 <ul class="goodslistul clear">
                     <li v-for="item in goOn" :key="item.id">
                         <router-link tag="div" :to="'/groupDet/' + item.id">
-                            <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
+                            <div class="left position-re">
+                                <p class="count_down">距结束 &nbsp;&nbsp;&nbsp; {{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p>
+                                <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
+                            </div>
                             <div class="left goods_info">
                                 <p class="name">{{item.suitName}}</p>
                                 <p class="desr">{{item.describe}}</p>
+                                <p class="tip"><span>固定地址享受超高优惠</span></p>
                                 <!--<p class="coupon" :class="[item.useCoupon === 0 ? 'unuseCoupon' : 'useCoupon']">{{item.useCoupon === 0 ? '优惠券不可使用' : '优惠券可使用'}}</p>-->
-                                <p class="price"><span class="RMB">￥</span>{{item.suitPrice}} <s>￥{{item.originalPrice}}</s></p>
+                                <p class="price"><span class="RMB">￥</span>{{item.suitPrice}} <span class="lable">3人成团</span></p>
+                                <p class="single_price">单买价￥{{item.originalPrice}}</p>
                             </div>
                             <div class="shopping_cart"><p>立即拼团</p></div>
                         </router-link>
                     </li>
                 </ul>
-                <transition appear @after-appear='afterEnter' @before-appear="beforeEnter" v-for="(item,index) in showMoveDot" :key="index">
-                    <span class="move_dot" v-if="item"></span>
-                </transition>
             </section>
         </div>
     </div>
@@ -44,11 +46,10 @@
                 fare: 0,
                 carts: [],
                 goOn: [],
-                showMoveDot: [], //控制下落的小圆点显示隐藏
-                elLeft: 0, //当前点击加按钮在网页中的绝对top值
-                elBottom: 0, //当前点击加按钮在网页中的绝对left值
                 hasMore: false,
-                proIds:[]
+                proIds:[],
+                timer: null,
+                endTimeDown: 90
             };
         },
         async beforeMount() {},
@@ -57,7 +58,7 @@
                 this.goOn = res.data.goOn
                 //this.hasMore = res.data.totalPages > this.page
             })
-            this.loadCarts();
+            this.computeNumber()
         },
         created() {
             this.proIds = JSON.parse(
@@ -84,34 +85,35 @@
                             cart.available = false;
                         }
                     });
-                    this.reComputePrice();
                 });
             },
-            addToGroup (suitId) {
+            // 倒计时
+            computeNumber () {
                 var that = this
-                let elLeft = event.target.getBoundingClientRect().left;
-                let elBottom = event.target.getBoundingClientRect().bottom;
-                that.showMoveDot.push(true);
-                that.showMoveDotFun(that.showMoveDot, elLeft, elBottom);
-                addToCart(productId, 1).then(res => {
-                    that.$parent.getCartNum();
-                    that.loadCarts();
-                })
-            },
-            showMoveDotFun (showMoveDot, elLeft, elBottom) { // 显示下落圆球
-                this.showMoveDot = [...this.showMoveDot, ...showMoveDot];
-                this.elLeft = elLeft;
-                this.elBottom = elBottom;
-            },
-            beforeEnter(el){
-                el.style.transform = `translate3d(${this.elLeft - 180}px,${this.elBottom - window.innerHeight}px,0px)`;
-                el.style.opacity = 0;
-            },
-            afterEnter(el){
-                el.style.transform = `translate3d(0,0,0px)`;
-                el.style.transition = 'transform .55s cubic-bezier(0.3, -0.25, 0.7, -0.15)';
-                this.showMoveDot = this.showMoveDot.map(item => false);
-                el.style.opacity = 1;
+                var time = that.endTimeDown
+                var start_time = new Date().getTime(); //获取开始时间的毫秒数
+                if(that.endTimeDown){
+                    this.timer = setInterval(function () {
+                        if(that.endTimeDown >= 1){
+                            var end_time = new Date().getTime();
+                            var diff_time = Math.floor((end_time - start_time) / 1000);
+                            //拿到时间差作为时间标记（行走时间）
+                            document.addEventListener('visibilitychange',function() {
+                                if(document.visibilityState=='visible') {
+                                    that.endTimeDown = time - diff_time
+                                } else {
+                                }
+                            })
+                            that.endTimeDown -= 1
+                            if(that.endTimeDown < 1){
+                                that.endTimeDown = 0
+                            }
+                        } else {
+                            clearInterval(that.timer)
+                            return
+                        }
+                    },1000)
+                }
             }
         },
         watch: {}
@@ -171,11 +173,23 @@
         }
         .goodslistul {
             padding: .25rem .15rem 0rem;
+            .count_down {
+                @include wh(100%, .22rem);
+                @include sc(.14rem, $fc);
+                line-height: .22rem;
+                position: absolute;
+                top: 0;
+                background-color: #E42826;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                text-align: center;
+            }
             img {
                 margin-right: .12rem;
                 width: 1.4rem;
                 height: 1.4rem;
                 border-radius: 5px;
+                background-color: #F8DCE8;
             }
             img.noImage {
                 background-color: #000;
@@ -194,13 +208,24 @@
             }
             .goods_info {
                 width: 55%;
+                padding-left: .05rem;
                 .name {
                     @include sc(.15rem, $g3);
                     padding: .05rem 0 .03rem;
                 }
                 .desr {
                     @include sc(.12rem, $g6);
-                    height: .75rem;
+                }
+                .tip {
+                    @include wh(1.7rem, .28rem);
+                    @include sc(.2rem, #FB9D1C);
+                    display: flex;
+                    align-items:center;
+                    justify-content:center;
+                    border: .02rem solid #FFBA00;
+                    border-radius: .14rem;
+                    margin: 0.04rem 0 .12rem;
+                    transform: scale(.55) translateX(-.72rem);
                 }
                 .coupon {
                     border-radius: 10px;
@@ -226,16 +251,33 @@
                         font-weight: normal;
                     }
                 }
+                .lable {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    @include wh(.75rem, .3rem);
+                    @include sc(.18rem, #E42826);
+                    border: .02rem solid rgba(228,40,38,1);
+                    border-radius: .025rem;
+                    transform: scale(.5) translateX(-.35rem);
+                }
+                .single_price {
+                    @include sc(.12rem, $g9);
+                }
             }
             .shopping_cart {
                 position: absolute;
                 right: 0;
-                bottom: .15rem;
-                @include wh(.655rem, .215rem);
-                background: #dd3333;
+                bottom: .29rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: .025rem;
+                @include wh(.675rem, .275rem);
+                background: #E42826;
                 p {
                     line-height: 1.5;
-                    @include sc(0.15rem, $fc);
+                    @include sc(0.13rem, $fc);
                     text-align: center;
                 }
             }

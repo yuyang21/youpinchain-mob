@@ -136,7 +136,7 @@
         }
         .part_2{
             padding-bottom: .5rem;
-            background-color: #efeff4;
+            background-color: $bc;
             .load_more{
                 border-top: 1px solid #f8f8f8;
                 padding: .2rem 0;

@@ -1,9 +1,9 @@
 <template>
-    <div class="order_page header-top">
-        <head-top head-title="秒拼" go-back='true'></head-top>
-        <ul class="nav_tab">
+    <div class="order_page">
+        <!-- <head-top head-title="秒拼" go-back='true'></head-top> -->
+        <!-- <ul class="nav_tab">
             <li v-for="(item,index) in tabList" :key="index" :class="{active: activeTab == index }" @click="findOrder(index)">{{item.tab}}</li>
-        </ul>
+        </ul> -->
         <transition name="router-slid" mode="out-in">
             <router-view @findOrder="updateOrder()" :sendData="activeTab"></router-view>
         </transition>
