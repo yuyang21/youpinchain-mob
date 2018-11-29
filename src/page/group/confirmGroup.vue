@@ -1,6 +1,6 @@
 <template>
-    <div class="confirmOrderContainer header-top">
-        <head-top head-title="拼团确认" go-back='true'></head-top>
+    <div class="confirmOrderContainer">
+        <!-- <head-top head-title="拼团确认" go-back='true'></head-top> -->
         <nav class="shop_list_container">
             <div class="swiper-container" v-if="productList.length">
                 <div class="topBG" v-if="choosedAddress"></div>
@@ -43,20 +43,31 @@
                             <button :class="{butopacity:butpart}" @click.prevent="submitAddress(address)">保存</button>
                         </section>
                     </div>
-                    <router-link :to="{name: 'addressList', query:{path: 'confirmOrder'}}" class="address_info" v-else>
+                    <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p>{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
-                                choosedAddress.address}}</p>
-                            <p><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span>
+                            <p><s>{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
+                                choosedAddress.address}}</s></p>
+                            <p><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span></p>
+                            <div class="label">普通拼团</div>
+                            <div class="tips">
+                                您的地址及电话会展示给您的团员 <br>
+                                <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
+                                <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
+                            </div>
+                            <p class="position-re">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
+                                choosedAddress.address}}
+                                <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
+                                <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
                             </p>
+                            <p><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span></p>
                         </div>
-                        <div class="deletesite">
+                        <router-link :to="{name: 'addressList', query:{path: 'confirmOrder'}}" class="deletesite">
                             <span></span>
-                        </div>
-                    </router-link>
+                        </router-link>
+                    </div>
                 </div>
                 <div class="shop_info">
-                    <p class="name">{{groupSuit.suitName}}</p>
+                    <!-- <p class="name">{{groupSuit.suitName}}</p> -->
                     <ul class="goods">
                         <li v-for="item in productList" :key="item.id">
                             <img :src="item.productThumbnailPic" alt="" class="img">
@@ -65,7 +76,7 @@
                                 <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
                             </div>
                             <div class="cart_btns">
-                                <span class="num">x{{item.suitNumber}}</span>
+                                <span class="num">x {{item.suitNumber}}</span>
                             </div>
                         </li>
                         <transition name="fade">
@@ -73,15 +84,24 @@
                                 <img src="../../images/path-2.png" width="4%"></div>
                         </transition>
                     </ul>
+                    <div class="purchase_num">
+                        <p class="left">购买数量</p>
+                        <div class="cart_btns right">
+                            <span class="subduction" :class="{'disabled': SuitNumber <= 1}"
+                                    @click="SuitNumber > 1 ? addNumber(SuitNumber, -1) : deleteCart(SuitNumber)"></span>
+                            <span class="num">{{SuitNumber}}</span>
+                            <span class="add" @click="addNumber(SuitNumber, 1)"></span>
+                        </div>
+                    </div>
                     <ul class="payment_info">
                         <li>
                             <p>商品总价</p>
                             <p><span class="RMB">￥</span>{{goodsPrice}}</p>
                         </li>
                         <router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">
-                            <p>优惠券</p>
-                            <p class="RMB" v-if="coupon">￥-{{coupon.money}}</p>
-                            <p class="coupon" v-else>不使用</p>
+                            <p>优惠价格</p>
+                            <p class="RMB coupon">-￥{{coupon ? coupon.money : 0}}</p>
+                            <!-- <p class="coupon" v-else>不使用</p> -->
                         </router-link>
                         <li>
                             <p>运费</p>
@@ -101,24 +121,28 @@
                         <p><span class="RMB">￥</span>{{totalPrice + fare}}</p>
                     </div>
                 </div>
-                <div class="shop_info">
+                <!-- <div class="shop_info">
                     <div class="input-new">
                         <span>留言</span>
                         <input type="text" maxlength="50" style="width: 100%;" placeholder="建议留言前先与客服进行确认,50字以内"
                                v-model="message">
                     </div>
-                </div>
+                </div> -->
             </div>
         </nav>
         <ul class="settlement">
             <li @click="paymentCall()">去付款</li>
             <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{totalPrice + fare}}</span></li>
         </ul>
+        <div class="mask_box" v-show="showTip" @click="showTip = false;"></div>
     </div>
 </template>
 
 <script>
     import headTop from '../../components/header/head'
+    import {
+        ModalHelper
+    } from "../../service/Utils";
     import AjaxPicker from "ajax-picker";
     import {
         mapState,
@@ -159,11 +183,17 @@
                 groupMyId: null,
                 payButton: false,
                 coupon: '',
-                couponId: ''
+                couponId: '',
+                SuitNumber: 1,
+                showTip: false
             }
         },
         props: ['showErrMsg'],
-        watch: {},
+        watch: {
+            showTip: function (newVal, oldVal) {
+                newVal ? ModalHelper.afterOpen() : ModalHelper.beforeClose();
+            }
+        },
         computed: {},
         mounted() {
             if (localStorage.getItem('choosedAddress') != 'undefined') {
@@ -195,6 +225,10 @@
             sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
         },
         methods: {
+            showTipsBox () {
+                this.showTip = true;
+                document.querySelector('.mask_box').style.height = document.documentElement.clientHeight + 'px';
+            },
             // ...mapMutations(["CHOOSE_ADDRESS"]),
 
             loadAllProducts() {
@@ -410,6 +444,14 @@
         padding-bottom: 0.49rem;
     }
 
+    .mask_box {
+        background-color: rgba(0,0,0,0.3);
+        @include wh(100%,0rem);
+        position: fixed;
+        top: 0;
+        z-index: 3;
+    }
+
     .shop_list_container {
         background-color: $bc;
         .swiper-container {
@@ -428,7 +470,6 @@
                 box-shadow: 0px 1px 13.9px 0.6px rgba(181, 184, 188, 0.51);
                 .address-detail {
                     position: relative;
-                    width: 2.3rem;
                     p {
                         line-height: 1.6;
                         @include sc(0.15rem, $g3);
@@ -439,6 +480,46 @@
                     }
                     p:nth-of-type(1) {
                         margin-bottom: 0.15rem;
+                    }
+                    .label {
+                        @include wh(.625rem, .24rem);
+                        @include sc(.13rem, $red);
+                        border: .01rem solid $red;
+                        border-radius: .025rem;
+                        margin-top: .12rem;
+                        text-align: center;
+                        line-height: .24rem;
+                    }
+                    .tips {
+                        @include sc(.13rem, $g9);
+                        line-height: 1.9;
+                        margin: .15rem 0;
+                        overflow: hidden;
+                        span {
+                            @include sc(.13rem, $g9);
+                        }
+                        span:nth-child(odd) {
+                            width: 69%;
+                        }
+                    }
+                    .icon {
+                        width: .165rem;
+                        vertical-align: sub;
+                    }
+                    .tip_box {
+                        @include wh(2.8rem,.67rem);
+                        @include sc(.12rem, $red);
+                        display: block;
+                        padding: .1rem .12rem;
+                        background: url('../../images/group/tip_box.png') no-repeat 0 0;
+                        background-size: 100% 100%;
+                        box-sizing: border-box;
+                        line-height: 1.45;
+                        position: absolute;
+                        top: -.57rem;
+                        right: .25rem;
+                        z-index: 4;
+                        pointer-events: none;
                     }
                 }
                 .address-detail:before {
@@ -525,10 +606,11 @@
             margin: 0.15rem auto 0;
             width: 95%;
             background-color: $fc;
-            padding: 0.2rem 0.15rem;
+            padding: 0.2rem 0;
             border-radius: 10px;
             overflow: hidden;
             .goods {
+                padding: 0 .15rem;
                 li {
                     position: relative;
                     margin-bottom: 0.26rem;
@@ -563,7 +645,7 @@
                         display: inline-block;
                         text-align: center;
                         @include wh(0.245rem, 0.245rem);
-                        @include sc(0.18rem, $red);
+                        @include sc(0.18rem, $g9);
                         vertical-align: top;
                         font-weight: bold;
                     }
@@ -571,7 +653,8 @@
             }
             .payment_info {
                 overflow: hidden;
-                padding: 0.15rem 0;
+                clear: both;
+                margin: .15rem;
                 border-bottom: 1px solid $gd;
                 li {
                     @include wh(100%, 0.35rem);
@@ -593,12 +676,50 @@
                 }
             }
             .totalPrice {
-                margin-top: 0.12rem;
+                margin: 0.12rem .15rem 0 0;
+                color: $g6;
                 p {
                     display: inline-block;
                     @include sc(0.2rem, $g3);
                     font-weight: bold;
                 }
+            }
+            .purchase_num {
+                @include wh(100%, .49rem);
+                @include sc(.15rem, $g6);
+                background-color: $f7;
+                padding: 0 .13rem;
+                line-height: .49rem;
+                .cart_btns {    
+                    margin-top: .15rem;
+                    display: flex;
+                    .subduction,
+                    .num,
+                    .add {
+                        @include wh(0.2rem, 0.2rem);
+                        display: inline-flex;
+                        flex: 1;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .num {
+                        @include sc(0.18rem, $red);
+                        vertical-align: top;
+                        margin: 0 0.05rem;
+                    }
+                    .subduction {
+                        @include bis("../../images/sub-icon.png");
+                    }
+                    .subduction.disabled {
+                        @include bis("../../images/sub-disable-icon.png");
+                    }
+                    .add {
+                        @include bis("../../images/add-icon.png");
+                    }
+                }
+            }
+            .input-new {
+                padding: 0 .15rem;
             }
         }
     }
@@ -647,7 +768,7 @@
     .load_more {
         @include wh(100%, 0.36rem);
         @include sc(0.15rem, $g6);
-        background-color: #f7f7f7;
+        background-color: $f7;
         text-align: center;
         line-height: 0.36rem;
     }
