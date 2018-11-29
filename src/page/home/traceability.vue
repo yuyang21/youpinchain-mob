@@ -195,7 +195,7 @@
       }
       .part6, .part7, .part8 {
         overflow: hidden;
-        background: #f7f7f7 !important;
+        background: $f7 !important;
         .text {
           width: 44%;
           margin-top: .63rem;

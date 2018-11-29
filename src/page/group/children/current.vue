@@ -6,7 +6,7 @@
                     <li v-for="item in goOn" :key="item.id">
                         <router-link tag="div" :to="'/groupDet/' + item.id">
                             <div class="left position-re">
-                                <p class="count_down">距结束 &nbsp;&nbsp;&nbsp; {{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</p>
+                                <p class="count_down">距结束 <span>{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</span></p>
                                 <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
                             </div>
                             <div class="left goods_info">
@@ -49,7 +49,7 @@
                 hasMore: false,
                 proIds:[],
                 timer: null,
-                endTimeDown: 90
+                endTimeDown: 9100
             };
         },
         async beforeMount() {},
@@ -123,43 +123,8 @@
 <style lang="scss" scoped>
     @import '../../../static/mescroll/mescroll.min.css';
     @import '../../../style/mixin';
-    .header_image {
-        height: 4.2rem;
-    }
-
-    .move_dot {
-        position: fixed;
-        bottom: .32rem;
-        left: 52.7%;
-        background: $red;
-        display: block;
-        border-radius: 50%;
-        @include wh(.15rem, .15rem);
-    }
-    .home {
-        padding-bottom: .5rem;
-    }
-
-    .product_nav {
-        overflow: hidden;
-        clear: both;
-        text-align: center;
-        background-color: $fc;
-        @include wh(100%, .575rem);
-        line-height: .575rem;
-        li {
-            float: left;
-            @include wh(33.333%, .575rem);
-            @include sc(.15rem, $g6);
-        }
-        li.active {
-            background-color: $red;
-            color: $fc;
-        }
-    }
-
     #hot_goods {
-        background-color: $fc; // margin-top: .15rem;
+        background-color: $fc;
         padding: .2rem 0 0;
         .goods_title {
             text-align: center;
@@ -182,7 +147,16 @@
                 background-color: #E42826;
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
-                text-align: center;
+                text-align: left;
+                padding: 0 .1rem;
+                span {
+                    @include sc(.14rem, $fc);
+                    display: inline-block;
+                    float: right;
+                    width: 43%;
+                    text-align: left;
+                    margin-left: .12rem;
+                }
             }
             img {
                 margin-right: .12rem;
@@ -208,7 +182,7 @@
             }
             .goods_info {
                 width: 55%;
-                padding-left: .05rem;
+                padding-left: .08rem;
                 .name {
                     @include sc(.15rem, $g3);
                     padding: .05rem 0 .03rem;
@@ -224,23 +198,8 @@
                     justify-content:center;
                     border: .02rem solid #FFBA00;
                     border-radius: .14rem;
-                    margin: 0.04rem 0 .12rem;
+                    // margin: 0.04rem 0 .12rem;
                     transform: scale(.55) translateX(-.72rem);
-                }
-                .coupon {
-                    border-radius: 10px;
-                    display: inline-block;
-                    transform: scale(0.82) translateX(-8px);
-                    margin: .2rem 0 .1rem;
-                    padding: 0 .05rem;
-                }
-                .useCoupon {
-                    @include sc(.12rem, $red);
-                    border: 1px solid $red;
-                }
-                .unuseCoupon {
-                    @include sc(.12rem, $g9);
-                    border: 1px solid $g9;
                 }
                 .price {
                     // margin-top: .6rem;

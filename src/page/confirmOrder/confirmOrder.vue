@@ -630,7 +630,7 @@
     .load_more {
         @include wh(100%, 0.36rem);
         @include sc(0.15rem, $g6);
-        background-color: #f7f7f7;
+        background-color: $f7;
         text-align: center;
         line-height: 0.36rem;
     }

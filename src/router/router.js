@@ -112,7 +112,10 @@ export default [{
         //我的拼团
         {
             path: '/groupMy/:groupMyId',
-            component: groupMy
+            component: groupMy,
+            meta: {
+                title: '拼团详情'
+            }
         },
         // 证件资质
         {
