@@ -107,9 +107,9 @@
             </ul>
         </div> -->
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
-            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">加入团购</div>
-            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">我要开团</div>
-            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">单独购买</div>
+            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 我要参团</div>
+            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 我要开团</div>
+            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.originalPrice}} <br> 单独购买</div>
         </div>
         <share-mask v-if="showShare" :showShare="showShare"></share-mask>
     </div>
@@ -478,19 +478,20 @@
                     @include bis("../../images/tab-buy-normal.png");
                 }
             }
-            .cart_btn {
-                line-height: 0.49rem;
+            .cart_btn, .cart_btn_alone {
+                height: 0.49rem;
                 text-align: center;
-                background-color: $red;
-                width: 50%;
+                padding: .07rem 0;
+                line-height: 1.25;
                 @include sc(0.15rem, $fc);
             }
+            .cart_btn {
+                background-color: $red;
+                width: 70%;
+            }
             .cart_btn_alone {
-                line-height: 0.49rem;
-                text-align: center;
-                background-color: $orange;
-                width: 50%;
-                @include sc(0.15rem, $fc);
+                background-color: #FF9FA2;
+                width: 30%;
             }
         }
         .assembling_process {
@@ -537,7 +538,8 @@
                 @include sc(.13rem, $g6);
                 span {
                     float: right;
-                    width: 83.6%;
+                    width: 82.3%;
+                    text-align: justify;
                     @include sc(.13rem, $g6);
                 }
             }
