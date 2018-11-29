@@ -4,10 +4,10 @@
             <div class="swiper-container" v-if="carts.length">
                 <div class="topBG"></div>
                 <div class="shop_info">
-                    <template v-for="cartList in carts">
-                        <span>{{cartList.brandName}}</span>
+                    <!-- <div v-for="(cartList, index) in carts" :key="index">
+                        <span>{{cartList.brandName}}</span> -->
                         <ul class="goods">
-                            <li v-for="item in cartList.cartListDtos" :key="item.cartId">
+                            <li v-for="item in carts" :key="item.cartId">
                                 <span :class="[item.choose && item.available ? 'choose' : 'unselected']"
                                       @click="checkCart(item)"></span>
                                 <img :src="item.thumbnailPic" alt="" class="img"
@@ -26,7 +26,7 @@
                                 </div>
                             </li>
                         </ul>
-                    </template>
+                    <!-- </div> -->
                     <ul class="payment_info">
                         <li>
                             <p>商品总价</p>
@@ -52,6 +52,7 @@
                 <p>您还没有添加任何商品哦～</p>
             </div>
         </nav>
+        <!-- 推荐商品 -->
         <div class="recommend_nav">
             <div class="recommend_header">推荐商品</div>
             <ul class="recommend_list">
@@ -72,6 +73,7 @@
                     :key="index">
             <span class="move_dot" v-if="item"></span>
         </transition>
+        <!-- 底部总计 -->
         <ul class="settlement">
             <li @click="checkSelectAll()">
                 <span :class="[selectAll ? 'selectAll' : 'unselected']"></span> 全选
