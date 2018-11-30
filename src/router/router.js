@@ -16,6 +16,7 @@ const confirmGroup = r => require.ensure([], () => r(require('../page/group/conf
 const current = r => require.ensure([], () => r(require('../page/group/children/current')), 'current')
 const preview = r => require.ensure([], () => r(require('../page/group/children/preview')), 'preview')
 const profile = r => require.ensure([], () => r(require('../page/profile/profile')), 'profile')
+const myProfile = r => require.ensure([], () => r(require('../page/profile/children/myProfile')), 'myProfile')
 const order = r => require.ensure([], () => r(require('../page/order/order')), 'order')
 const allOrder = r => require.ensure([], () => r(require('../page/order/children/all')), 'order')
 const unpaid = r => require.ensure([], () => r(require('../page/order/children/unpaid')), 'order')
@@ -28,6 +29,9 @@ const confirmOrder = r => require.ensure([], () => r(require('../page/confirmOrd
 const address = r => require.ensure([], () => r(require('../page/profile/children/address')), 'address')
 const add = r => require.ensure([], () => r(require('../page/profile/children/add')), 'add')
 const coupon = r => require.ensure([], () => r(require('../page/profile/children/coupon')), 'coupon')
+const income = r => require.ensure([], () => r(require('../page/profile/children/income')), 'income')
+const inviteList = r => require.ensure([], () => r(require('../page/profile/children/inviteList')), 'inviteList')
+const incomeDetails = r => require.ensure([], () => r(require('../page/profile/children/incomeDetails')), 'incomeDetails')
 const aboutUs = r => require.ensure([], () => r(require('../page/home/aboutUs')), 'aboutUs')
 const BountyPlan = r => require.ensure([], () => r(require('../page/activity/bounty/bountyPlan')), 'bountyPlan')
 const BountyHome = r => require.ensure([], () => r(require('../page/activity/bounty/children/home')), 'bountyHome')
@@ -150,12 +154,43 @@ export default [{
         //拼团确认
         {
             path: '/confirmGroup',
-            component: confirmGroup
+            component: confirmGroup,
+            meta: { title: '订单确认'}
         },
         //个人信息页
         {
             path: '/profile',
             component: profile,
+            children: [
+                {
+                    path: '',
+                    component: myProfile,
+                },
+                {
+                    path: 'income',
+                    component: income,
+                    name: 'income',
+                    meta: {
+                        title: '我的'
+                    }
+                },
+                {
+                    path: 'incomeDetails',
+                    component: incomeDetails,
+                    name: 'incomeDetails',
+                    meta: {
+                        title: '我的'
+                    }
+                },
+                {
+                    path: 'inviteList',
+                    component: inviteList,
+                    name: 'inviteList',
+                    meta: {
+                        title: '我的'
+                    }
+                }
+            ]
         },
         {
             path: 'address',
@@ -238,12 +273,14 @@ export default [{
                     component: Invite,
                     name: 'Invite',
                     meta: {title: '邀请好友'}
-                }, {
+                }, 
+                {
                     path: 'waiter',
                     component: Waiter,
                     name: 'Waiter',
                     meta: {title: '添加客服'}
-                }, {
+                },
+                {
                     path: 'userCenter',
                     component: BountyUserCenter,
                     name: 'BountyUserCenter',
