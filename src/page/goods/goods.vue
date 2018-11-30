@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="goods_info">
-        <div class="info_title">商品详情</div>
+        <div class="panel_title">商品详情</div>
         <!--<div class="info_content" v-html="goods.Desc"></div>-->
         <div class="info_content">
             <p>品名：{{goods.name}}</p>
@@ -275,14 +275,6 @@ export default {
     .goods_info {
         margin-top: 0.15rem;
         background-color: $fc;
-        .info_title {
-            padding-left: 0.16rem;
-            border-left: 7px solid $red;
-            line-height: 0.45rem;
-            border-bottom: 1px solid #f7f7fa;
-            @include wh(100%, 0.45rem);
-            @include sc(0.15rem, $g6);
-        }
         .info_content {
             p {
                 @include sc(0.13rem, $g6);

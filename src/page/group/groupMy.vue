@@ -29,7 +29,7 @@
         </div>
         <!-- 拼团流程 -->
         <div class="assembling_process">
-            <div class="info_title">拼团流程</div>
+            <div class="panel_title">拼团流程</div>
             <div class="content">
                 <ul class="process">
                     <li>
@@ -338,14 +338,6 @@
     .info_box {
         background-color: $fc;
         padding-bottom: .1rem;
-    }
-    .info_title {
-        padding-left: 0.16rem;
-        border-left: 7px solid $red;
-        line-height: 0.45rem;
-        border-bottom: 1px solid #f7f7fa;
-        @include wh(100%, 0.45rem);
-        @include sc(0.15rem, $g6);
     }
     .assembling_process {
         background-color: $fc;

@@ -172,3 +172,12 @@ body.modal-open{
 .red {
     color: $red;
 }
+.panel_title {
+    padding-left: 0.16rem;
+    border-left: 7px solid $red;
+    line-height: 0.45rem;
+    border-bottom: 1px solid #f7f7fa;
+    background-color: $fc;
+    @include wh(100%, 0.45rem);
+    @include sc(0.15rem, $g6);
+}
