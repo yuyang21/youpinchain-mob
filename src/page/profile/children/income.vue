@@ -4,11 +4,11 @@
     <ul class="number_statistics">
       <li>
         <p>邀请人数</p>
-        <p>{{inviteNum}}人</p>
+        <p>{{profileInfo.inviteNum}}人</p>
       </li>
       <li>
         <p>下单人数</p>
-        <p>{{orderNum}}人</p>
+        <p>{{profileInfo.inviteOrderNum}}人</p>
       </li>
     </ul>
     <div class="royalty_ratio">
@@ -36,31 +36,31 @@
       </div>
       <ul class="content">
         <li>
-          <p><span>¥</span>{{profileInfo.profit}}</p>
+          <p><span>¥</span>{{todayInfo.todayAmount}}</p>
           <p>今日收益</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.orderAmount}}</p>
+          <p><span>¥</span>{{todayInfo.todayOrderAmount}}</p>
           <p>今日下单金额</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.totalOrderAmount}}</p>
+          <p><span>¥</span>{{profileInfo.invitePayNum}}</p>
           <p>用户累计下单</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.totalProfit}}</p>
+          <p><span>¥</span>{{profileInfo.totalAmount}}</p>
           <p>累计收益</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.balance}}</p>
+          <p><span>¥</span>{{profileInfo.totalAmount - profileInfo.canWithdrawAmount - profileInfo.alreadyWithdrawAmount}}</p>
           <p>预估收益余额</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.withdrawals}}</p>
+          <p><span>¥</span>{{profileInfo.alreadyWithdrawAmount}}</p>
           <p>已累计提现</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.withdrawable}}</p>
+          <p><span>¥</span>{{profileInfo.canWithdrawAmount}}</p>
           <p>可提现金额</p>
         </li>
         <li>
@@ -80,23 +80,30 @@
 <script>
   import headTop from '../../../components/header/head'
   import footGuide from "src/components/footer/footGuide";
+  import {
+    accountsInfo,
+    todayProfit
+  } from '../../../service/getData'
   export default {
     data () {
       return {
-        inviteNum: 80,
-        orderNum: 9,
-        profileInfo: {
-          profit: 40,
-          orderAmount: 53,
-          totalOrderAmount: 868,
-          totalProfit: 111,
-          balance: 40,
-          withdrawals: 120,
-          withdrawable: 234
-        }
+        profileInfo: {},
+        todayInfo: {}
       }
     },
     created () {
+      this.getInfo();
+    },
+    methods: {
+      getInfo () {
+        var that = this
+        accountsInfo().then(function (res) {
+          that.profileInfo = res.data
+        })
+        todayProfit().then(function (res) {
+          that.todayInfo = res.data
+        })
+      }
     },
     components: {
       headTop,
