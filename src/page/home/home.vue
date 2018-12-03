@@ -97,14 +97,14 @@ export default {
             this.getDatasBrandId(res.data.brandDatas)
         })
         var that = this
-        that.mescroll = new MeScroll(that.$refs.mescroll, { 
+        that.mescroll = new MeScroll(that.$refs.mescroll, {
             down: {
                 use: true,
             },
             up: {
               callback: that.upCallback,
               page: {
-                num: 0, 
+                num: 0,
                 size: 4,
               }
             }
@@ -155,6 +155,9 @@ export default {
             el.style.opacity = 1;
         },
         getDatasBrandId(nav) {
+            if (nav == undefined) {
+                return
+            }
             nav.forEach(key => {
                 if (key.name === 'brand') {
                     this.datasBrandId = key.id
@@ -165,14 +168,15 @@ export default {
           productList(page.num, page.size).then(res => {
             this.showLoading = false;
             let arr = res.data.productList;
-            if (page.num == 1) this.hotgoodslist = [];
-            var that = this
+            if (page.num === 1) this.hotgoodslist = [];
+            var that = this;
             setTimeout(function () {
               that.hotgoodslist = that.hotgoodslist.concat(arr);
               that.$nextTick(() => {
-                that.mescroll.endSuccess(arr.length);
+                that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
               })
             },300)
+
           }).catch((e)=> {
             this.mescroll.endErr();
           })
