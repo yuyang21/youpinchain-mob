@@ -72,40 +72,6 @@
                 </li>
             </ul>
         </div>
-        <!-- <div class="certificates">
-            <p class="abstract">奖励规则</p>
-            <ul>
-                <li v-for="item in rules">
-                    <p v-if="item.describe">{{item.describe}}</p>
-                    <p v-else>{{item.rewardRulesName}}:满足拼团人数超过{{item.rulesNum}},即可获得{{item.rewardName}}</p>
-                </li>
-            </ul>
-        </div>
-        <div class="description_detail">
-            <img class="abstractImg" src="../../images/group/group_explain.jpg" alt="">
-            <ul>
-                <li>
-                    <p class="abstract">预售说明</p>
-                    <p align="center" style="text-align:center">为保证新鲜，生猪屠宰排酸后即发货。
-                        <br/>9月18日屠宰，即日其可下单购买。
-                        <br/>数量有限、售完为止。
-                    </p>
-                </li>
-                <li>
-                    <p class="abstract">物流说明</p>
-                    <div class="tip">（以下时效是以快递发出后计算）</div>
-                    <p>覆盖区域：仲秋活动仅限北京和江浙沪地区<br> 物流费用：消费不满199元，快递费15元；消费>199元，包邮。
-                        <br/> 快递公司：默认顺丰或者申通。
-                        <br/> 特别提示：北京订单为淮安至北京冷链车统一运送，北京同城快递达至客户手中。
-                    </p>
-                </li>
-                <li>
-                    <p class="abstract">售后说明</p>
-                    <p>若因外箱破损或快递延误发现腐烂变质情况，请在收获后3小时联系客服，我们来为您处理，保证您购物无忧。 <br/> 温馨提示：因生鲜产品特殊性，物流签收超过24小时后，不支持退换货，敬请谅解。
-                    </p>
-                </li>
-            </ul>
-        </div> -->
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
             <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 我要参团</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 我要开团</div>
@@ -147,19 +113,15 @@
                 groupMyId: '',
                 groupSuit: {},
                 suitDet: [],
-                rules: [],
                 cart_num: 0,
                 number: [1, 2, 3, 4, 5],
                 pagination: {
                     activeColor: "#e4372e",
                     color: "#fff"
                 },
-                preview: '',
                 endTimeDown: null,
-                startTimeDown:null,
+                startTimeDown: null,
                 timer: null,
-                timer2: null,
-                timer3: null,
             };
         },
         watch: {
@@ -169,8 +131,8 @@
             endTimeDown: function (val) {
                 var that = this
                 if (!val) {
-                    clearInterval(that.timer3)
-                    that.timer3 = setTimeout(function () {
+                    clearInterval(that.timer)
+                    setTimeout(function () {
                         that.initData()
                     },1000)
                 }
@@ -180,7 +142,6 @@
             this.goodsid = this.$route.params.suitId;
             this.groupMyId = this.$route.query.groupMyId;
             this.initData();
-            this.initCartCount();
         },
         components: {
             Carousel,
@@ -191,9 +152,6 @@
         computed: {},
         props: ["showErrMsg"],
         methods: {
-            toCredential(index) {
-                this.$router.push("/credentials/#w_anchor" + index);
-            },
             initData() {
                 var that = this;
                 groupDet(that.goodsid).then(res => {
@@ -202,9 +160,8 @@
                     }
                     that.groupSuit = res.data.groupSuit;
                     that.suitDet = res.data.suitDet;
-                    that.rules = res.data.rules;
-                    that.endTimeDown = res.data.endTimeDown;
-                    that.startTimeDown = res.data.startTimeDown;
+                    that.endTimeDown = res.data.suitEndTimeDown;
+                    // that.startTimeDown = res.data.startTimeDown;
                     !res.data.preSaleDelivery ?
                         (that.groupSuit.preSaleDelivery = "2018-09-18T00:58:28") :
                         null;
@@ -218,21 +175,6 @@
                 //开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
                 showBack(status => {
                     that.headTitle = status ? that.groupSuit.name : "";
-                });
-            },
-            initCartCount() {
-                cartProductCount().then(res => {
-                    if (res.errno == 0) {
-                        this.cart_num = res.data;
-                    }
-                });
-            },
-            addCartList(goods) {
-                addToCart(this.goodsid, 1).then(res => {
-                    if (res.errno === 0) {
-                        this.showErrMsg("添加成功");
-                        this.initCartCount();
-                    }
                 });
             },
             /**
@@ -271,7 +213,6 @@
                                 }
                             })
                             that.endTimeDown -= 1
-                            that.luckDrawTime -= 1
                             if(that.endTimeDown < 1){
                                 that.endTimeDown = 0
                             }

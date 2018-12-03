@@ -1,28 +1,23 @@
 <template>
     <div class="mescroll" ref="mescroll">
-        <div>
-            <section id="hot_goods">
-                <ul class="goodslistul clear">
-                    <li v-for="item in goOn" :key="item.id">
-                        <router-link tag="div" :to="'/groupDet/' + item.id">
-                            <div class="left position-re">
-                                <p class="count_down">距结束 <span>{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</span></p>
-                                <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
-                            </div>
-                            <div class="left goods_info">
-                                <p class="name">{{item.suitName}}</p>
-                                <p class="desr">{{item.describe}}</p>
-                                <p class="tip"><span>固定地址享受超高优惠</span></p>
-                                <!--<p class="coupon" :class="[item.useCoupon === 0 ? 'unuseCoupon' : 'useCoupon']">{{item.useCoupon === 0 ? '优惠券不可使用' : '优惠券可使用'}}</p>-->
-                                <p class="price"><span class="RMB">￥</span>{{item.suitPrice}} <span class="lable">3人成团</span></p>
-                                <p class="single_price">单买价￥{{item.originalPrice}}</p>
-                            </div>
-                            <div class="shopping_cart"><p>立即拼团</p></div>
-                        </router-link>
-                    </li>
-                </ul>
-            </section>
-        </div>
+        <section id="hot_goods">
+            <ul class="goodslistul clear">
+                <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
+                    <div class="left position-re">
+                        <p class="count_down">距结束 <span>{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</span></p>
+                        <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
+                    </div>
+                    <div class="left goods_info">
+                        <p class="name">{{item.suitName}}</p>
+                        <p class="desr">{{item.describe}}</p>
+                        <p class="tip"><span>固定地址享受超高优惠</span></p>
+                        <p class="price"><span class="RMB">￥</span>{{item.suitPrice}} <span class="lable">3人成团</span></p>
+                        <p class="single_price">单买价￥{{item.originalPrice}}</p>
+                    </div>
+                    <div class="shopping_cart"><p>立即拼团</p></div>
+                </router-link>
+            </ul>
+        </section>
     </div>
 </template>
 
@@ -30,62 +25,31 @@
     import footGuide from "src/components/footer/footGuide";
     import {
         findCart,
-        updateCart,
-        deleteCart,
-        addToCart,
         groupList
     } from "../../../service/getData";
 
     export default {
         data() {
             return {
-                selectAll: false,
-                totalPrice: 0,
-                goodsPrice: 0,
-                payment: 0,
-                fare: 0,
-                carts: [],
                 goOn: [],
-                hasMore: false,
-                proIds:[],
                 timer: null,
                 endTimeDown: 9100
             };
         },
+        watch: {},
         async beforeMount() {},
         mounted() {
-            groupList().then(res => {
-                this.goOn = res.data.goOn
-                //this.hasMore = res.data.totalPages > this.page
-            })
             this.computeNumber()
+            this.getGroupList()
         },
         created() {
-            this.proIds = JSON.parse(
-                sessionStorage.getItem(this.$route.query.rebuyKey)
-            );
-        },
-        components: {
-            footGuide
         },
         computed: {},
         methods: {
-            loadCarts () {
-                findCart(1, 100).then(res => {
-                    this.carts = res.data.cart;
-                    this.carts.forEach(cart => {
-                        cart.choose = true;
-                        if(this.proIds){
-                            if(this.proIds.indexOf(cart.productId) == -1){
-                                cart.choose = false;
-                            }
-                        }
-                        cart.available = true;
-                        if (cart.stock - cart.number < 0 || !cart.isShow){
-                            cart.available = false;
-                        }
-                    });
-                });
+            getGroupList () {
+                groupList(1, 10).then(res => {
+                    this.goOn = res.data.goOn
+                })
             },
             // 倒计时
             computeNumber () {
@@ -116,7 +80,9 @@
                 }
             }
         },
-        watch: {}
+        components: {
+            footGuide
+        }
     };
 </script>
 
@@ -125,7 +91,6 @@
     @import '../../../style/mixin';
     #hot_goods {
         background-color: $fc;
-        padding: .2rem 0 0;
         .goods_title {
             text-align: center;
             margin: 0 auto;
@@ -158,16 +123,6 @@
                     margin-left: .12rem;
                 }
             }
-            img {
-                margin-right: .12rem;
-                width: 1.4rem;
-                height: 1.4rem;
-                border-radius: 5px;
-                background-color: #F8DCE8;
-            }
-            img.noImage {
-                background-color: #000;
-            }
             li {
                 width: 100%;
                 clear: both;
@@ -176,6 +131,18 @@
                 position: relative;
                 border-bottom: 1px solid #f8f8f8;
                 padding-bottom: .15rem;
+                .left.position-re {
+                    @include wh(1.4rem,1.4rem);
+                    img {
+                        margin-right: .12rem;
+                        width: 100%;
+                        border-radius: 5px;
+                        background-color: #F8DCE8;
+                    }
+                    img.noImage {
+                        background-color: #000;
+                    }
+                }
             }
             li:last-child {
                 margin-bottom: 0;

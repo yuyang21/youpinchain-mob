@@ -4,10 +4,10 @@
             <div class="swiper-container" v-if="carts.length">
                 <div class="topBG"></div>
                 <div class="shop_info">
-                    <!-- <div v-for="(cartList, index) in carts" :key="index">
-                        <span>{{cartList.brandName}}</span> -->
+                    <div v-for="(cartList, index) in carts" :key="index">
+                        <span>{{cartList.brandName}}</span>
                         <ul class="goods">
-                            <li v-for="item in carts" :key="item.cartId">
+                            <li v-for="item in cartList.cartListDtos" :key="item.cartId">
                                 <span :class="[item.choose && item.available ? 'choose' : 'unselected']"
                                       @click="checkCart(item)"></span>
                                 <img :src="item.thumbnailPic" alt="" class="img"
@@ -26,7 +26,7 @@
                                 </div>
                             </li>
                         </ul>
-                    <!-- </div> -->
+                    </div>
                     <ul class="payment_info">
                         <li>
                             <p>商品总价</p>
