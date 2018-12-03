@@ -108,7 +108,6 @@
     import {signout} from 'src/service/getData'
     import alertTip from 'src/components/common/alertTip'
     import {getImgPath} from 'src/components/common/mixin'
-    import {imgBaseUrl} from 'src/config/env'
     import {removeStore} from 'src/config/mUtils'
 
     export default {
@@ -123,7 +122,6 @@
                 isLeave:false, //是否退出
                 showAlert: false,
                 alertText: null,
-                imgBaseUrl,
             }
         },
         beforeDestroy(){
@@ -511,8 +509,8 @@ body .coverpart .cover-animate-leave{
      </div>
  </template>
  <style>
-     
+
  </style>
  <script>
-     
+
  </script> -->

@@ -1,10 +1,6 @@
-import {
-	baseUrl
-} from './env'
-
 export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 	type = type.toUpperCase();
-	url = baseUrl + url;
+	url = process.env.WEB_DEFAULT_DOMAIN + url;
 
 	if (type == 'GET') {
 		let dataStr = ''; //数据拼接字符串
@@ -39,7 +35,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 				value: JSON.stringify(data)
 			})
 		}
-		
+
 		try {
 			const response = await fetch(url, requestConfig);
 			const responseJson = await response.json();

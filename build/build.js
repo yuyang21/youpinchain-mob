@@ -1,8 +1,8 @@
 // https://github.com/shelljs/shelljs
 require('shelljs/global')
 var env = process.argv[2];
-if(!env) {
-  env = 'production'
+if (!env) {
+    env = 'production'
 }
 // env.NODE_ENV = 'production'
 process.env.NODE_ENV = env
@@ -13,8 +13,8 @@ var ora = require('ora')
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.prod.conf')
 
-if (env == 'test') {
-webpackConfig = require('./webpack.test.conf')
+if (env === 'test') {
+    webpackConfig = require('./webpack.test.conf')
 }
 
 var spinner = ora('building for ' + env + '...')
@@ -25,7 +25,7 @@ rm('-rf', assetsPath)
 mkdir('-p', assetsPath)
 cp('-R', 'static/*', assetsPath)
 
-webpack(webpackConfig, function(err, stats) {
+webpack(webpackConfig, function (err, stats) {
     spinner.stop()
     if (err) throw err
     process.stdout.write(stats.toString({

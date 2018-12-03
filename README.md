@@ -24,7 +24,7 @@ vue2 + vuex + vue-router + webpack + ES6/7 + fetch + sass + flex + svg
 
 ## 项目运行
 
-#### 注意：由于涉及大量的 ES6/7 等新属性，node 需要 6.0 以上版本 
+#### 注意：由于涉及大量的 ES6/7 等新属性，node 需要 6.0 以上版本
 
 ```
 git clone https://github.com/lijiapeng0302/vue2-elem.git  
@@ -203,7 +203,6 @@ npm run dev
 │   │   └── header
 │   │       └── head.vue                        // 头部公共组件
 │   ├── config                                  // 基本配置
-│   │   ├── env.js                              // 环境切换配置
 │   │   ├── fetch.js                            // 获取数据
 │   │   ├── mUtils.js                           // 常用的js方法
 │   │   └── rem.js                              // px转换rem
@@ -221,7 +220,7 @@ npm run dev
 │   │   │       ├── exchange.vue                // 兑换红包
 │   │   │       ├── hbDescription.vue           // 红包说明
 │   │   │       └── hbHistory.vue               // 历史红包
-│   │   ├── city                 
+│   │   ├── city
 │   │   │   └── city.vue                        // 当前城市页
 │   │   ├── confirmOrder
 │   │   │   ├── children
@@ -232,7 +231,7 @@ npm run dev
 │   │   │   │   ├── chooseAddress.vue           // 选择地址页
 │   │   │   │   ├── invoice.vue                 // 选择发票页
 │   │   │   │   ├── payment.vue                 // 付款页
-│   │   │   │   ├── remark.vue                  // 订单备注页 
+│   │   │   │   ├── remark.vue                  // 订单备注页
 │   │   │   │   └── userValidation.vue          // 用户验证页
 │   │   │   └── confirmOrder.vue                // 确认订单页
 │   │   ├── download
