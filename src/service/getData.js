@@ -421,7 +421,7 @@ export const source = () => fetch('/source', {});
  * @param size
  * @returns {Promise<*>}
  */
-export const groupList = (page, size) => fetch('/group', {
+export const groupList = (page, size) => fetch('/groups', {
     page: page,
     size: size
 });
@@ -430,7 +430,7 @@ export const groupList = (page, size) => fetch('/group', {
  * 根据拼团id查询商品详情
  * @param {拼团id} suitId
  */
-export const groupDet = (suitId) => fetch('/group/' + suitId, {});
+export const groupDet = (suitId) => fetch('/groups/' + suitId, {});
 
 /**
  * 我的拼团详情
@@ -447,7 +447,66 @@ export const myGroupOrder = () => fetch('/group/myOrder', {});
 /**
  * 我的优惠卷查询
  */
-export const couponList = (page, pageSize) => fetch('/coupon', {
+export const couponList = (page, size) => fetch('/coupon', {
+    page: page,
+    size: size
+});
+
+/**
+ * 我的账户信息
+ */
+export const accountsInfo = () => fetch('/accounts/0', {});
+
+/**
+ * 我的邀请记录
+ */
+export const userInvites = (page, pageSize) => fetch('/accounts/0/userInvites', {
     page: page,
     pageSize: pageSize
-});
+})
+
+/**
+ * 我的段位
+ */
+export const rewardGrade = () => fetch('/accounts/0/rewardGrade', {})
+
+/**
+ * 申请提现
+ */
+export const withdraws = () => fetch('/accounts/0/withdraws', {})
+
+/**
+ * 提成奖励段位信息
+ */
+export const rewardGrades = () => fetch('/rewardGrades', {})
+
+/**
+ * 拼团提交订单
+ */
+export const groupMyOrder = (suitId, groupMyId) => fetch('/groups/' + suitId + '/groupMys/' + groupMyId + '/order', {})
+
+/**
+ * 团长地址信息
+ */
+export const groupMyAddress = (suitId, groupMyId) => fetch('/groups/' + suitId + '/groupMys/' + groupMyId, {})
+
+/**
+ * 拼团商品详情
+ */
+export const groupsDetail = (suitId, groupMyId) => fetch('/groups/' + suitId, {
+    suitId: suitId,
+    groupMyId: groupMyId
+})
+
+/**
+ * 我的今日收益
+ */
+export const todayProfit = () => fetch('/accounts/0/todayProfit', {})
+
+/**
+ * 我的收益明细
+ */
+export const incomeDeals = (page, pageSize) => fetch('/accounts/0/deals', {
+    page: page,
+    pageSize: pageSize
+})

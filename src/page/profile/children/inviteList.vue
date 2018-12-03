@@ -3,42 +3,34 @@
     <head-top head-title="我的邀请成员" go-back='true'></head-top>
     <ul class="content">
       <li v-for="(item, index) in list" :key="index">
-        <img :src="item.imgUrl" :class="{'noImage': !item.imgUrl}" alt="头像">
+        <img :src="item.headImgUrl" :class="{'noImage': !item.headImgUrl}" alt="头像">
       </li>
     </ul>
   </div>
 </template>
 <script>
   import headTop from '../../../components/header/head'
+  import {
+    userInvites
+  } from '../../../service/getData'
   export default {
     data () {
       return {
-        list: [
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          },
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          },
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          },
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          },
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          },
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          },
-          {
-            imgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-          }
-        ]
+        page: 1,
+        size: 10,
+        list: []
       }
     },
     created () {
+      this.getList(this.page, this.size)
+    },
+    methods: {
+      getList (page, size) {
+        var that = this
+        userInvites(page, size).then(function (res) {
+          that.list = res.data.data
+        })
+      }
     },
     components: {
       headTop
