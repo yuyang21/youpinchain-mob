@@ -3,33 +3,36 @@
     <head-top head-title="收益明细" go-back='true'></head-top>
     <ul>
       <li v-for="(item,index) in detailList" :key="index">
-        <p>{{item.date | date('.')}}</p>
-        <p class="ellipsis">{{item.desr}}</p>
-        <p>{{item.money > 0 ? '+' : ''}}{{item.money}}</p>
+        <p>{{item.createTime | date('.')}}</p>
+        <p class="ellipsis">{{item.describe}}</p>
+        <p>{{item.amount > 0 ? '+' : ''}}{{item.amount}}</p>
       </li>
     </ul>
   </div>
 </template>
 <script>
   import headTop from '../../../components/header/head'
+  import {
+    incomeDeals
+  } from '../../../service/getData'
   export default {
     data () {
       return {
-        detailList: [
-          {
-            date: 16732211111,
-            desr: '某某某消费230元某某某消费230元',
-            money: 1.25
-          },
-          {
-            date: 11555322222,
-            desr: '提现20元',
-            money: -25
-          }
-        ]
+        page: 1,
+        size: 10,
+        detailList: []
       }
     },
     created () {
+      this.getDetail(this.page, this.size)
+    },
+    methods: {
+      getDetail (page, size) {
+        var that = this
+        incomeDeals(page, size).then((res) => {
+          that.detailList = res.data.data
+        })
+      }
     },
     components: {
       headTop
