@@ -45,21 +45,25 @@
                     </div>
                     <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p><s>{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
-                                choosedAddress.address}}</s></p>
-                            <p><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span></p>
-                            <div class="label">普通拼团</div>
-                            <div class="tips">
+                            <p :class="{'line-through': groupMyId !== 'undefined' && isNotTuanAdd}">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
+                                choosedAddress.address}}</p>
+                            <p :class="{'line-through': groupMyId !== 'undefined' && isNotTuanAdd}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
+                            <div v-if="groupMyId === 'undefined'" class="label" :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes" :key="index" @click="selectSuitType(item.type)">{{item.text}}</div>
+                            <div class="tips" v-if="groupSuitType === 2">
                                 您的地址及电话会展示给您的团员 <br>
                                 <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
                                 <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
                             </div>
-                            <p class="position-re">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
-                                choosedAddress.address}}
-                                <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
-                                <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
-                            </p>
-                            <p><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span></p>
+                            <div v-if="groupMyId !== 'undefined' && isNotTuanAdd">
+                                <br>
+                                <div class="position-re">
+                                    <p class="left address-tuan">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
+                                    choosedAddress.address}}</p>
+                                    <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
+                                    <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
+                                </div>
+                                <p class="clear"><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span></p>
+                            </div>
                         </div>
                         <router-link :to="{name: 'addressList', query:{path: 'confirmOrder'}}" class="deletesite">
                             <span></span>
@@ -154,7 +158,8 @@
         getAddressList,
         getRegionsList,
         prepayOrder,
-        addAddress
+        addAddress,
+        openGroup
     } from "../../service/getData";
 
     export default {
@@ -185,7 +190,19 @@
                 coupon: '',
                 couponId: '',
                 SuitNumber: 1,
-                showTip: false
+                showTip: false,
+                groupSuitType: 1,
+                suitTypes: [
+                    {
+                        type: 1,
+                        text: '普通拼团'
+                    },
+                    {
+                        type: 2,
+                        text: '社区拼团'
+                    }
+                ],
+                isNotTuanAdd: false
             }
         },
         props: ['showErrMsg'],
@@ -218,6 +235,7 @@
             );
             this.groupType = this.$route.query.type
             this.groupMyId = this.$route.query.groupMyId
+            console.log(this.groupMyId === 'undefined')
             this.showTotal = this.productList.length > 2;
             this.goodsPrice = this.groupType == 1 ? this.groupSuit.suitPrice : this.groupSuit.originalPrice;
             this.totalPrice = this.groupType == 1 ? this.groupSuit.suitPrice : this.groupSuit.originalPrice;
@@ -416,6 +434,14 @@
                         })
                     }
                 });
+            },
+            openGroup () {
+                openGroup(groupSuit.id, type, 2, groupSuit.suitNum, groupMyId).then((res) => {
+
+                })
+            },
+            selectSuitType (type) {
+                this.groupSuitType = type;
             }
         },
         components: {
@@ -444,6 +470,9 @@
         padding-bottom: 0.49rem;
     }
 
+    .line-through {
+        text-decoration: line-through;
+    }
     .mask_box {
         background-color: rgba(0,0,0,0.3);
         @include wh(100%,0rem);
@@ -470,6 +499,7 @@
                 box-shadow: 0px 1px 13.9px 0.6px rgba(181, 184, 188, 0.51);
                 .address-detail {
                     position: relative;
+                    width: 84%;
                     p {
                         line-height: 1.6;
                         @include sc(0.15rem, $g3);
@@ -483,18 +513,23 @@
                     }
                     .label {
                         @include wh(.625rem, .24rem);
+                        @include sc(.13rem, $g9);
+                        border: .01rem solid $g9;
+                        border-radius: .025rem;
+                        margin: .12rem .22rem .12rem 0;
+                        text-align: center;
+                        line-height: .23rem;
+                        float: left;
+                    }
+                    .label.selected {
                         @include sc(.13rem, $red);
                         border: .01rem solid $red;
-                        border-radius: .025rem;
-                        margin-top: .12rem;
-                        text-align: center;
-                        line-height: .24rem;
                     }
                     .tips {
                         @include sc(.13rem, $g9);
                         line-height: 1.9;
-                        margin: .15rem 0;
                         overflow: hidden;
+                        clear: both;
                         span {
                             @include sc(.13rem, $g9);
                         }
@@ -502,9 +537,13 @@
                             width: 69%;
                         }
                     }
+                    .address-tuan {
+                        width: 93%;
+                    }
                     .icon {
                         width: .165rem;
-                        vertical-align: sub;
+                        float: left;
+                        margin-top: .03rem;
                     }
                     .tip_box {
                         @include wh(2.8rem,.67rem);
@@ -517,7 +556,7 @@
                         line-height: 1.45;
                         position: absolute;
                         top: -.57rem;
-                        right: .25rem;
+                        right: -.2rem;
                         z-index: 4;
                         pointer-events: none;
                     }

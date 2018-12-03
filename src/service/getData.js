@@ -510,3 +510,14 @@ export const incomeDeals = (page, pageSize) => fetch('/accounts/0/deals', {
     page: page,
     pageSize: pageSize
 })
+
+/**
+ * 开团 / 参团(新)
+ */
+export const openGroup = (suitId, type, groupSuitType, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMy', {
+    suitId: suitId,
+    type: type,
+    groupSuitType: groupSuitType,
+    suitNum: suitNum,
+    groupMyId: groupMyId
+}, 'POST')
