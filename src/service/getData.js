@@ -183,16 +183,16 @@ export const submitOrder = (cartIds, addressId, couponId, message) => fetch('/or
  * @param addressId 地址id
  * @param couponId 我的优惠卷id
  * @param message 备注
- * @param type 类型：0：拼团直接购买，1：我要开团
- * @param groupMyId 我的拼团id,如果是我要开团传null
+ * @param suitNum 套装数量
+ * @param groupMyId 我的拼团id
  * @returns {Promise<*>}
  */
-export const submitGroup = (suitId, addressId, couponId, message, type, groupMyId) => fetch('/group/submit', {
+export const submitGroup = (suitId, addressId, couponId, message, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMys/' + groupMyId + '/order', {
     suitId: suitId,
     addressId: addressId,
     couponId: couponId,
     message: message,
-    type: type,
+    suitNum: suitNum,
     groupMyId: groupMyId
 }, 'POST');
 

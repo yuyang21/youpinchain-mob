@@ -91,20 +91,20 @@
                     <div class="purchase_num">
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
-                            <span class="subduction" :class="{'disabled': SuitNumber <= 1}"
-                                    @click="SuitNumber > 1 ? addNumber(SuitNumber, -1) : deleteCart(SuitNumber)"></span>
-                            <span class="num">{{SuitNumber}}</span>
-                            <span class="add" @click="addNumber(SuitNumber, 1)"></span>
+                            <span class="subduction" :class="{'disabled': suitNum <= 1}"
+                                    @click="addNumber(suitNum, -1)"></span>
+                            <span class="num">{{suitNum}}</span>
+                            <span class="add" @click="addNumber(suitNum, 1)"></span>
                         </div>
                     </div>
                     <ul class="payment_info">
                         <li>
                             <p>商品总价</p>
-                            <p><span class="RMB">￥</span>{{goodsPrice}}</p>
+                            <p><span class="RMB">￥</span>{{goodsPrice | number}}</p>
                         </li>
                         <router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">
                             <p>优惠价格</p>
-                            <p class="RMB coupon">-￥{{coupon ? coupon.money : 0}}</p>
+                            <p class="RMB coupon">-￥{{coupon ? coupon.money : 0 | number}}</p>
                             <!-- <p class="coupon" v-else>不使用</p> -->
                         </router-link>
                         <li>
@@ -122,7 +122,7 @@
                     </ul>
                     <div class="right totalPrice">
                         实际支付
-                        <p><span class="RMB">￥</span>{{totalPrice + fare}}</p>
+                        <p><span class="RMB">￥</span>{{(totalPrice + fare) | number}}</p>
                     </div>
                 </div>
                 <!-- <div class="shop_info">
@@ -136,7 +136,7 @@
         </nav>
         <ul class="settlement">
             <li @click="paymentCall()">去付款</li>
-            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{totalPrice + fare}}</span></li>
+            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{(totalPrice + fare) | number}}</span></li>
         </ul>
         <div class="mask_box" v-show="showTip" @click="showTip = false;"></div>
     </div>
@@ -159,7 +159,8 @@
         getRegionsList,
         prepayOrder,
         addAddress,
-        openGroup
+        openGroup,
+        groupMyAddress
     } from "../../service/getData";
 
     export default {
@@ -189,7 +190,7 @@
                 payButton: false,
                 coupon: '',
                 couponId: '',
-                SuitNumber: 1,
+                suitNum: 1,
                 showTip: false,
                 groupSuitType: 1,
                 suitTypes: [
@@ -235,14 +236,16 @@
             );
             this.groupType = this.$route.query.type
             this.groupMyId = this.$route.query.groupMyId
-            console.log(this.groupMyId === 'undefined')
             this.showTotal = this.productList.length > 2;
-            this.goodsPrice = this.groupType == 1 ? this.groupSuit.suitPrice : this.groupSuit.originalPrice;
-            this.totalPrice = this.groupType == 1 ? this.groupSuit.suitPrice : this.groupSuit.originalPrice;
-            this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
-            sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
+            this.reComputePrice();
+            this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
         },
         methods: {
+            getGroupMyAddress () {
+                groupMyAddress(this.groupMyId, this.groupSuit.id).then((res) => {
+                    console.log(res)
+                })
+            },
             showTipsBox () {
                 this.showTip = true;
                 document.querySelector('.mask_box').style.height = document.documentElement.clientHeight + 'px';
@@ -263,33 +266,35 @@
                         that.payButton = false;
                         return;
                     }
-                    that.submitAddress(that.address, function () {
-                        that.doPayCall();
-                    })
+                    // that.submitAddress(that.address, function () {
+                    //     that.doPayCall();
+                    // })
                 } else {
                     that.doPayCall();
                 }
             },
 
             doPayCall() {
-                if (this.orderId != 0) {
-                    this.doPay(this.orderId);
-                    return;
-                }
                 let that = this;
                 let suitId = that.groupSuit.id
                 let addressId = that.choosedAddress.id;
-                let type = that.groupType;
-                let groupMyId = that.groupMyId ? that.groupMyId : null
-
-                submitGroup(suitId, addressId, that.couponId, that.message, type, groupMyId).then(res => {
-                    if (res.errno !== 0) {
-                        this.showErrMsg(res.errmsg)
-                        that.payButton = false;
-                        return;
-                    }
-                    that.orderId = res.data.orderId;
-                    that.doPay(that.orderId);
+                let type = Number(that.groupType);
+                let groupSuitType = that.groupSuitType;
+                let suitNum = that.suitNum;
+                let groupMyId = that.groupMyId === 'undefined' ? null : that.groupMyId;
+                console.log(groupMyId)
+                openGroup(suitId, type, groupSuitType, suitNum, groupMyId).then((res) => {
+                    that.groupMyId = res.data;
+                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, that.groupMyId).then(res => {
+                        if (res.errno !== 0) {
+                            that.showErrMsg(res.errmsg)
+                            that.payButton = false;
+                            return;
+                        }
+                        that.orderId = res.data.orderId;
+                        console.log(that.orderId)
+                        // that.doPay(that.orderId);
+                    })
                 })
             },
 
@@ -435,13 +440,21 @@
                     }
                 });
             },
-            openGroup () {
-                openGroup(groupSuit.id, type, 2, groupSuit.suitNum, groupMyId).then((res) => {
-
-                })
-            },
             selectSuitType (type) {
                 this.groupSuitType = type;
+            },
+            reComputePrice () {
+                this.goodsPrice = this.groupType == 1 ? this.groupSuit.suitPrice * this.suitNum : this.groupSuit.originalPrice;
+                this.totalPrice = this.groupType == 1 ? this.groupSuit.suitPrice * this.suitNum : this.groupSuit.originalPrice;
+                this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
+                sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
+            },
+            addNumber(suitNum, number) {
+                if (number < 0 && suitNum <= 1) {
+                    return;
+                }
+                this.suitNum += number 
+                this.reComputePrice();
             }
         },
         components: {
