@@ -45,24 +45,23 @@
                     </div>
                     <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p :class="{'line-through': groupMyId !== 'undefined' && isNotTuanAdd}">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
+                            <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
-                            <p :class="{'line-through': groupMyId !== 'undefined' && isNotTuanAdd}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
-                            <div v-if="groupMyId === 'undefined'" class="label" :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes" :key="index" @click="selectSuitType(item.type)">{{item.text}}</div>
+                            <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
+                            <div v-if="groupMyId === 'undefined' && groupType === '1'" class="label" :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes" :key="index" @click="selectSuitType(item.type)">{{item.text}}</div>
                             <div class="tips" v-if="groupSuitType === 2">
                                 您的地址及电话会展示给您的团员 <br>
                                 <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
                                 <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
                             </div>
-                            <div v-if="groupMyId !== 'undefined' && isNotTuanAdd">
+                            <div v-if="groupMyId !== 'undefined'">
                                 <br>
                                 <div class="position-re">
-                                    <p class="left address-tuan">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
-                                    choosedAddress.address}}</p>
+                                    <p class="left address-tuan">{{tuanAddress.address}}</p>
                                     <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
                                     <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
                                 </div>
-                                <p class="clear"><span>{{choosedAddress.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{choosedAddress.mobile}}</span></p>
+                                <p class="clear"><span>{{tuanAddress.consignee}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{tuanAddress.mobile}}</span></p>
                             </div>
                         </div>
                         <router-link :to="{name: 'addressList', query:{path: 'confirmOrder'}}" class="deletesite">
@@ -203,7 +202,7 @@
                         text: '社区拼团'
                     }
                 ],
-                isNotTuanAdd: false
+                tuanAddress: {}
             }
         },
         props: ['showErrMsg'],
@@ -226,6 +225,7 @@
                 this.totalPrice -= this.coupon.money
                 this.couponId = this.coupon.id
             }
+            console.log(this.choosedAddress.id)
         },
         created() {
             this.productList = JSON.parse(
@@ -242,8 +242,8 @@
         },
         methods: {
             getGroupMyAddress () {
-                groupMyAddress(this.groupMyId, this.groupSuit.id).then((res) => {
-                    console.log(res)
+                groupMyAddress(this.groupSuit.id, this.groupMyId).then((res) => {
+                    this.tuanAddress = res.data
                 })
             },
             showTipsBox () {
@@ -281,19 +281,17 @@
                 let type = Number(that.groupType);
                 let groupSuitType = that.groupSuitType;
                 let suitNum = that.suitNum;
-                let groupMyId = that.groupMyId === 'undefined' ? null : that.groupMyId;
-                console.log(groupMyId)
+                let groupMyId = that.groupMyId === 'undefined' ? null : Number(that.groupMyId);
                 openGroup(suitId, type, groupSuitType, suitNum, groupMyId).then((res) => {
-                    that.groupMyId = res.data;
-                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, that.groupMyId).then(res => {
+                    groupMyId = res.data;
+                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
                         if (res.errno !== 0) {
                             that.showErrMsg(res.errmsg)
                             that.payButton = false;
                             return;
                         }
                         that.orderId = res.data.orderId;
-                        console.log(that.orderId)
-                        // that.doPay(that.orderId);
+                        that.doPay(that.orderId, groupMyId);
                     })
                 })
             },
@@ -301,7 +299,7 @@
             /**
              * 去支付，调起微信支付
              */
-            doPay(orderId) {
+            doPay(orderId, groupMyId) {
                 prepayOrder(orderId).then(resp => {
                     var that = this;
                     if (resp.errno === 403) {
@@ -319,7 +317,7 @@
                             function (res) {
                                 that.payButton = false;
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                    that.$router.push('/order/undelivery');
+                                    that.$router.push('/groupMy/' + groupMyId);
                                 }
                                 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                             }
