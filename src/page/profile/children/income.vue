@@ -18,13 +18,12 @@
           <u>如何提高比率</u>
           <img src="../../../images/group/icon.png" alt="">
         </div>
+        <ul class="img">
+          <li v-for="(item,index) in levels" :key="index" :class="{'level': level === item.id}"></li>
+          <hr color="#FCC931" width="88%" height=".025rem">
+        </ul>
         <ul class="levels">
-          <img class="img" src="../../../images/profile/royalty_ratio.png" alt="" width="90%">
-          <li>短工</li>
-          <li>长工</li>
-          <li>贫民</li>
-          <li>富农</li>
-          <li>土豪</li>
+          <li v-for="(item,index) in levels" :key="index">{{item.name}}</li>
         </ul>
         <p class="text">奖励：<br> 用户下单金额*(有效下单人数提成比+邀请用户提成比)</p>
       </div>
@@ -82,13 +81,37 @@
   import footGuide from "src/components/footer/footGuide";
   import {
     accountsInfo,
-    todayProfit
+    todayProfit,
+    rewardGrade
   } from '../../../service/getData'
   export default {
     data () {
       return {
         profileInfo: {},
-        todayInfo: {}
+        todayInfo: {},
+        levels: [
+          {
+            id: 1,
+            name: '短工'
+          },
+          {
+            id: 2,
+            name: '长工'
+          },
+          {
+            id: 3,
+            name: '贫民'
+          },
+          {
+            id: 4,
+            name: '富农'
+          },
+          {
+            id: 5,
+            name: '土豪'
+          }
+        ],
+        level: null
       }
     },
     created () {
@@ -102,6 +125,9 @@
         })
         todayProfit().then(function (res) {
           that.todayInfo = res.data
+        })
+        rewardGrade().then((res) => {
+          that.level = res.data.id
         })
       }
     },
@@ -175,6 +201,55 @@
           text-align: left;
           line-height: 1.7;
           padding: .15rem 0 0.07rem .1rem;
+        }
+        .img {
+          overflow: hidden;
+          clear: both;
+          position: relative;
+          height: 1.2rem;
+          hr {
+            margin-top: 1.12rem;
+          }
+          li {
+            float: left;
+            background-color: #FDE749;
+            width: .29rem;
+            position: absolute;
+            bottom: 0.15rem;
+            border-radius: .025rem;
+          }
+          li:nth-child(1) {
+            height: .28rem;
+            left: 6%;
+          }
+          li:nth-child(2) {
+            height: .38rem;
+            left: 26%;
+          }
+          li:nth-child(3) {
+            height: .48rem;
+            left: 46%;
+          }
+          li:nth-child(4) {
+            height: .58rem;
+            left: 66%;
+          }
+          li:nth-child(5) {
+            height: .68rem;
+            left: 86%;
+          }
+          li.level{
+            &:before {
+              content: '';
+              display: block;
+              @include wh(.24rem,.24rem);
+              background: url('../../../images/profile/icon.png') no-repeat 0 0;
+              background-size: 100% 100%;
+              position: absolute;
+              top: -.28rem;
+              left: .015rem;
+            }
+          }
         }
       }
       .panel_title {
