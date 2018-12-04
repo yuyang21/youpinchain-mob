@@ -115,7 +115,7 @@ export default [{
         },
         //我的拼团
         {
-            path: '/groupMy/:groupMyId',
+            path: '/groups/:suitId/groupMy/:groupMyId',
             component: groupMy,
             meta: {
                 title: '拼团详情'
@@ -261,7 +261,7 @@ export default [{
                     component: BountyTask,
                     name: 'BountyTask',
                     meta: {title: '淘金任务'}
-                }, 
+                },
                 {
                     path: 'PickGoldTask/:id',
                     component: PickGoldTask,
@@ -273,7 +273,7 @@ export default [{
                     component: Invite,
                     name: 'Invite',
                     meta: {title: '邀请好友'}
-                }, 
+                },
                 {
                     path: 'waiter',
                     component: Waiter,

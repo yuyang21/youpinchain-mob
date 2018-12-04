@@ -1,3 +1,4 @@
+<!-- 发起或参与拼团详情页，可分享 -->
 <template>
     <div class="goods">
         <div class="info_box">
@@ -50,8 +51,8 @@
                     </li>
                 </ul>
                 <p class="rules">奖励规则 <br>
-                    2人即可享受拼团优惠 <br>
-                    5人即每人获得20元优惠卷
+                    3人即可享受拼团优惠 <br>
+                    <!--5人即每人获得20元优惠卷-->
                 </p>
             </div>
         </div>
@@ -65,7 +66,7 @@
         ModalHelper
     } from "../../service/Utils";
     import {
-        groupMy
+        groupMy, groupDet
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -76,6 +77,7 @@
             return {
                 showShare: false,
                 groupMyId: "",
+                groupSuitId: '',
                 groupSuit: {
                     id: 1,
                     thumbnailPic: '',
@@ -104,6 +106,8 @@
         },
         mounted() {
             this.groupMyId = this.$route.params.groupMyId;
+            this.groupSuitId = this.$route.params.suitId;
+
             this.initData();
         },
         watch: {
@@ -129,19 +133,21 @@
         methods: {
             initData() {
                 var that = this;
+                groupDet(that.groupSuitId).then(res => {
+                    that.groupSuit = res.data.groupSuit;
+                    wx.ready(function () {
+                        var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
+                        WechatShareUtils.onMenuShareAppMessage('一起来拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
+                    })
+                })
                 groupMy(that.groupMyId).then(res => {
                     that.computeNumber()
                     if (res.errno !== 0) {
                         return;
                     }
-                    that.groupSuit = res.data.groupSuit;
                     that.rules = res.data.rules;
                     that.groupMy = res.data.groupMy;
                     that.endTimeDown = res.data.endTimeDown;
-                    wx.ready(function () {
-                        var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId
-                        WechatShareUtils.onMenuShareAppMessage('一起来拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
-                    })
                     that.computeNumber()
                 });
             },
@@ -247,7 +253,7 @@
             @include wh(92%,.45rem);
             @include sc(.15rem,$fc);
             text-align: center;
-            line-height: .45rem;    
+            line-height: .45rem;
             margin: 0 auto .15rem;
             border-radius: .225rem;
             background-color: $red;
