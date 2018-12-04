@@ -91,10 +91,10 @@
                     <div class="purchase_num">
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
-                            <span class="subduction" :class="{'disabled': suitNum <= 1}"
-                                    @click="addNumber(suitNum, -1)"></span>
+                            <span class="subduction" :class="{'disabled': suitNum <= groupSuit.minimum}"
+                                    @click="addNumber(suitNum, -groupSuit.stepSize)"></span>
                             <span class="num">{{suitNum}}</span>
-                            <span class="add" @click="addNumber(suitNum, 1)"></span>
+                            <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
                         </div>
                     </div>
                     <ul class="payment_info">
@@ -234,8 +234,10 @@
                 } else if (t.type === 2) {
                     t.text = '社区拼团';
                 }
-            })
+            });
 
+            // 最低起售份数
+            this.suitNum = this.groupSuit.minimum;
             this.groupType = this.$route.query.type
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
@@ -464,7 +466,7 @@
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
             },
             addNumber(suitNum, number) {
-                if (number < 0 && suitNum <= 1) {
+                if (number < 0 && suitNum <= this.groupSuit.minimum) {
                     return;
                 }
                 this.suitNum += number
