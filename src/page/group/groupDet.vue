@@ -1,3 +1,4 @@
+<!-- 团购详情 -->
 <template>
     <div class="goods">
         <head-top class="header" go-back='true' is-share="true" :showShare="showShare"
@@ -9,12 +10,22 @@
                 <img :src="groupSuit.normalPic" alt="" class="show">
             </carousel>
             <div class="presell_box">
-                <div class="left_price left">
+
+                <div class="left_price left" v-if="groupSuit.preSaleDelivery !== undefined">
                     <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
                     <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
                 </div>
-                <div class="right_tip right" v-if="endTimeDown>0 && startTimeDown<1">
+                <div class="left_price left" v-else>
+                    <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
+                </div>
+                <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
                     <p>距开团结束</p>
+                    <p>
+                        <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
+                    </p>
+                </div>
+                <div class="right_tip right" v-if="groupMyId">
+                    <p>距拼团结束</p>
                     <p>
                         <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
                     </p>
@@ -73,8 +84,8 @@
             </ul>
         </div>
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
-            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 我要参团</div>
-            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 我要开团</div>
+            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 参与拼团</div>
+            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 发起拼团</div>
             <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.originalPrice}} <br> 单独购买</div>
         </div>
         <share-mask v-if="showShare" :showShare="showShare"></share-mask>
@@ -161,16 +172,27 @@
                     that.groupSuit = res.data.groupSuit;
                     that.suitDet = res.data.suitDet;
                     that.endTimeDown = res.data.suitEndTimeDown;
+                    that.headTitle = res.data.groupSuit.suitName;
                     // that.startTimeDown = res.data.startTimeDown;
-                    !res.data.preSaleDelivery ?
-                        (that.groupSuit.preSaleDelivery = "2018-09-18T00:58:28") :
-                        null;
                     wx.ready(function () {
                         var shareLink = window.location.href
                         WechatShareUtils.onMenuShareAppMessage('超值拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                     })
                     that.computeNumber()
                 });
+                if (this.groupMyId) {
+                    groupMy(this.groupMyId).then(res => {
+                        that.computeNumber()
+                        if (res.errno !== 0) {
+                            return;
+                        }
+                        that.groupSuit = res.data.groupSuit;
+                        that.rules = res.data.rules;
+                        that.groupMy = res.data.groupMy;
+                        that.endTimeDown = res.data.endTimeDown;
+                        that.computeNumber()
+                    });
+                }
 
                 //开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
                 showBack(status => {
