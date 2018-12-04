@@ -90,10 +90,10 @@
                     <div class="purchase_num">
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
-                            <span class="subduction" :class="{'disabled': suitNum <= 1}"
-                                    @click="addNumber(suitNum, -1)"></span>
+                            <span class="subduction" :class="{'disabled': suitNum <= groupSuit.minimum}"
+                                    @click="addNumber(suitNum, -groupSuit.stepSize)"></span>
                             <span class="num">{{suitNum}}</span>
-                            <span class="add" @click="addNumber(suitNum, 1)"></span>
+                            <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
                         </div>
                     </div>
                     <ul class="payment_info">
@@ -110,14 +110,14 @@
                             <p>运费</p>
                             <p><span class="RMB">￥</span>{{fare}}</p>
                         </li>
-                        <li>
-                            <p>包装费</p>
-                            <p><span class="RMB">￥</span>{{packingFee}}</p>
-                        </li>
-                        <li>
-                            <p>包装费减免</p>
-                            <p><span class="RMB">￥</span>{{packingFeeReduction}}</p>
-                        </li>
+                        <!--<li>-->
+                            <!--<p>包装费</p>-->
+                            <!--<p><span class="RMB">￥</span>{{packingFee}}</p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<p>包装费减免</p>-->
+                            <!--<p><span class="RMB">￥</span>{{packingFeeReduction}}</p>-->
+                        <!--</li>-->
                     </ul>
                     <div class="right totalPrice">
                         实际支付
@@ -192,16 +192,7 @@
                 suitNum: 1,
                 showTip: false,
                 groupSuitType: 1,
-                suitTypes: [
-                    {
-                        type: 1,
-                        text: '普通拼团'
-                    },
-                    {
-                        type: 2,
-                        text: '社区拼团'
-                    }
-                ],
+                suitTypes: [],
                 tuanAddress: {}
             }
         },
@@ -234,6 +225,19 @@
             this.groupSuit = JSON.parse(
                 sessionStorage.getItem(this.$route.query.groupKey)
             );
+            this.suitTypes = JSON.parse(
+                sessionStorage.getItem(this.$route.query.suitTypeKey)
+            );
+            this.suitTypes.forEach(t => {
+                if (t.type === 1) {
+                    t.text = '普通拼团';
+                } else if (t.type === 2) {
+                    t.text = '社区拼团';
+                }
+            });
+
+            // 最低起售份数
+            this.suitNum = this.groupSuit.minimum;
             this.groupType = this.$route.query.type
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
@@ -440,18 +444,30 @@
             },
             selectSuitType (type) {
                 this.groupSuitType = type;
+                this.reComputePrice();
             },
             reComputePrice () {
-                this.goodsPrice = this.groupType == 1 ? this.groupSuit.suitPrice * this.suitNum : this.groupSuit.originalPrice;
-                this.totalPrice = this.groupType == 1 ? this.groupSuit.suitPrice * this.suitNum : this.groupSuit.originalPrice;
+                this.goodsPrice = 0;
+                this.totalPrice = 0;
+
+                // 根据拼团的类型计算不同的套装价格
+                this.suitTypes.forEach(t => {
+                    if (t.type === this.groupSuitType) {
+                        if (this.groupSuit.id  === t.productId) {
+                            this.goodsPrice += t.discountPrice * this.suitNum;
+                        }
+                    }
+                })
+
+                this.totalPrice = this.goodsPrice;
                 this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
             },
             addNumber(suitNum, number) {
-                if (number < 0 && suitNum <= 1) {
+                if (number < 0 && suitNum <= this.groupSuit.minimum) {
                     return;
                 }
-                this.suitNum += number 
+                this.suitNum += number
                 this.reComputePrice();
             }
         },
@@ -740,7 +756,7 @@
                 background-color: $f7;
                 padding: 0 .13rem;
                 line-height: .49rem;
-                .cart_btns {    
+                .cart_btns {
                     margin-top: .15rem;
                     display: flex;
                     .subduction,

@@ -12,11 +12,11 @@
             <div class="presell_box">
 
                 <div class="left_price left" v-if="groupSuit.preSaleDelivery !== undefined">
-                    <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
+                    <p class="price"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
                     <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
                 </div>
                 <div class="left_price left" v-else>
-                    <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
+                    <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
                 </div>
                 <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
                     <p>距开团结束</p>
@@ -84,9 +84,9 @@
             </ul>
         </div>
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
-            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 参与拼团</div>
-            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupSuit.suitPrice}} <br> 发起拼团</div>
-            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.originalPrice}} <br> 单独购买</div>
+            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupMy.discountPrice}} <br> 参与拼团</div>
+            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupPrice}} <br> 发起拼团</div>
+            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.suitPrice}} <br> 单独购买</div>
         </div>
         <share-mask v-if="showShare" :showShare="showShare"></share-mask>
     </div>
@@ -123,7 +123,9 @@
                 goodsid: "",
                 groupMyId: '',
                 groupSuit: {},
+                suitTypes: [],
                 suitDet: [],
+                groupPrice: 0,
                 cart_num: 0,
                 number: [1, 2, 3, 4, 5],
                 pagination: {
@@ -173,6 +175,11 @@
                     that.suitDet = res.data.suitDet;
                     that.endTimeDown = res.data.suitEndTimeDown;
                     that.headTitle = res.data.groupSuit.suitName;
+                    that.suitTypes = res.data.suitTypes;
+                    that.groupPrice = that.suitTypes[0].discountPrice;
+                    that.suitTypes.forEach(t => {
+                        that.groupPrice = Math.min(that.groupPrice, t.discountPrice);
+                    })
                     // that.startTimeDown = res.data.startTimeDown;
                     wx.ready(function () {
                         var shareLink = window.location.href
@@ -215,7 +222,11 @@
                     "groupSuit_" + currentTime,
                     JSON.stringify(groupSuit)
                 );
-                this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&groupMyId="+groupMyId);
+                sessionStorage.setItem(
+                    "suitType_" + currentTime,
+                    JSON.stringify(this.suitTypes)
+                );
+                this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
             },
             // 倒计时
             computeNumber () {
