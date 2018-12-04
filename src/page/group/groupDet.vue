@@ -16,7 +16,7 @@
                     <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
                 </div>
                 <div class="left_price left" v-else>
-                    <p class="price"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
+                    <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}"><span>￥</span>{{groupSuit.suitPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
                 </div>
                 <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
                     <p>距开团结束</p>
@@ -277,6 +277,9 @@
                         @include sc(0.12rem, $fc);
                         font-weight: normal;
                     }
+                }
+                .price.margin-t-p8 {
+                    margin-top: .08rem;
                 }
                 .tip {
                     @include sc(0.12rem, $fc);
