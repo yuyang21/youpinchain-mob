@@ -123,6 +123,7 @@
                 goodsid: "",
                 groupMyId: '',
                 groupSuit: {},
+                suitTypes: [],
                 suitDet: [],
                 cart_num: 0,
                 number: [1, 2, 3, 4, 5],
@@ -173,6 +174,7 @@
                     that.suitDet = res.data.suitDet;
                     that.endTimeDown = res.data.suitEndTimeDown;
                     that.headTitle = res.data.groupSuit.suitName;
+                    that.suitTypes = res.data.suitTypes;
                     // that.startTimeDown = res.data.startTimeDown;
                     wx.ready(function () {
                         var shareLink = window.location.href
@@ -215,7 +217,11 @@
                     "groupSuit_" + currentTime,
                     JSON.stringify(groupSuit)
                 );
-                this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&groupMyId="+groupMyId);
+                sessionStorage.setItem(
+                    "suitType_" + currentTime,
+                    JSON.stringify(this.suitTypes)
+                );
+                this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
             },
             // 倒计时
             computeNumber () {
