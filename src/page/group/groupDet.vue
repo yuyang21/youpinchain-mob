@@ -122,6 +122,7 @@
                 headTitle: "",
                 goodsid: "",
                 groupMyId: '',
+                groupMy: {},
                 groupSuit: {},
                 suitTypes: [],
                 suitDet: [],
