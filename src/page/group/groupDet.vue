@@ -106,7 +106,7 @@
         showBack
     } from "src/config/mUtils";
     import {
-        groupMy,
+        groupMyAddress,
         groupDet
     } from "../../service/getData";
     import {
@@ -152,7 +152,7 @@
             }
         },
         mounted() {
-            this.goodsid = this.$route.params.suitId;
+            this.groupSuitId = this.$route.params.suitId;
             this.groupMyId = this.$route.query.groupMyId;
             this.initData();
         },
@@ -167,13 +167,12 @@
         methods: {
             initData() {
                 var that = this;
-                groupDet(that.goodsid).then(res => {
+                groupDet(that.groupSuitId).then(res => {
                     if (res.errno !== 0) {
                         return;
                     }
                     that.groupSuit = res.data.groupSuit;
                     that.suitDet = res.data.suitDet;
-                    that.endTimeDown = res.data.suitEndTimeDown;
                     that.headTitle = res.data.groupSuit.suitName;
                     that.suitTypes = res.data.suitTypes;
                     that.groupPrice = that.suitTypes[0].discountPrice;
@@ -185,18 +184,23 @@
                         var shareLink = window.location.href
                         WechatShareUtils.onMenuShareAppMessage('超值拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                     })
-                    that.computeNumber()
+
+                    // 因请求是异步，无法保证时间先后，所以需判断
+                    if (!this.groupMyId) {
+                        that.endTimeDown = res.data.suitEndTimeDown;
+                        that.computeNumber()
+                    }
                 });
+
+                // 有用户拼团Id，说明这是一个已开的团，只能参团
                 if (this.groupMyId) {
-                    groupMy(this.groupMyId).then(res => {
+                    groupMyAddress(this.groupSuitId, this.groupMyId).then(res => {
                         that.computeNumber()
                         if (res.errno !== 0) {
                             return;
                         }
-                        that.groupSuit = res.data.groupSuit;
-                        that.rules = res.data.rules;
                         that.groupMy = res.data.groupMy;
-                        that.endTimeDown = res.data.endTimeDown;
+                        that.endTimeDown = res.data.groupMy.endTime - new Date().getTime()/1000;
                         that.computeNumber()
                     });
                 }
