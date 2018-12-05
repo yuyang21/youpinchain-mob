@@ -247,7 +247,7 @@
         methods: {
             getGroupMyAddress () {
                 groupMyAddress(this.groupSuit.id, this.groupMyId).then((res) => {
-                    this.tuanAddress = res.data
+                    this.tuanAddress = res.data.orderAddressVo;
                 })
             },
             showTipsBox () {

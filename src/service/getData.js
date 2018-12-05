@@ -437,7 +437,7 @@ export const groupDet = (suitId) => fetch('/groups/' + suitId, {});
  * @param groupMyId
  * @returns {Promise<*>}
  */
-export const groupMy = (groupMyId) => fetch('/group/my/' + groupMyId, {});
+export const groupMy = (groupMyId) => fetch('/groups/my/' + groupMyId, {});
 
 /**
  * 我的拼团数据查询
