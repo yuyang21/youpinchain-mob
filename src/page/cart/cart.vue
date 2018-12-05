@@ -64,7 +64,7 @@
                         <p class="price"><span class="RMB">￥</span>{{item.presentPrice}} <s class="RMB">￥{{item.originalPrice}}</s>
                         </p>
                     </router-link>
-                    <div class="right add_cart" @touchstart="addToCart(item.id, $event)"></div>
+                    <div class="right add_cart" :class="{'shopping_cart_disabled': item.stock <= 0}" @touchstart="addToCart(item, $event)"></div>
                 </li>
             </ul>
             <router-link :to="'/home'" class="load_more" v-if="hasMore">查看更多商品</router-link>
@@ -118,6 +118,7 @@
         },
         async beforeMount() {
         },
+        props: ['showErrMsg'],
         mounted() {
             productHotList().then(res => {
                 this.hotgoodslist = res.data.productList
@@ -157,13 +158,17 @@
                     that.reComputePrice();
                 });
             },
-            addToCart(productId) {
+            addToCart(product) {
                 var that = this
+                if (product.stock <= 0) {
+                    that.showErrMsg('库存不足');
+                    return;
+                }
                 let elLeft = event.target.getBoundingClientRect().left;
                 let elBottom = event.target.getBoundingClientRect().bottom;
                 that.showMoveDot.push(true);
                 that.showMoveDotFun(that.showMoveDot, elLeft, elBottom);
-                addToCart(productId, 1).then(res => {
+                addToCart(product.id, 1).then(res => {
                     that.$parent.getCartNum();
                     that.loadCarts();
                 })
@@ -357,10 +362,13 @@
                         font-weight: normal;
                     }
                 }
-                .add_cart {
+                .add_cart, .shopping_cart_disabled {
                     @include wh(0.315rem, 0.315rem);
                     @include bis("../../images/shopping_cart.png");
                     margin-top: 0.08rem;
+                }
+                .shopping_cart_disabled {
+                    @include bis('../../images/shopping_cart_disabled.png');
                 }
             }
         }

@@ -36,7 +36,7 @@
                                 <p class="price"><span class="RMB">￥</span>{{item.presentPrice}} <s>￥{{item.originalPrice}}</s></p>
                             </div>
                         </router-link>
-                        <div class="shopping_cart" @touchstart="addToCart(item.id, $event)"></div>
+                        <div class="shopping_cart" :class="{'shopping_cart_disabled': item.stock <= 0}" @touchstart="addToCart(item, $event)"></div>
                     </li>
                 </ul>
                 <transition appear @after-appear='afterEnter' @before-appear="beforeEnter" v-for="(item,index) in showMoveDot" :key="index">
@@ -122,19 +122,24 @@ export default {
         Carousel,
         Slide
     },
+    props: ['showErrMsg'],
     computed: {},
     methods: {
         toggleTab(dataId, index) {
             this.$router.push("/growing-environment?dataId=" + dataId);
             this.activeTab = index
         },
-        addToCart(productId, event) { // 加入购物车，计算按钮位置。
+        addToCart(product, event) { // 加入购物车，计算按钮位置。
+            if (product.stock <= 0) {
+                this.showErrMsg('库存不足');
+                return;
+            }
             let elLeft = event.target.getBoundingClientRect().left;
             let elBottom = event.target.getBoundingClientRect().bottom;
             this.showMoveDot.push(true);
             let that = this;
             this.showMoveDotFun(this.showMoveDot, elLeft, elBottom);
-            addToCart(productId, 1).then(res => {
+            addToCart(product.id, 1).then(res => {
                 that.$parent.getCartNum();
             })
         },
@@ -294,12 +299,15 @@ export default {
                 }
             }
         }
-        .shopping_cart {
+        .shopping_cart, .shopping_cart_disabled {
             position: absolute;
             right: 0;
             bottom: .25rem;
             @include wh(.315rem, .315rem);
             @include bis('../../images/shopping_cart.png');
+        }
+        .shopping_cart_disabled {
+            @include bis('../../images/shopping_cart_disabled.png');
         }
     }
 }
