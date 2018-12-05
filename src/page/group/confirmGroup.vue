@@ -45,7 +45,7 @@
                     </div>
                     <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.provinceName +
+                            <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.provinceName +
                                 choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
