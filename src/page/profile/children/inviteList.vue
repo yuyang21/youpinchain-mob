@@ -1,7 +1,7 @@
 <template>
   <div class="inviteList header-top">
     <head-top head-title="我的邀请成员" go-back='true'></head-top>
-    <ul class="content">
+    <ul class="content" ref="mescroll">
       <li v-for="(item, index) in list" :key="index">
         <img :src="item.headImgUrl" :class="{'noImage': !item.headImgUrl}" alt="头像">
       </li>
@@ -10,25 +10,49 @@
 </template>
 <script>
   import headTop from '../../../components/header/head'
+  import MeScroll from '../../../static/mescroll/mescroll.min.js'
   import {
     userInvites
   } from '../../../service/getData'
   export default {
     data () {
       return {
-        page: 1,
-        size: 10,
         list: []
       }
     },
+    mounted() {
+      var that = this
+      that.mescroll = new MeScroll(that.$refs.mescroll, {
+        down: {
+          use: true,
+        },
+        up: {
+          callback: that.upCallback,
+          page: {
+            num: 0,
+            size: 10,
+          }
+        }
+      });
+      that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+    },
     created () {
-      this.getList(this.page, this.size)
     },
     methods: {
-      getList (page, size) {
-        var that = this
-        userInvites(page, size).then(function (res) {
-          that.list = res.data.data
+      upCallback (page) {
+        userInvites(page.num, page.size).then(res => {
+          this.showLoading = false;
+          let arr = res.data.data;
+          if (page.num === 1) this.list = [];
+          var that = this;
+          setTimeout(function () {
+            that.list = that.list.concat(arr);
+            that.$nextTick(() => {
+              that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
+            })
+          },300)
+        }).catch((e)=> {
+          this.mescroll.endErr();
         })
       }
     },
@@ -38,6 +62,7 @@
   }
 </script>
 <style lang="scss" scoped>
+  @import '../../../static/mescroll/mescroll.min.css';
   @import "src/style/mixin";
   .inviteList {
     background-color: $bc;

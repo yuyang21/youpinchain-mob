@@ -1,7 +1,7 @@
 <template>
   <div class="income_details header-top">
     <head-top head-title="收益明细" go-back='true'></head-top>
-    <ul>
+    <ul ref="mescroll">
       <li v-for="(item,index) in detailList" :key="index">
         <p>{{item.createTime | date('.')}}</p>
         <p class="ellipsis">{{item.describe}}</p>
@@ -12,25 +12,50 @@
 </template>
 <script>
   import headTop from '../../../components/header/head'
+  import MeScroll from '../../../static/mescroll/mescroll.min.js'
   import {
     incomeDeals
   } from '../../../service/getData'
   export default {
     data () {
       return {
-        page: 1,
-        size: 10,
-        detailList: []
+        detailList: [],
+        mescroll: null
       }
     },
+    mounted() {
+      var that = this
+      that.mescroll = new MeScroll(that.$refs.mescroll, {
+          down: {
+            use: true,
+          },
+          up: {
+              callback: that.upCallback,
+              page: {
+                num: 0,
+                size: 10,
+              }
+          }
+      });
+      that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+    },
     created () {
-      this.getDetail(this.page, this.size)
     },
     methods: {
-      getDetail (page, size) {
-        var that = this
-        incomeDeals(page, size).then((res) => {
-          that.detailList = res.data.data
+      upCallback (page) {
+        incomeDeals(page.num, page.size).then(res => {
+          this.showLoading = false;
+          let arr = res.data.data;
+          if (page.num === 1) this.detailList = [];
+          var that = this;
+          setTimeout(function () {
+            that.detailList = that.detailList.concat(arr);
+            that.$nextTick(() => {
+              that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
+            })
+          },300)
+        }).catch((e)=> {
+          this.mescroll.endErr();
         })
       }
     },
@@ -40,6 +65,7 @@
   }
 </script>
 <style lang="scss" scoped>
+  @import '../../../static/mescroll/mescroll.min.css';
   @import "src/style/mixin";
   .income_details {
     ul {
