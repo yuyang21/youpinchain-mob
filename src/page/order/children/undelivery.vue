@@ -13,21 +13,20 @@
                                 {{item.orderStatusText}}
                             </p>
                         </header>
-                        <template v-for="group in groupOrder">
-                            <router-link v-if="group.groupMyId == item.groupMyId"
-                                         :to="{path:'/groupMy/' + item.groupMyId}" class="order_item_top_header_group"
-                                         tag="header">
-                                <ul>
-                                    <li><p class="order_time" style="color: #dd3333">{{group.suitName}}拼团中</p></li>
-                                    <li><p class="order_status" style="color: #dd3333">
-                                        已有{{group.groupNum}}人参与 当前拼团将在{{group.suitEntTime | timeformat}}结束
-                                    </p></li>
-                                </ul>
-                                <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                                </svg>
-                            </router-link>
-                        </template>
+                        <router-link v-if="item.groupOrderDto"
+                                     :to="{path:'/groupMy/' + item.groupMyId}"
+                                     class="order_item_top_header_group"
+                                     tag="header">
+                            <ul>
+                                <li><p class="order_time" style="color: #dd3333">{{item.groupOrderDto.suitName}}拼团中</p></li>
+                                <li><p class="order_status" style="color: #dd3333">
+                                    已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{group.endTime}}结束
+                                </p></li>
+                            </ul>
+                            <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+                            </svg>
+                        </router-link>
                         <router-link :to="{path:'/orderDetail/' + item.id}" tag="div">
                             <section class="goods_img">
                                 <div class="goods_box">
@@ -79,7 +78,7 @@
     import loading from 'src/components/common/loading'
     import {loadMore} from 'src/components/common/mixin'
     import alertTip from 'src/components/common/alertTip'
-    import {getOrderList, cancelOrder, confirmOrder, myGroupOrder, refundOrder} from "../../../service/getData";
+    import {getOrderList, cancelOrder, confirmOrder, refundOrder} from "../../../service/getData";
     import refundOrderTip from "src/components/common/refundOrderTip";
     import MeScroll from '../../../static/mescroll/mescroll.min.js'
 
@@ -92,7 +91,6 @@
                 status_title: ['待支付', '待发货', '已发货', '已完成', '已取消'],
                 showLoading: true, //显示加载动画
                 orderList: [],
-                groupOrder: [],
                 mescroll: null
             }
         },
@@ -163,14 +161,6 @@
                     }
                     this.$parent.showErrMsg("成功");
                     this.list();
-                })
-            },
-            getGroupOrder() {
-                myGroupOrder().then(res => {
-                    if (res.errno !== 0) {
-                        return;
-                    }
-                    this.groupOrder = res.data;
                 })
             },
             upCallback(page) {
