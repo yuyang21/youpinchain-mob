@@ -58,13 +58,13 @@ router.beforeEach((to, from, next) => {
             delete query.T
             next({path: to.path, query: query})
         } else {
-            WechatShareUtils.redirectToAuth(to.path)
+            WechatShareUtils.redirectToAuth(to.fullPath)
         }
     } else {
         next();
         userInfo().then(res => {
             if (res.errno === 401) {
-                WechatShareUtils.redirectToAuth(to.path)
+                WechatShareUtils.redirectToAuth(to.fullPath)
             }
         });
     }
