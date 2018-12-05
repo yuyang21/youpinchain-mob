@@ -200,11 +200,6 @@
                         that.computeNumber()
                     });
                 }
-
-                //开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
-                showBack(status => {
-                    that.headTitle = status ? that.groupSuit.name : "";
-                });
             },
             /**
              * 到提交订单页面
