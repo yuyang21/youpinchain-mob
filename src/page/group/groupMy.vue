@@ -76,7 +76,8 @@
         groupMy,
         groupDet,
         groupMyAddress,
-        groupMembers
+        groupMembers,
+        systemTime
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -93,13 +94,17 @@
                 members: [],
                 leader: {},
                 endTimeDown: null,
-                timer: null
+                timer: null,
+                systemTime: null
             };
         },
         mounted() {
             this.groupMyId = this.$route.params.groupMyId;
             this.groupSuitId = this.$route.params.suitId;
-            this.initData();
+            systemTime().then((res) => {
+                this.systemTime = res.data
+                this.initData();
+            })
         },
         watch: {
             showShare: function (newVal, oldVal) {
@@ -131,7 +136,7 @@
                             return;
                         }
                         that.groupMy = res.data.groupMy;
-                        that.endTimeDown = res.data.groupMy.endTime - new Date().getTime();
+                        that.endTimeDown = res.data.groupMy.endTime - that.systemTime;
                         countDown(that.endTimeDown, time => {
                             that.endTimeDown = time
                         })
