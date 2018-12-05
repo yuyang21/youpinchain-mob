@@ -283,7 +283,7 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
 /**
  * 倒计时
  */
-export const computeNumber = (time, callback) => {
+export const countDown = (time, callback) => {
     var start_time = new Date().getTime(); //获取开始时间的毫秒数
     var countDown = time;
     var timer = setInterval(() => {
