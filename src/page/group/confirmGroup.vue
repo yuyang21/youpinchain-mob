@@ -286,13 +286,27 @@
                 let groupSuitType = that.groupSuitType;
                 let suitNum = that.suitNum;
                 let groupMyId = that.groupMyId === 'undefined' ? null : Number(that.groupMyId);
-                openGroup(suitId, type, groupSuitType, suitNum, groupMyId).then((res) => {
-                    // 参团或者开团失败时
-                    if (res.errno !== 0) {
-                        that.showErrMsg(res.errmsg);
-                        return;
-                    }
-                    groupMyId = res.data;
+
+                // 开团
+                if (!groupMyId) {
+                    openGroup(suitId, type, groupSuitType, suitNum, groupMyId).then((res) => {
+                        // 开团失败时
+                        if (res.errno !== 0) {
+                            that.showErrMsg(res.errmsg);
+                            return;
+                        }
+                        groupMyId = res.data;
+                        submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
+                            if (res.errno !== 0) {
+                                that.showErrMsg(res.errmsg)
+                                that.payButton = false;
+                                return;
+                            }
+                            that.orderId = res.data.orderId;
+                            that.doPay(that.orderId, groupMyId);
+                        })
+                    })
+                } else { // 参团
                     submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
                         if (res.errno !== 0) {
                             that.showErrMsg(res.errmsg)
@@ -302,7 +316,8 @@
                         that.orderId = res.data.orderId;
                         that.doPay(that.orderId, groupMyId);
                     })
-                })
+                }
+
             },
 
             /**
