@@ -103,7 +103,7 @@
         ModalHelper
     } from "../../service/Utils";
     import {
-        showBack
+        countDown
     } from "src/config/mUtils";
     import {
         groupMyAddress,
@@ -190,21 +190,25 @@
                         })
 
                         that.endTimeDown = res.data.suitEndTimeDown;
-                        that.computeNumber()
+                        countDown(that.endTimeDown, time => {
+                            that.endTimeDown = time
+                        })
                     }
                 });
 
                 // 有用户拼团Id，说明这是一个已开的团，只能参团
                 if (this.groupMyId) {
                     groupMyAddress(this.groupSuitId, this.groupMyId).then(res => {
-                        that.computeNumber()
                         if (res.errno !== 0) {
                             return;
                         }
                         that.groupMy = res.data.groupMy;
                         that.groupPrice = res.data.groupMy.discountPrice;
                         that.endTimeDown = res.data.groupMy.endTime - new Date().getTime()/1000;
-                        that.computeNumber()
+                        
+                        countDown(that.endTimeDown, time => {
+                            that.endTimeDown = time
+                        })
                     });
                 }
             },
@@ -229,34 +233,6 @@
                     JSON.stringify(this.suitTypes)
                 );
                 this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
-            },
-            // 倒计时
-            computeNumber () {
-                var that = this
-                var time = that.endTimeDown
-                var start_time = new Date().getTime(); //获取开始时间的毫秒数
-                if(that.endTimeDown){
-                    this.timer = setInterval(function () {
-                        if(that.endTimeDown >= 1){
-                            var end_time = new Date().getTime();
-                            var diff_time = Math.floor((end_time - start_time) / 1000);
-                            //拿到时间差作为时间标记（行走时间）
-                            document.addEventListener('visibilitychange',function() {
-                                if(document.visibilityState=='visible') {
-                                    that.endTimeDown = time - diff_time
-                                } else {
-                                }
-                            })
-                            that.endTimeDown -= 1
-                            if(that.endTimeDown < 1){
-                                that.endTimeDown = 0
-                            }
-                        } else {
-                            clearInterval(that.timer)
-                            return
-                        }
-                    },1000)
-                }
             }
         }
     };

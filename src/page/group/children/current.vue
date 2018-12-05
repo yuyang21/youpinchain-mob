@@ -28,6 +28,9 @@
         groupList,
         systemTime
     } from "../../../service/getData";
+    import {
+        countDown
+    } from "src/config/mUtils";
     import MeScroll from '../../../static/mescroll/mescroll.min.js'
     export default {
         data() {
@@ -63,35 +66,6 @@
         },
         computed: {},
         methods: {
-            // 倒计时
-            computeNumber () {
-                var that = this
-                var start_time = new Date().getTime(); //获取开始时间的毫秒数
-                that.goOn.forEach((t, index) => {
-                    if(t.endTimeDown){
-                        this.timer = setInterval(function () {
-                            if(t.endTimeDown >= 1){
-                                var end_time = new Date().getTime();
-                                var diff_time = Math.floor((end_time - start_time) / 1000);
-                                //拿到时间差作为时间标记（行走时间）
-                                document.addEventListener('visibilitychange',function() {
-                                    if(document.visibilityState=='visible') {
-                                        that.goOn[index].endTimeDown = time - diff_time
-                                    } else {
-                                    }
-                                })
-                                that.goOn[index].endTimeDown -= 1
-                                if(t.endTimeDown < 1){
-                                    that.goOn[index].endTimeDown = 0
-                                }
-                            } else {
-                                clearInterval(that.timer)
-                                return
-                            }
-                        },1000)
-                    }
-                })
-            },
             upCallback (page) {
                 groupList(page.num, page.size).then(res => {
                     this.showLoading = false;
@@ -103,7 +77,11 @@
                     })
                     setTimeout(function () {
                         that.goOn = that.goOn.concat(arr);
-                        that.computeNumber()
+                        that.goOn.forEach((t, index) => {
+                            countDown(t.endTimeDown, time => {
+                                that.goOn[index].endTimeDown = time
+                            })
+                        })
                         that.$nextTick(() => {
                             that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
                         })
