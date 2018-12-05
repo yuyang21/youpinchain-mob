@@ -175,10 +175,7 @@
                     that.suitDet = res.data.suitDet;
                     that.headTitle = res.data.groupSuit.suitName;
                     that.suitTypes = res.data.suitTypes;
-                    that.groupPrice = that.suitTypes[0].discountPrice;
-                    that.suitTypes.forEach(t => {
-                        that.groupPrice = Math.min(that.groupPrice, t.discountPrice);
-                    })
+
                     // that.startTimeDown = res.data.startTimeDown;
                     wx.ready(function () {
                         var shareLink = window.location.href
@@ -187,6 +184,11 @@
 
                     // 因请求是异步，无法保证时间先后，所以需判断
                     if (!this.groupMyId) {
+                        that.groupPrice = that.suitTypes[0].discountPrice;
+                        that.suitTypes.forEach(t => {
+                            that.groupPrice = Math.min(that.groupPrice, t.discountPrice);
+                        })
+
                         that.endTimeDown = res.data.suitEndTimeDown;
                         that.computeNumber()
                     }
@@ -200,6 +202,7 @@
                             return;
                         }
                         that.groupMy = res.data.groupMy;
+                        that.groupPrice = res.data.groupMy.discountPrice;
                         that.endTimeDown = res.data.groupMy.endTime - new Date().getTime()/1000;
                         that.computeNumber()
                     });
