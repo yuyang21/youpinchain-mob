@@ -70,7 +70,7 @@
         ModalHelper
     } from "../../service/Utils";
     import {
-        computeNumber
+        countDown
     } from "src/config/mUtils";
     import {
         groupMy,
@@ -138,7 +138,7 @@
                     that.leader = res.data.leader;
                     that.members = res.data.member;
                     that.endTimeDown = res.data.endTimeDown;
-                    computeNumber(that.endTimeDown, time => {
+                    countDown(that.endTimeDown, time => {
                         that.endTimeDown = time
                     })
                 });
