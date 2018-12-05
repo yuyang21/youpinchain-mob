@@ -7,7 +7,7 @@ let WechatShareUtils = {
     let redirect_uri = encodeURIComponent(process.env.REDIRECT) + "?backUrl=" + url;
     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
         "appid=" + process.env.WECHAT_APPID +
-        "&redirect_uri=" + redirect_uri +
+        "&redirect_uri=" + encodeURIComponent(redirect_uri) +
         "&response_type=code&scope=snsapi_userinfo" +
         "&state=" + 0 +
         "&connect_redirect=1#wechat_redirect"
