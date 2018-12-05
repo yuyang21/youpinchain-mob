@@ -514,7 +514,7 @@ export const incomeDeals = (page, pageSize) => fetch('/accounts/0/deals', {
 /**
  * 开团 / 参团(新)
  */
-export const openGroup = (suitId, type, groupSuitType, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMy', {
+export const openGroup = (suitId, type, groupSuitType, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMys', {
     suitId: suitId,
     type: type,
     groupSuitType: groupSuitType,
@@ -526,3 +526,11 @@ export const openGroup = (suitId, type, groupSuitType, suitNum, groupMyId) => fe
  * 获取系统时间
  */
 export const systemTime = () => fetch('/system/time', {})
+
+/**
+ * 参团人员信息
+ */
+export const groupMembers = (suitId, groupMyId, page, pageSize) => fetch('/groups/' + suitId + '/groupMys/' + groupMyId + '/members', {
+    page: page,
+    pageSize: pageSize
+})

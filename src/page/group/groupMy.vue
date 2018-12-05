@@ -7,9 +7,9 @@
                     <img :src="groupSuit.thumbnailPic" alt="" class="left"
                             :class="{'noImage': !groupSuit.thumbnailPic}">
                     <div class="left goods_info">
-                        <p class="name">已经有<span>{{members.length}}</span>参与拼团</p>
+                        <p class="name">已经有<span>{{members.length}}</span>人参与拼团</p>
                         <div class="right_tip" v-if="endTimeDown>0">
-                            <p>距开团结束</p>
+                            <p>距拼团结束</p>
                             <p>
                                 <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
                             </p>
@@ -75,7 +75,8 @@
     import {
         groupMy,
         groupDet,
-        groupMyAddress
+        groupMyAddress,
+        groupMembers
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -125,30 +126,30 @@
                 var that = this;
                 groupDet(that.groupSuitId).then(res => {
                     that.groupSuit = res.data.groupSuit;
-                    wx.ready(function () {
-                        var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
-                        WechatShareUtils.onMenuShareAppMessage('一起来拼团 ' + that.groupSuit.suitName, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
+                    groupMyAddress(that.groupSuitId, that.groupMyId).then(res => {
+                        if (res.errno !== 0) {
+                            return;
+                        }
+                        that.groupMy = res.data.groupMy;
+                        that.endTimeDown = res.data.groupMy.endTime - new Date().getTime();
+                        countDown(that.endTimeDown, time => {
+                            that.endTimeDown = time
+                        })
+                        wx.ready(function () {
+                            var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
+                            let title = '我发起了一个拼团，大家一起来拼团吧 ' + that.groupSuit.suitName;
+                            if (that.groupMy.groupSuitType === 2) {
+                                title = '我在' + res.data.orderAddressVo.address + '发起了一个拼团，大家一起来拼团吧！'
+                            }
+                            WechatShareUtils.onMenuShareAppMessage(title, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
+                        })
                     })
                 })
-                groupMy(that.groupMyId).then(res => {
-                    if (res.errno !== 0) {
-                        return;
-                    }
-                    that.groupMyInfo = res.data;
-                    that.leader = res.data.leader;
-                    that.members = res.data.member;
-                    that.endTimeDown = res.data.endTimeDown;
-                    countDown(that.endTimeDown, time => {
-                        that.endTimeDown = time
-                    })
-                });
-                groupMyAddress(that.groupSuitId, that.groupMyId).then(res => {
-                    if (res.errno !== 0) {
-                        return;
-                    }
-                    that.groupMy = res.data.groupMy;
-                    // that.endTimeDown = res.data.groupMy.endTime - that.systemTime;
+                groupMembers(that.groupSuitId, that.groupMyId, 1, 10).then(res => {
+                    that.leader = res.data.members[0];
+                    that.members = res.data.members;
                 })
+
             }
         }
     }
