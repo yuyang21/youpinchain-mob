@@ -7,23 +7,27 @@
                     <img :src="groupSuit.thumbnailPic" alt="" class="left"
                             :class="{'noImage': !groupSuit.thumbnailPic}">
                     <div class="left goods_info">
-                        <p class="name">已经有<span>{{groupSuit.joinNum}}</span>参与拼团</p>
+                        <p class="name">已经有<span>{{members.length}}</span>参与拼团</p>
                         <div class="right_tip" v-if="endTimeDown>0">
                             <p>距开团结束</p>
                             <p>
                                 <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
                             </p>
                         </div>
-                        <p class="price"><span class="RMB">￥</span>{{groupSuit.suitPrice}}</p>
+                        <div class="right_tip" v-else>
+                            <p class="activityEnd">已结束</p>
+                        </div>
+                        <p class="price"><span class="RMB">￥</span>{{groupMy.discountPrice}}</p>
                         <p class="desr">￥{{groupSuit.originalPrice}}</p>
                     </div>
                 </router-link>
             </div>
             <div class="aid_friend">
                 <ul class="friend_list">
-                    <li><img :src="groupMy.headImgUrl"><p>团长</p></li>
-                    <li v-for="(item,index) in groupMy.members" :key="index"><img :src="item.cheadImgUrl"></li>
+                    <li><img :src="leader.headImgUrl"><p>团长</p></li>
+                    <li v-for="(item,index) in members" :key="index"><img :src="item.headImgUrl"></li>
                     <li class="none"><div>?</div><p>待邀请</p></li>
+                    <li class="none" v-if="members.length > 15"><div><span>查看<br>更多</span></div></li>
                 </ul>
             </div>
             <div class="invite_btn clear" v-if="endTimeDown > 0" @click="showShare = true;">邀请好友</div>
@@ -51,7 +55,7 @@
                     </li>
                 </ul>
                 <p class="rules">奖励规则 <br>
-                    3人即可享受拼团优惠 <br>
+                    {{groupMy.rulesNum}}人即可享受拼团优惠 <br>
                     <!--5人即每人获得20元优惠卷-->
                 </p>
             </div>
@@ -66,7 +70,12 @@
         ModalHelper
     } from "../../service/Utils";
     import {
-        groupMy, groupDet
+        computeNumber
+    } from "src/config/mUtils";
+    import {
+        groupMy,
+        groupDet,
+        groupMyAddress
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -76,38 +85,19 @@
         data() {
             return {
                 showShare: false,
-                groupMyId: "",
+                groupMyId: '',
                 groupSuitId: '',
-                groupSuit: {
-                    id: 1,
-                    thumbnailPic: '',
-                    // thumbnailPic: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg',
-                    suitName: 'ddddd',
-                    describe: 'ffffffff',
-                    suitPrice: '23.88',
-                    originalPrice: '39.99',
-                    joinNum: 1
-                },
-                rules: [],
-                groupMy: {
-                    headImgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg',
-                    members: [
-                        {
-                            cheadImgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-                        },
-                        {
-                            cheadImgUrl: 'https://img14.360buyimg.com/n0/jfs/t23668/43/1220104374/517222/795bdff/5b56dfeeN3f7518ba.jpg'
-                        }
-                    ]
-                },
-                endTimeDown: 9999,
+                groupSuit: {},
+                groupMy: {},
+                members: [],
+                leader: {},
+                endTimeDown: null,
                 timer: null
             };
         },
         mounted() {
             this.groupMyId = this.$route.params.groupMyId;
             this.groupSuitId = this.$route.params.suitId;
-
             this.initData();
         },
         watch: {
@@ -117,7 +107,7 @@
             endTimeDown: function (val) {
                 var that = this
                 if (!val) {
-                    clearInterval(that.timer3)
+                    clearInterval(that.timer)
                     that.timer = setTimeout(function () {
                         that.initData()
                     },1000)
@@ -141,43 +131,24 @@
                     })
                 })
                 groupMy(that.groupMyId).then(res => {
-                    that.computeNumber()
                     if (res.errno !== 0) {
                         return;
                     }
-                    that.rules = res.data.rules;
-                    that.groupMy = res.data.groupMy;
+                    that.groupMyInfo = res.data;
+                    that.leader = res.data.leader;
+                    that.members = res.data.member;
                     that.endTimeDown = res.data.endTimeDown;
-                    that.computeNumber()
+                    computeNumber(that.endTimeDown, time => {
+                        that.endTimeDown = time
+                    })
                 });
-            },
-            // 倒计时
-            computeNumber () {
-                var that = this
-                var time = that.endTimeDown
-                var start_time = new Date().getTime(); //获取开始时间的毫秒数
-                if(that.endTimeDown){
-                    this.timer = setInterval(function () {
-                        if(that.endTimeDown >= 1){
-                            var end_time = new Date().getTime();
-                            var diff_time = Math.floor((end_time - start_time) / 1000);
-                            //拿到时间差作为时间标记（行走时间）
-                            document.addEventListener('visibilitychange',function() {
-                                if(document.visibilityState=='visible') {
-                                    that.endTimeDown = time - diff_time
-                                } else {
-                                }
-                            })
-                            that.endTimeDown -= 1
-                            if(that.endTimeDown < 1){
-                                that.endTimeDown = 0
-                            }
-                        } else {
-                            clearInterval(that.timer)
-                            return
-                        }
-                    },1000)
-                }
+                groupMyAddress(that.groupSuitId, that.groupMyId).then(res => {
+                    if (res.errno !== 0) {
+                        return;
+                    }
+                    that.groupMy = res.data.groupMy;
+                    // that.endTimeDown = res.data.groupMy.endTime - that.systemTime;
+                })
             }
         }
     }
@@ -202,11 +173,11 @@
         border-color: $bc;
         .aid_friend {
             .friend_list {
-                // overflow: hidden;
+                overflow: hidden;
                 margin: 0.2rem auto 0;
-                padding: .25rem .3rem;
+                padding: .25rem .3rem .1rem;
                 border-top: .01rem solid #EFEFF4;
-                display: flex;
+                // display: flex;
                 align-items: center;
                 justify-content: center;
                 width: 100%;
@@ -218,6 +189,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    margin-bottom: .15rem;
                     img {
                         @include wh(.42rem,.42rem);
                         border-radius: 50%;
@@ -242,6 +214,14 @@
                         line-height: .42rem;
                         box-sizing: content-box;
                         @include sc(.24rem, $g9);
+                        span {
+                            font-size: .12rem;
+                            line-height: 1.4;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin-top: .05rem;
+                        }
                     }
                     p {
                         background-color: $g9;
@@ -318,6 +298,13 @@
                 }
                 p:last-child {
                     @include sc(.14rem, $fc);
+                }
+                p.activityEnd {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    @include sc(.18rem, $g3);
                 }
                 &:before {
                     content: "";
