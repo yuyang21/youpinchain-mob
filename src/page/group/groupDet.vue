@@ -106,9 +106,8 @@
         showBack
     } from "src/config/mUtils";
     import {
-        addToCart,
-        groupDet,
-        cartProductCount
+        groupMy,
+        groupDet
     } from "../../service/getData";
     import {
         WechatShareUtils
