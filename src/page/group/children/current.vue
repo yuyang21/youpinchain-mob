@@ -4,7 +4,7 @@
             <ul class="goodslistul clear">
                 <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
                     <div class="left position-re">
-                        <p class="count_down">距结束 <span>{{endTimeDown | timeArry(0)}}:{{endTimeDown | timeArry(1)}}:{{endTimeDown | timeArry(2)}}</span></p>
+                        <p class="count_down">距结束 <span>{{item.endTimeDown | timeArry(0)}}:{{item.endTimeDown | timeArry(1)}}:{{item.endTimeDown | timeArry(2)}}</span></p>
                         <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
                     </div>
                     <div class="left goods_info">
@@ -25,59 +25,93 @@
     import footGuide from "src/components/footer/footGuide";
     import {
         findCart,
-        groupList
+        groupList,
+        systemTime
     } from "../../../service/getData";
-
+    import MeScroll from '../../../static/mescroll/mescroll.min.js'
     export default {
         data() {
             return {
                 goOn: [],
                 timer: null,
-                endTimeDown: 9100
+                mescroll: null,
+                systemTime: null
             };
         },
         watch: {},
         async beforeMount() {},
         mounted() {
-            this.computeNumber()
-            this.getGroupList()
+            var that = this
+            that.mescroll = new MeScroll(that.$refs.mescroll, {
+                down: {
+                    use: true,
+                },
+                up: {
+                    callback: that.upCallback,
+                    page: {
+                        num: 0,
+                        size: 10,
+                    }
+                }
+            });
+            that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
         },
         created() {
+            systemTime().then((res) => {
+                this.systemTime = res.data
+            })
         },
         computed: {},
         methods: {
-            getGroupList () {
-                groupList(1, 10).then(res => {
-                    this.goOn = res.data.goOn
-                })
-            },
             // 倒计时
             computeNumber () {
                 var that = this
-                var time = that.endTimeDown
                 var start_time = new Date().getTime(); //获取开始时间的毫秒数
-                if(that.endTimeDown){
-                    this.timer = setInterval(function () {
-                        if(that.endTimeDown >= 1){
-                            var end_time = new Date().getTime();
-                            var diff_time = Math.floor((end_time - start_time) / 1000);
-                            //拿到时间差作为时间标记（行走时间）
-                            document.addEventListener('visibilitychange',function() {
-                                if(document.visibilityState=='visible') {
-                                    that.endTimeDown = time - diff_time
-                                } else {
+                that.goOn.forEach((t, index) => {
+                    if(t.endTimeDown){
+                        this.timer = setInterval(function () {
+                            if(t.endTimeDown >= 1){
+                                var end_time = new Date().getTime();
+                                var diff_time = Math.floor((end_time - start_time) / 1000);
+                                //拿到时间差作为时间标记（行走时间）
+                                document.addEventListener('visibilitychange',function() {
+                                    if(document.visibilityState=='visible') {
+                                        that.goOn[index].endTimeDown = time - diff_time
+                                    } else {
+                                    }
+                                })
+                                that.goOn[index].endTimeDown -= 1
+                                if(t.endTimeDown < 1){
+                                    that.goOn[index].endTimeDown = 0
                                 }
-                            })
-                            that.endTimeDown -= 1
-                            if(that.endTimeDown < 1){
-                                that.endTimeDown = 0
+                            } else {
+                                clearInterval(that.timer)
+                                return
                             }
-                        } else {
-                            clearInterval(that.timer)
-                            return
-                        }
-                    },1000)
-                }
+                        },1000)
+                    }
+                })
+            },
+            upCallback (page) {
+                groupList(page.num, page.size).then(res => {
+                    this.showLoading = false;
+                    let arr = res.data.goOn;
+                    if (page.num === 1) this.goOn = [];
+                    var that = this;
+                    arr.forEach((t, index) => {
+                        arr[index].endTimeDown = (new Date(t.endTime).getTime() / 1000) - that.systemTime;
+                    })
+                    setTimeout(function () {
+                        that.goOn = that.goOn.concat(arr);
+                        that.computeNumber()
+                        that.$nextTick(() => {
+                            that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
+                        })
+                    },300)
+
+                }).catch((e)=> {
+                    this.mescroll.endErr();
+                })
             }
         },
         components: {
