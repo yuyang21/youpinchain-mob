@@ -45,23 +45,28 @@
                     </div>
                     <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.provinceName + choosedAddress.cityName + choosedAddress.areaName +
+                            <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.provinceName +
+                                choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
-                            <div v-if="groupMyId === 'undefined' && groupType === '1'" class="label" :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes" :key="index" @click="selectSuitType(item.type)">{{item.text}}</div>
+                            <div v-if="groupMyId === 'undefined' && groupType === '1'" class="label"
+                                 :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
+                                 :key="index" @click="selectSuitType(item.type)">{{item.text}}
+                            </div>
                             <div class="tips" v-if="groupSuitType === 2">
                                 您的地址及电话会展示给您的团员 <br>
                                 <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
                                 <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
                             </div>
-                            <div v-if="groupMyId !== 'undefined'">
+                            <div v-if="groupMy && groupMy.groupSuitType === 2">
                                 <br>
                                 <div class="position-re">
                                     <p class="left address-tuan">{{tuanAddress.address}}</p>
                                     <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
                                     <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
                                 </div>
-                                <p class="clear"><span>{{tuanAddress.consignee}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{tuanAddress.mobile}}</span></p>
+                                <p class="clear"><span>{{tuanAddress.consignee}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{tuanAddress.mobile}}</span>
+                                </p>
                             </div>
                         </div>
                         <router-link :to="{name: 'addressList', query:{path: 'confirmOrder'}}" class="deletesite">
@@ -91,7 +96,7 @@
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
                             <span class="subduction" :class="{'disabled': suitNum <= groupSuit.minimum}"
-                                    @click="addNumber(suitNum, -groupSuit.stepSize)"></span>
+                                  @click="addNumber(suitNum, -groupSuit.stepSize)"></span>
                             <span class="num">{{suitNum}}</span>
                             <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
                         </div>
@@ -111,12 +116,12 @@
                             <p><span class="RMB">￥</span>{{fare}}</p>
                         </li>
                         <!--<li>-->
-                            <!--<p>包装费</p>-->
-                            <!--<p><span class="RMB">￥</span>{{packingFee}}</p>-->
+                        <!--<p>包装费</p>-->
+                        <!--<p><span class="RMB">￥</span>{{packingFee}}</p>-->
                         <!--</li>-->
                         <!--<li>-->
-                            <!--<p>包装费减免</p>-->
-                            <!--<p><span class="RMB">￥</span>{{packingFeeReduction}}</p>-->
+                        <!--<p>包装费减免</p>-->
+                        <!--<p><span class="RMB">￥</span>{{packingFeeReduction}}</p>-->
                         <!--</li>-->
                     </ul>
                     <div class="right totalPrice">
@@ -186,6 +191,7 @@
                 message: '',
                 groupType: '',
                 groupMyId: null,
+                groupMy: null,
                 payButton: false,
                 coupon: '',
                 couponId: '',
@@ -245,12 +251,13 @@
             this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
         },
         methods: {
-            getGroupMyAddress () {
+            getGroupMyAddress() {
                 groupMyAddress(this.groupSuit.id, this.groupMyId).then((res) => {
+                    this.groupMy = res.data.groupMy;
                     this.tuanAddress = res.data.orderAddressVo;
                 })
             },
-            showTipsBox () {
+            showTipsBox() {
                 this.showTip = true;
                 document.querySelector('.mask_box').style.height = document.documentElement.clientHeight + 'px';
             },
@@ -341,7 +348,7 @@
                             function (res) {
                                 that.payButton = false;
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                    that.$router.push('/groups/' + that.groupSuit.id +  '/groupMy/' + groupMyId);
+                                    that.$router.push('/groups/' + that.groupSuit.id + '/groupMy/' + groupMyId);
                                 }
                                 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                             }
@@ -462,18 +469,18 @@
                     }
                 });
             },
-            selectSuitType (type) {
+            selectSuitType(type) {
                 this.groupSuitType = type;
                 this.reComputePrice();
             },
-            reComputePrice () {
+            reComputePrice() {
                 this.goodsPrice = 0;
                 this.totalPrice = 0;
 
                 // 根据拼团的类型计算不同的套装价格
                 this.suitTypes.forEach(t => {
                     if (t.type === this.groupSuitType) {
-                        if (this.groupSuit.id  === t.productId) {
+                        if (this.groupSuit.id === t.productId) {
                             this.goodsPrice += t.discountPrice * this.suitNum;
                         }
                     }
@@ -520,9 +527,10 @@
     .line-through {
         text-decoration: line-through;
     }
+
     .mask_box {
-        background-color: rgba(0,0,0,0.3);
-        @include wh(100%,0rem);
+        background-color: rgba(0, 0, 0, 0.3);
+        @include wh(100%, 0rem);
         position: fixed;
         top: 0;
         z-index: 3;
@@ -593,7 +601,7 @@
                         margin-top: .03rem;
                     }
                     .tip_box {
-                        @include wh(2.8rem,.67rem);
+                        @include wh(2.8rem, .67rem);
                         @include sc(.12rem, $red);
                         display: block;
                         padding: .1rem .12rem;
