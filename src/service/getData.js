@@ -521,3 +521,8 @@ export const openGroup = (suitId, type, groupSuitType, suitNum, groupMyId) => fe
     suitNum: suitNum,
     groupMyId: groupMyId
 }, 'POST')
+
+/**
+ * 获取系统时间
+ */
+export const systemTime = () => fetch('/system/time', {})
