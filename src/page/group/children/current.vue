@@ -146,6 +146,7 @@
                     img {
                         margin-right: .12rem;
                         width: 100%;
+                        height: 100%;
                         border-radius: 5px;
                         background-color: #F8DCE8;
                     }
