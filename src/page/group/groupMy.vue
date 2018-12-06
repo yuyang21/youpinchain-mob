@@ -152,7 +152,7 @@
                 })
                 groupMembers(that.groupSuitId, that.groupMyId, 1, 10).then(res => {
                     that.leader = res.data.members[0];
-                    that.members = res.data.members;
+                    that.members = res.data.members.slice(1);
                 })
 
             }
