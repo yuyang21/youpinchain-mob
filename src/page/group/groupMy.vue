@@ -92,6 +92,7 @@
                 groupMy: {},
                 members: [],
                 leader: {},
+                leaderAddress: {},
                 endTimeDown: null,
                 timer: null,
                 systemTime: null
@@ -132,6 +133,7 @@
                         return;
                     }
                     that.groupMy = res.data.groupMy;
+                    that.leaderAddress = res.data.orderAddressVo;
                     that.endTimeDown = res.data.groupMy.endTime - that.systemTime;
                     countDown(that.endTimeDown, time => {
                         that.endTimeDown = time
@@ -142,7 +144,7 @@
                             var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                             let title = '我发起了一个拼团，大家一起来拼团吧 ' + that.groupSuit.suitName;
                             if (that.groupMy.groupSuitType === 2) {
-                                title = '我在' + that.groupMy.orderAddressVo.address + '发起了一个拼团，大家一起来拼团吧！'
+                                title = '我在' + that.leaderAddress.address + '发起了一个拼团，大家一起来拼团吧！'
                             }
                             WechatShareUtils.onMenuShareAppMessage(title, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                         })
