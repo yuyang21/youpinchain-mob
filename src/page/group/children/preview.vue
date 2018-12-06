@@ -10,8 +10,8 @@
                                 <p class="name">{{item.suitName}}</p>
                                 <p class="desr">{{item.describe}}</p>
                                 <!--<p class="coupon" :class="[item.useCoupon === 0 ? 'unuseCoupon' : 'useCoupon']">{{item.useCoupon === 0 ? '优惠券不可使用' : '优惠券可使用'}}</p>-->
-                                <p class="price"><span class="RMB">￥</span>{{item.suitPrice}}
-                                    <s>￥{{item.originalPrice}}</s></p>
+                                <p class="price"><span class="RMB">￥</span>{{item.minimumPrice}}
+                                    <s>￥{{item.suitPrice}}</s></p>
                             </div>
                         </router-link>
                     </li>

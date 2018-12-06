@@ -12,8 +12,8 @@
                         <p class="name">{{item.suitName}}</p>
                         <p class="desr">{{item.describe}}</p>
                         <p class="tip"><span>固定地址享受超高优惠</span></p>
-                        <p class="price"><span class="RMB">￥</span>{{item.suitPrice}} <span class="lable">3人成团</span></p>
-                        <p class="single_price">单买价￥{{item.originalPrice}}</p>
+                        <p class="price"><span class="RMB">￥</span>{{item.minimumPrice}} <span class="lable">3人成团</span></p>
+                        <p class="single_price">单买价￥{{item.suitPrice}}</p>
                     </div>
                     <div class="shopping_cart"><p>立即拼团</p></div>
                 </router-link>

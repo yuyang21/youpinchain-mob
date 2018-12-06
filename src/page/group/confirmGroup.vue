@@ -53,7 +53,7 @@
                                  :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
                                  :key="index" @click="selectSuitType(item.type)">{{item.text}}
                             </div>
-                            <div class="tips" v-if="!groupMyId && groupSuitType === 2">
+                            <div class="tips" v-if="!groupMy && groupSuitType === 2">
                                 您的地址及电话会展示给您的团员 <br>
                                 <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
                                 <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="right totalPrice red">
-                        打包价格
+                        套装单价
                         <p><span class="RMB">￥</span>{{packPrice | number}}</p>
                     </div>
                 </div>
@@ -508,6 +508,7 @@
                 this.suitTypes.forEach(t => {
                     if (t.type === this.groupSuitType) {
                         if (this.groupSuit.id === t.productId) {
+                            this.packPrice = t.discountPrice;
                             this.goodsPrice += t.discountPrice * this.suitNum;
                         }
                     }

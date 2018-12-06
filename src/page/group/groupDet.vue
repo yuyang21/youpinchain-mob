@@ -12,11 +12,13 @@
             <div class="presell_box">
 
                 <div class="left_price left" v-if="groupSuit.preSaleDelivery !== undefined">
-                    <p class="price"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
+                    <p class="price"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.suitPrice}}</s></p>
                     <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
                 </div>
                 <div class="left_price left" v-else>
-                    <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>
+                    <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}">
+                        <span>￥</span>{{groupPrice}} <s>￥{{groupSuit.suitPrice}}</s>
+                    </p>
                 </div>
                 <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
                     <p>距开团结束</p>
@@ -83,7 +85,7 @@
                                 item.productNetContent}}*1{{item.productPacking}}</p>
                             <p class="desr">{{item.productDescribe}}</p>
                             <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
-                            <p class="single_price">单买价￥{{item.productOriginalPrice}}</p>
+                            <!--<p class="single_price">单买价￥{{item.productOriginalPrice}}</p>-->
                         </div>
                     </router-link>
                 </li>
@@ -326,7 +328,7 @@
             .right_tip.activityEnd {
                 background-color: $g9;
                 &:before {
-                    border-right: .05rem solid $g9; 
+                    border-right: .05rem solid $g9;
                 }
                 p {
                     display: flex;
