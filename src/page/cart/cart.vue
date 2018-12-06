@@ -4,8 +4,12 @@
             <div class="swiper-container" v-if="carts.length">
                 <div class="topBG"></div>
                 <div class="shop_info">
-                    <div v-for="(cartList, index) in carts" :key="index">
-                        <span>{{cartList.brandName}}</span>
+                    <div v-for="(cartList, index) in carts" :key="index" :class="{'border-no': index === carts.length - 1}" class="lists">
+                        <div class="title">
+                            <span :class="[cartList.choose ? 'choose' : 'unselected']"
+                            @click="checkCart(cartList)"></span>
+                            <span>{{cartList.brandName}}</span>
+                        </div>
                         <ul class="goods">
                             <li v-for="item in cartList.cartListDtos" :key="item.cartId">
                                 <span :class="[item.choose && item.available ? 'choose' : 'unselected']"
@@ -142,6 +146,7 @@
                 findCart(1, 100).then(res => {
                     that.carts = res.data.cart;
                     that.carts.forEach(cart => {
+                        cart.choose = true;
                         if (cart.cartListDtos)
                             cart.cartListDtos.forEach(cartList => {
                                 cartList.choose = true;
@@ -191,6 +196,11 @@
             },
             checkCart(cart) {
                 cart.choose = !cart.choose;
+                if (cart.cartListDtos) {
+                    cart.cartListDtos.forEach(c => {
+                        c.choose = cart.choose;
+                    })
+                }
                 this.reComputePrice();
             },
 
@@ -417,14 +427,20 @@
                 margin: -0.48rem auto 0;
                 width: 95%;
                 background-color: $fc;
-                padding: 0.2rem 0.15rem;
+                padding: 0 0.15rem 0.2rem;
                 border-radius: 10px;
                 overflow: hidden;
-                .goods {
-                    border-bottom: 1px solid $gd;
-                    li {
-                        position: relative;
-                        margin-bottom: 0.26rem;
+                .lists {
+                    border-bottom: .36rem solid $f7;
+                    .title {
+                        padding: .25rem 0;
+                        display: flex;
+                        align-items: center;
+                        span:last-child {
+                            @include sc(.16rem, $g3);
+                            font-weight: 500;
+                            padding-left: .1rem;
+                        }
                     }
                     .unselected {
                         border-radius: 50%;
@@ -436,6 +452,12 @@
                         @include bis("../../images/selected.png");
                         display: inline-block;
                         @include wh(0.19rem, 0.19rem);
+                    }
+                }
+                .goods {
+                    li {
+                        position: relative;
+                        margin-bottom: 0.26rem;
                     }
                     .img {
                         display: inline-block;
@@ -493,6 +515,7 @@
                     overflow: hidden;
                     padding: 0.15rem 0;
                     border-bottom: 1px solid $gd;
+                    border-top: 1px solid $gd;
                     li {
                         @include wh(100%, 0.35rem);
                         line-height: 0.35rem;
