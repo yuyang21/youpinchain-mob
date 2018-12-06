@@ -30,6 +30,9 @@
                         <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
                     </p>
                 </div>
+                <div class="right_tip right" :class="{'activityEnd': endTimeDown <= 0}" v-if="endTimeDown <= 0">
+                    <p>拼团结束</p>
+                </div>
             </div>
             <div class="title">
                 <!--<p class="price" v-if="!groupSuit.presentPrice"><span>￥</span>{{groupSuit.presentPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>-->
@@ -87,6 +90,10 @@
             <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupMy.discountPrice}} <br> 参与拼团</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupPrice}} <br> 发起拼团</div>
             <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.suitPrice}} <br> 单独购买</div>
+        </div>
+        <div class="add_cart_container activityEnd_btns" v-if="endTimeDown <= 0">
+            <div class="cart_btn right" @click="toSubmitOrder(1)">{{!groupMyId ? '我要开团' : '查看其他拼团'}}</div>
+            <div class="cart_btn_alone right">拼团结束</div>
         </div>
         <share-mask v-if="showShare" :showShare="showShare"></share-mask>
     </div>
@@ -216,6 +223,10 @@
              * 到提交订单页面
              */
             toSubmitOrder(type) {
+                if (this.groupMyId && this.endTimeDown <= 0) {
+                    this.$router.push('/group');
+                    return;
+                }
                 let suitDet = this.suitDet
                 let groupSuit = this.groupSuit
                 let currentTime = new Date().getTime();
@@ -307,6 +318,18 @@
                     align-items: center;
                     justify-content: center;
                     border-radius: .025rem;
+                }
+            }
+            .right_tip.activityEnd {
+                background-color: $g9;
+                &:before {
+                    border-right: .05rem solid $g9; 
+                }
+                p {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
                 }
             }
         }
@@ -439,6 +462,15 @@
             .cart_btn_alone {
                 background-color: #FF9FA2;
                 width: 30%;
+            }
+        }
+        .add_cart_container.activityEnd_btns {
+            .cart_btn_alone {
+                background-color: $g9;
+                line-height: .35rem;
+            }
+            .cart_btn {
+                line-height: .35rem;
             }
         }
         .assembling_process {
