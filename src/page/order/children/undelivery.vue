@@ -20,7 +20,7 @@
                             <ul>
                                 <li><p class="order_time" style="color: #dd3333">{{item.groupOrderDto.suitName}}拼团中</p></li>
                                 <li><p class="order_status" style="color: #dd3333">
-                                    已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{group.endTime}}结束
+                                    已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{item.groupOrderDto.endTime}}结束
                                 </p></li>
                             </ul>
                             <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;">
