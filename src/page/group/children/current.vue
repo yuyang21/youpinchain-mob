@@ -4,7 +4,8 @@
             <ul class="goodslistul clear">
                 <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
                     <div class="left position-re">
-                        <p class="count_down">距结束 <span>{{item.endTimeDown | timeArry(0)}}:{{item.endTimeDown | timeArry(1)}}:{{item.endTimeDown | timeArry(2)}}</span></p>
+                        <p class="count_down" v-if="item.endTimeDown > 24*60*60">距结束 <span>{{Math.floor(item.endTimeDown/60/60/24)}}天{{item.endTimeDown - Math.floor(item.endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分</span></p>
+                        <p class="count_down" v-else>距结束 <span>{{item.endTimeDown | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分{{item.endTimeDown | timeArry(2)}}秒</span></p>
                         <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
                     </div>
                     <div class="left goods_info">
@@ -125,14 +126,11 @@
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
                 text-align: left;
-                padding: 0 .1rem;
                 span {
                     @include sc(.14rem, $fc);
                     display: inline-block;
                     float: right;
-                    width: 43%;
                     text-align: left;
-                    margin-left: .12rem;
                 }
             }
             li {

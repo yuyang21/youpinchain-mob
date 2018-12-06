@@ -20,8 +20,11 @@
                 </div>
                 <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
                     <p>距开团结束</p>
-                    <p>
-                        <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
+                    <p v-if="endTimeDown > 24*60*60">
+                        <span class="shadow_box">{{Math.floor(endTimeDown/60/60/24)}}</span>天<span class="shadow_box">{{endTimeDown - Math.floor(endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分
+                    </p>
+                    <p v-else>
+                        <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>秒
                     </p>
                 </div>
                 <div class="right_tip right" v-if="groupMyId">
