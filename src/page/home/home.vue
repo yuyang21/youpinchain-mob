@@ -5,16 +5,13 @@
             <loading v-show="showLoading"></loading>
         </transition>
         <div v-show="!showLoading">
-
-            <carousel :loop="true" :autoplay="true" :minSwipeDistance="6" :scrollPerPage="true" :speed="500"
-                      :perPage="1" :paginationPadding="5" :paginationSize="8"
-                      :paginationActiveColor="pagination.activeColor" :paginationColor="pagination.color">
-                <slide v-for="item in brand" :key="item.id">
+            <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+                <swipe-item v-for="item in brand" :key="item.id">
                     <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
                         <img :src="item.pictureUrl" alt="" width="100%" class="show">
                     </router-link>
-                </slide>
-            </carousel>
+                </swipe-item>
+            </swipe>
 
             <!--<router-link tag="div" class="header_image" :to="{path:'/introduce/'+ brand.id}">-->
                 <!--<img :src="brand.pictureUrl" alt="" width="100%" class="show">-->
