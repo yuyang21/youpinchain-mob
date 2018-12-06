@@ -115,7 +115,7 @@ export default [{
         },
         //我的拼团
         {
-            path: '/groups/:suitId/groupMy/:groupMyId',
+            path: '/groupMy/:groupMyId',
             component: groupMy,
             meta: {
                 title: '拼团详情'

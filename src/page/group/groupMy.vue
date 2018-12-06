@@ -88,7 +88,6 @@
             return {
                 showShare: false,
                 groupMyId: '',
-                groupSuitId: '',
                 groupSuit: {},
                 groupMy: {},
                 members: [],
@@ -100,7 +99,6 @@
         },
         mounted() {
             this.groupMyId = this.$route.params.groupMyId;
-            this.groupSuitId = this.$route.params.suitId;
             systemTime().then((res) => {
                 this.systemTime = res.data
                 this.initData();
@@ -129,17 +127,17 @@
         methods: {
             initData() {
                 var that = this;
-                groupDet(that.groupSuitId).then(res => {
-                    that.groupSuit = res.data.groupSuit;
-                    groupMyAddress(that.groupSuitId, that.groupMyId).then(res => {
-                        if (res.errno !== 0) {
-                            return;
-                        }
-                        that.groupMy = res.data.groupMy;
-                        that.endTimeDown = res.data.groupMy.endTime - that.systemTime;
-                        countDown(that.endTimeDown, time => {
-                            that.endTimeDown = time
-                        })
+                groupMyAddress(0, that.groupMyId).then(res => {
+                    if (res.errno !== 0) {
+                        return;
+                    }
+                    that.groupMy = res.data.groupMy;
+                    that.endTimeDown = res.data.groupMy.endTime - that.systemTime;
+                    countDown(that.endTimeDown, time => {
+                        that.endTimeDown = time
+                    })
+                    groupDet(that.groupMy.groupSuitId).then(res => {
+                        that.groupSuit = res.data.groupSuit;
                         wx.ready(function () {
                             var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                             let title = '我发起了一个拼团，大家一起来拼团吧 ' + that.groupSuit.suitName;
@@ -149,8 +147,9 @@
                             WechatShareUtils.onMenuShareAppMessage(title, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                         })
                     })
+
                 })
-                groupMembers(that.groupSuitId, that.groupMyId, 1, 10).then(res => {
+                groupMembers(0, that.groupMyId, 1, 10).then(res => {
                     that.leader = res.data.members[0];
                     that.members = res.data.members.slice(1);
                 })
