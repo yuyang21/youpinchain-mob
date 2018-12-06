@@ -150,11 +150,15 @@
             <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{(totalPrice + fare) | number}}</span></li>
         </ul>
         <div class="mask_box" v-show="showTip" @click="showTip = false;"></div>
+        <transition name="loading">
+            <loading v-show="showLoading"></loading>
+        </transition>
     </div>
 </template>
 
 <script>
     import headTop from '../../components/header/head'
+    import loading from "src/components/common/loading";
     import {
         ModalHelper
     } from "../../service/Utils";
@@ -210,7 +214,8 @@
                 groupSuitType: 1,
                 suitTypes: [],
                 tuanAddress: {},
-                expressCostData: null
+                expressCostData: null,
+                showLoading: false
             }
         },
         props: ['showErrMsg'],
@@ -303,6 +308,7 @@
                     return;
                 }
                 that.payButton = true;
+                this.showLoading = true;
                 if (!that.choosedAddress) {
                     if (!that.checkAddress(that.address)) {
                         that.payButton = false;
@@ -364,6 +370,8 @@
             doPay(orderId, groupMyId) {
                 prepayOrder(orderId).then(resp => {
                     var that = this;
+                    that.showLoading = false;
+                    that.payButton = false;
                     if (resp.errno === 403) {
                         this.showErrMsg("订单不可支付")
                     } else {
@@ -545,7 +553,8 @@
             }
         },
         components: {
-            headTop
+            headTop,
+            loading
         },
     };
 </script>
@@ -784,7 +793,7 @@
                     .num {
                         display: inline-block;
                         text-align: center;
-                        @include wh(0.245rem, 0.245rem);
+                        @include wh(0.345rem, 0.245rem);
                         @include sc(0.18rem, $g9);
                         vertical-align: top;
                         font-weight: bold;
