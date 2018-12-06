@@ -21,7 +21,7 @@
                                 <ul>
                                     <li><p class="order_time" style="color: #dd3333">{{item.groupOrderDto.suitName}}拼团中</p></li>
                                     <li><p class="order_status" style="color: #dd3333">
-                                        已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{item.groupOrderDto.endTime}}结束
+                                        已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{item.groupOrderDto.endTime | formatDate}}结束
                                     </p></li>
                                 </ul>
                                 <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;">
@@ -92,6 +92,7 @@
         refundOrder
     } from "../../../service/getData";
     import MeScroll from '../../../static/mescroll/mescroll.min.js'
+    import { formatDate } from '../../../service/Utils'
 
     export default {
         data() {
@@ -245,7 +246,17 @@
                 })
             }
         },
-        watch: {}
+        watch: {},
+        filters: {
+            /**
+             * unix时间戳格式化，单位秒，
+             * 格式化为 yyyy-MM-dd hh:mm
+             */
+            formatDate(time) {
+                var date = new Date(time * 1000);
+                return formatDate(date, 'yyyy-MM-dd hh:mm');
+            }
+        }
     };
 </script>
 
