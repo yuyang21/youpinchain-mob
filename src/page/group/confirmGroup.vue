@@ -536,7 +536,7 @@
             addNumber(suitNum, number) {
                 if (number < 0 && suitNum <= this.groupSuit.minimum) {
                     if (this.groupSuit.minimum > 1) {
-                        this.showErrMsg('该商品至少购买' + this.groupSuit.minimum + '件');
+                        this.showErrMsg('该商品至少购买' + this.groupSuit.minimum + '份');
                     }
                     return;
                 }
