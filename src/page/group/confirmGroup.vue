@@ -48,7 +48,7 @@
                             <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.provinceName +
                                 choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
-                            <p :class="{'line-through': groupMyId !== 'undefined'}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
+                            <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
                             <div v-if="groupMyId === 'undefined' && groupType === '1'" class="label"
                                  :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
                                  :key="index" @click="selectSuitType(item.type)">{{item.text}}
