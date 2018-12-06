@@ -34,7 +34,7 @@
                     </div>
                     <ul class="goods">
                         <li v-for="item in orderProduct" :key="item.id">
-                            <img :src="item.pictureUrl" alt="" class="img">
+                            <img :src="item.picUrl" alt="" class="img">
                             <div class="goods_info">
                                 <p class="name">{{item.productName}}</p>
                                 <p class="price"><span>￥</span>{{item.retailPrice}}</p>
@@ -260,10 +260,10 @@
         }
     }
 </script>
-  
+
 <style lang="scss" scoped>
     @import 'src/style/mixin';
-  
+
     .order_detail_page{
         position: absolute;
         top: 0;
@@ -432,10 +432,10 @@
                     font-weight: bold;
                     position: relative;
                 top: .38rem;
-                    span { 
+                    span {
                         display: inline-block;
                         @include sc(.12rem, $red);
-                        font-weight: normal; 
+                        font-weight: normal;
                         transform: scale(.8) translateY(1px);
                     }
                 }
@@ -510,5 +510,5 @@
     .loading-enter, .loading-leave-active {
         opacity: 0;
     }
-    
+
 </style>
