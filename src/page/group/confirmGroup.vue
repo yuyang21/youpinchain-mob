@@ -118,7 +118,7 @@
                             <!-- <p class="coupon" v-else>不使用</p> -->
                         </router-link>
                         <li>
-                            <p>运费</p>
+                            <p>运费{{fareInfo}}</p>
                             <p><span class="RMB">￥</span>{{fare}}</p>
                         </li>
                         <!--<li>-->
@@ -170,7 +170,8 @@
         prepayOrder,
         addAddress,
         openGroup,
-        groupMyAddress
+        groupMyAddress,
+        expressCost
     } from "../../service/getData";
 
     export default {
@@ -184,6 +185,7 @@
                 packingFee: 0,
                 packingFeeReduction: 0,
                 fare: 0,
+                fareInfo: '',
                 productList: [],
                 groupSuit: {},
                 butpart: false, //  新增地址按钮的透明度
@@ -206,7 +208,8 @@
                 showTip: false,
                 groupSuitType: 1,
                 suitTypes: [],
-                tuanAddress: {}
+                tuanAddress: {},
+                expressCostData: null
             }
         },
         props: ['showErrMsg'],
@@ -252,13 +255,26 @@
                 
             });
 
+
+
             // 最低起售份数
             this.suitNum = this.groupSuit.minimum;
             this.groupType = this.$route.query.type
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
-            this.reComputePrice();
             this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
+            // 运费
+            var that = this
+            expressCost(this.groupSuit.expressCostId).then(res => {
+                that.expressCostData = res.data;
+                this.reComputePrice();
+                if (that.expressCostData.freeExpress === 1) {
+                    this.fareInfo = '(满' + that.expressCostData.freeExpressValue + '元包邮)'
+                } else if (that.expressCostData.freeExpress === 2) {
+                    this.fareInfo = this.fareInfo = '(满' + that.expressCostData.freeExpressValue + '件包邮)'
+                }
+
+            })
         },
         methods: {
             getGroupMyAddress() {
@@ -497,8 +513,14 @@
                 })
 
                 this.totalPrice = this.goodsPrice;
-                this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
+                this.fare = this.expressCostData.expressPrice;
+                if (this.expressCostData.freeExpress === 1 && this.goodsPrice >= this.expressCostData.freeExpressValue) { // 金额包邮
+                    this.fare = 0;
+                } else if (this.expressCostData.freeExpress === 2 && this.suitNum >= this.expressCostData.freeExpressValue) { // 数量包邮
+                    this.fare = 0;
+                }
+
             },
             addNumber(suitNum, number) {
                 if (number < 0 && suitNum <= this.groupSuit.minimum) {

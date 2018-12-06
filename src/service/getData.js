@@ -534,3 +534,8 @@ export const groupMembers = (suitId, groupMyId, page, pageSize) => fetch('/group
     page: page,
     pageSize: pageSize
 })
+
+/**
+ * 运费查询
+ */
+export const expressCost = (expressCostId) => fetch('/express/' + expressCostId, {})

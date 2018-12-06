@@ -212,7 +212,7 @@
                         that.groupMy = res.data.groupMy;
                         that.groupPrice = res.data.groupMy.discountPrice;
                         that.endTimeDown = res.data.groupMy.endTime - new Date().getTime()/1000;
-                        
+
                         countDown(that.endTimeDown, time => {
                             that.endTimeDown = time
                         })
