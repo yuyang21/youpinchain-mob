@@ -24,10 +24,9 @@
             </div>
             <div class="aid_friend">
                 <ul class="friend_list">
-                    <li><img :src="leader.headImgUrl"><p>团长</p></li>
-                    <li v-for="(item,index) in members" :key="index"><img :src="item.headImgUrl"></li>
+                    <li v-for="(item,index) in members" :key="index"><img :src="item.headImgUrl"><p v-if="index === 0">团长</p></li>
                     <li class="none"><div>?</div><p>待邀请</p></li>
-                    <li class="none" v-if="members.length > 15"><div><span>查看<br>更多</span></div></li>
+                    <li class="none" v-if="totalPages > 1" @click="loadMoreMember()"><div><span>查看<br>更多</span></div></li>
                 </ul>
             </div>
             <div class="invite_btn clear" v-if="endTimeDown > 0" @click="showShare = true;">邀请好友</div>
@@ -91,7 +90,9 @@
                 groupSuit: {},
                 groupMy: {},
                 members: [],
-                leader: {},
+                page: 1,
+                size: 10,
+                totalPages: 1,
                 leaderAddress: {},
                 endTimeDown: null,
                 timer: null,
@@ -104,6 +105,7 @@
                 this.systemTime = res.data
                 this.initData();
             })
+            this.getMembers(this.page, this.size);
         },
         watch: {
             showShare: function (newVal, oldVal) {
@@ -123,7 +125,6 @@
             shareMask
         },
         created() {
-
         },
         methods: {
             initData() {
@@ -151,11 +152,17 @@
                     })
 
                 })
-                groupMembers(0, that.groupMyId, 1, 10).then(res => {
-                    that.leader = res.data.members[0];
-                    that.members = res.data.members.slice(1);
-                })
 
+            },
+            getMembers (page, size) {
+                groupMembers(0, this.groupMyId, page, size).then(res => {
+                    this.members = res.data.members;
+                    this.totalPages = res.data.totalPages;
+                })
+            },
+            loadMoreMember () {
+                this.page += 1;
+                this.getMembers(this.page, this.size);
             }
         }
     }
@@ -219,7 +226,7 @@
                         border: .02rem dashed $g9;
                         border-radius: 50%;
                         line-height: .42rem;
-                        box-sizing: content-box;
+                        box-sizing: border-box;
                         @include sc(.24rem, $g9);
                         span {
                             font-size: .12rem;
