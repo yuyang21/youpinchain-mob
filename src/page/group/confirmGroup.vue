@@ -252,9 +252,11 @@
         },
         methods: {
             getGroupMyAddress() {
+                var that = this
                 groupMyAddress(this.groupSuit.id, this.groupMyId).then((res) => {
-                    this.groupMy = res.data.groupMy;
-                    this.tuanAddress = res.data.orderAddressVo;
+                    that.groupMy = res.data.groupMy;
+                    that.tuanAddress = res.data.orderAddressVo;
+                    that.groupSuitType = res.data.groupMy.groupSuitType;
                 })
             },
             showTipsBox() {
