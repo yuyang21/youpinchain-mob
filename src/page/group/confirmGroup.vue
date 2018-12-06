@@ -101,6 +101,12 @@
                             <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
                         </div>
                     </div>
+                    <div class="right totalPrice red">
+                        打包价格
+                        <p><span class="RMB">￥</span>{{packPrice | number}}</p>
+                    </div>
+                </div>
+                <div class="shop_info margin-t-p3">
                     <ul class="payment_info">
                         <li>
                             <p>商品总价</p>
@@ -174,6 +180,7 @@
                 shopCart: null, // 购物车数据
                 totalPrice: 0,
                 goodsPrice: 0,
+                packPrice: 0,
                 packingFee: 0,
                 packingFeeReduction: 0,
                 fare: 0,
@@ -222,7 +229,6 @@
                 this.totalPrice -= this.coupon.money
                 this.couponId = this.coupon.id
             }
-            console.log(this.choosedAddress.id)
         },
         created() {
             this.productList = JSON.parse(
@@ -240,6 +246,10 @@
                 } else if (t.type === 2) {
                     t.text = '社区拼团';
                 }
+                if (t.type === this.groupSuitType && this.groupSuit.id === t.productId) {
+                    this.packPrice += t.discountPrice;
+                }
+                
             });
 
             // 最低起售份数
@@ -434,7 +444,6 @@
                             }
                         ],
                         success: function (arr) {
-                            console.log(arr)
                             var addressD = "";
                             for (var i = 0; i < arr.length; i++) {
                                 addressD += " " + arr[i].value;
@@ -478,7 +487,6 @@
             reComputePrice() {
                 this.goodsPrice = 0;
                 this.totalPrice = 0;
-
                 // 根据拼团的类型计算不同的套装价格
                 this.suitTypes.forEach(t => {
                     if (t.type === this.groupSuitType) {
@@ -750,7 +758,8 @@
             .payment_info {
                 overflow: hidden;
                 clear: both;
-                margin: .15rem;
+                margin: 0 .15rem;
+                padding-bottom: .15rem;
                 border-bottom: 1px solid $gd;
                 li {
                     @include wh(100%, 0.35rem);
@@ -778,6 +787,11 @@
                     display: inline-block;
                     @include sc(0.2rem, $g3);
                     font-weight: bold;
+                }
+            }
+            .totalPrice.red {
+                p {
+                    color: $red;
                 }
             }
             .purchase_num {
@@ -867,5 +881,10 @@
         background-color: $f7;
         text-align: center;
         line-height: 0.36rem;
+    }
+
+
+    .shop_info.margin-t-p3 {
+        margin-top: .3rem;
     }
 </style>
