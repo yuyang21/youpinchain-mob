@@ -18,7 +18,7 @@
                             <p class="activityEnd">已结束</p>
                         </div>
                         <p class="price"><span class="RMB">￥</span>{{groupMy.discountPrice}}</p>
-                        <p class="desr">￥{{groupSuit.originalPrice}}</p>
+                        <!--<p class="desr">￥{{groupSuit.suitPrice}}</p>-->
                     </div>
                 </router-link>
             </div>

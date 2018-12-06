@@ -95,7 +95,8 @@
                     <div class="purchase_num">
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
-                            <span class="subduction" :class="{'disabled': suitNum <= groupSuit.minimum}"
+                            <!--:class="{'disabled': suitNum <= groupSuit.minimum}"-->
+                            <span class="subduction"
                                   @click="addNumber(suitNum, -groupSuit.stepSize)"></span>
                             <span class="num">{{suitNum}}</span>
                             <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
@@ -534,6 +535,9 @@
             },
             addNumber(suitNum, number) {
                 if (number < 0 && suitNum <= this.groupSuit.minimum) {
+                    if (this.groupSuit.minimum > 1) {
+                        this.showErrMsg('该商品至少购买' + this.groupSuit.minimum + '份');
+                    }
                     return;
                 }
                 this.suitNum += number
