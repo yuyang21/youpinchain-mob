@@ -142,7 +142,7 @@
                             var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                             let title = '我发起了一个拼团，大家一起来拼团吧 ' + that.groupSuit.suitName;
                             if (that.groupMy.groupSuitType === 2) {
-                                title = '我在' + res.data.orderAddressVo.address + '发起了一个拼团，大家一起来拼团吧！'
+                                title = '我在' + that.groupMy.orderAddressVo.address + '发起了一个拼团，大家一起来拼团吧！'
                             }
                             WechatShareUtils.onMenuShareAppMessage(title, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                         })
