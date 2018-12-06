@@ -284,6 +284,7 @@
                     that.tuanAddress = res.data.orderAddressVo;
                     that.groupSuitType = res.data.groupMy.groupSuitType;
                     that.packPrice = that.groupMy.discountPrice;
+                    this.reComputePrice();
                 })
             },
             showTipsBox() {
@@ -504,15 +505,22 @@
             reComputePrice() {
                 this.goodsPrice = 0;
                 this.totalPrice = 0;
-                // 根据拼团的类型计算不同的套装价格
-                this.suitTypes.forEach(t => {
-                    if (t.type === this.groupSuitType) {
-                        if (this.groupSuit.id === t.productId) {
-                            this.packPrice = t.discountPrice;
-                            this.goodsPrice += t.discountPrice * this.suitNum;
+
+                // 参团
+                if (this.groupMy) {
+                    this.packPrice = this.groupMy.discountPrice;
+                    this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
+                } else {
+                    // 开团根据拼团的类型计算不同的套装价格
+                    this.suitTypes.forEach(suitType => {
+                        if (suitType.type === this.groupSuitType) {
+                            if (this.groupSuit.id === suitType.productId) {
+                                this.packPrice = suitType.discountPrice;
+                                this.goodsPrice += suitType.discountPrice * this.suitNum;
+                            }
                         }
-                    }
-                })
+                    })
+                }
 
                 this.totalPrice = this.goodsPrice;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
