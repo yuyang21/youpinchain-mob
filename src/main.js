@@ -12,8 +12,6 @@ import FastClick from 'fastclick'
 import VueHtml2Canvas from 'vue-html2canvas';
 Vue.use(VueHtml2Canvas);
 import VueClipboard from 'vue-clipboard2'
-import 'c-swipe/dist/swipe.css';
-import '../src/style/common.scss';
 import { Swipe, SwipeItem } from 'c-swipe';
 Vue.component('swipe', Swipe);
 Vue.component('swipe-item', SwipeItem);

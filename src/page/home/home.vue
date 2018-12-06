@@ -188,6 +188,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../static/swipe/swipe.min.css';
 @import '../../static/mescroll/mescroll.min.css';
 @import '../../style/mixin';
 .header_image {
