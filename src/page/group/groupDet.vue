@@ -29,7 +29,7 @@
                         <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>秒
                     </p>
                 </div>
-                <div class="right_tip right" v-if="groupMyId">
+                <div class="right_tip right" v-if="groupMyId && endTimeDown>0">
                     <p>距拼团结束</p>
                     <p>
                         <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
@@ -293,7 +293,7 @@
             }
             .right_tip {
                 position: relative;
-                width: .9rem;
+                width: 1rem;
                 text-align: center;
                 background-color: #FB9D1C;
                 height: .64rem;
