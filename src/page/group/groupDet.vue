@@ -293,7 +293,7 @@
             }
             .right_tip {
                 position: relative;
-                width: 1rem;
+                width: 1.2rem;
                 text-align: center;
                 background-color: #FB9D1C;
                 height: .64rem;
