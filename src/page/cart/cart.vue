@@ -37,7 +37,7 @@
                             <p><span class="RMB">￥</span>{{payment | number}}</p>
                         </li>
                         <li>
-                            <p>运费（满199包邮）</p>
+                            <p>运费</p>
                             <p><span class="RMB">￥</span>{{fare}}</p>
                         </li>
                     </ul>
@@ -64,7 +64,8 @@
                         <p class="price"><span class="RMB">￥</span>{{item.presentPrice}} <s class="RMB">￥{{item.originalPrice}}</s>
                         </p>
                     </router-link>
-                    <div class="right add_cart" :class="{'shopping_cart_disabled': item.stock <= 0}" @touchstart="addToCart(item, $event)"></div>
+                    <div class="right add_cart" :class="{'shopping_cart_disabled': item.stock <= 0}"
+                         @touchstart="addToCart(item, $event)"></div>
                 </li>
             </ul>
             <router-link :to="'/home'" class="load_more" v-if="hasMore">查看更多商品</router-link>
@@ -213,11 +214,17 @@
                 this.fare = 0;
                 this.carts.forEach(cart => {
                     if (cart.cartListDtos)
-                        cart.cartListDtos.forEach(cartList => {
-                            if (cartList.choose && cartList.available) {
-                                this.goodsPrice += cartList.presentPrice * cartList.number;
-                                this.payment += cartList.presentPrice * cartList.number;
-                                this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
+                        cart.cartListDtos.forEach(cartItem => {
+                            if (cartItem.choose && cartItem.available) {
+                                let itemGoodsPrice = cartItem.presentPrice * cartItem.number;
+                                this.goodsPrice += itemGoodsPrice;
+                                this.payment += itemGoodsPrice;
+                                if (cartItem.expressCost.freeExpress === 1 && itemGoodsPrice < cartItem.expressCost.freeExpressValue) { // 下单金额
+                                    this.fare += cartItem.expressCost.expressPrice;
+                                }
+                                if (cartItem.expressCost.freeExpress === 2 && cartItem.number < cartItem.expressCost.freeExpressValue) { // 下单金额
+                                    this.fare += cartItem.expressCost.expressPrice;
+                                }
                             }
                         })
                 });
@@ -232,9 +239,13 @@
                     return;
                 }
                 let orderCar = [];
-                this.carts.forEach(item => {
-                    if (item.choose && item.available) {
-                        orderCar.push(item);
+                this.carts.forEach(cartBrand => {
+                    if (cartBrand.cartListDtos) {
+                        cartBrand.cartListDtos.forEach(cartItem => {
+                            if (cartItem.choose && cartItem.available) {
+                                orderCar.push(cartItem);
+                            }
+                        })
                     }
                 })
                 if (!orderCar || orderCar.length <= 0) {
