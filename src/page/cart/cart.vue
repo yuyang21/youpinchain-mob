@@ -15,20 +15,20 @@
                             <div class="left">
                                 <li v-for="item in cartList.cartListDtos" :key="item.cartId">
                                     <span :class="[item.choose && item.available ? 'choose' : 'unselected']"
-                                        @click="checkCart(item)"></span>
+                                          @click="checkCart(item)"></span>
                                 </li>
                             </div>
                             <div class="right">
                                 <li v-for="item in cartList.cartListDtos" :key="item.cartId">
                                     <img :src="item.thumbnailPic" alt="" class="img"
-                                    :class="{'noImage': !item.thumbnailPic}">
+                                         :class="{'noImage': !item.thumbnailPic}">
                                     <div class="goods_info">
                                         <p class="name">{{item.productName}}</p>
                                         <p class="price"><span class="RMB">￥</span>{{item.presentPrice}}</p>
                                     </div>
                                     <div class="cart_btns">
                                         <span class="subduction" :class="{'disabled': item.number <= 1}"
-                                            @click="item.number > 1 ? addNumber(item, -1) : deleteCart(item)"></span>
+                                              @click="item.number > 1 ? addNumber(item, -1) : deleteCart(item)"></span>
                                         <span class="num">{{item.number}}</span>
                                         <span class="add" @click="addNumber(item, 1)"></span>
                                     </div>
@@ -321,10 +321,23 @@
             /**
              * 删除购物车
              */
-            deleteCart(cart) {
-                deleteCart(cart.cartId).then(res => {
-                    if (res.errno == 0) {
-                        this.carts.splice(this.carts.indexOf(cart), 1);
+            deleteCart(cartItem) {
+                deleteCart(cartItem.cartId).then(res => {
+                    if (res.errno === 0) {
+                        let needDeleteBrandCart = null;
+                        this.carts.forEach(brandCart => {
+                            if (cartItem.brandId === brandCart.brandId) {
+                                brandCart.cartListDtos.splice(brandCart.cartListDtos.indexOf(cartItem), 1);
+                                if (brandCart.cartListDtos.length === 0) {
+                                    needDeleteBrandCart = brandCart;
+                                }
+                            }
+                        })
+
+                        if (needDeleteBrandCart) {
+                            this.carts.splice(this.carts.indexOf(needDeleteBrandCart), 1);
+                        }
+
                         this.reComputePrice();
                         this.$parent.getCartNum();
                     }

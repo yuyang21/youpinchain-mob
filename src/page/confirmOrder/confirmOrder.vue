@@ -240,6 +240,7 @@
                 let that = this;
                 submitOrder(cartIds, addressId, that.couponId, that.message).then(res => {
                     if (res.errno !== 0) {
+                        this.showErrMsg(res.errmsg);
                         return;
                     }
                     that.orderId = res.data.orderId;
