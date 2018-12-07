@@ -19,11 +19,12 @@
           <img src="../../../images/group/icon.png" alt="">
         </div>
         <ul class="img">
-          <li v-for="(item,index) in levels" :key="index" :class="{'level': level === item.id}"></li>
+          <li v-for="(item,index) in levels" :key="index" :class="{'level': level === item.sortNo}"></li>
           <hr color="#FCC931" width="88%" height=".025rem">
         </ul>
         <ul class="levels">
-          <li v-for="(item,index) in levels" :key="index">{{item.name}}</li>
+          <li v-for="(item,index) in levels" :key="index"
+            :style="{width: 100 / levels.length + '%'}">{{item.name}}</li>
         </ul>
         <p class="text">奖励：<br> 用户下单金额*(有效下单人数提成比+邀请用户提成比)</p>
       </div>
@@ -35,35 +36,35 @@
       </div>
       <ul class="content">
         <li>
-          <p><span>¥</span>{{todayInfo.todayAmount}}</p>
+          <p><span>¥</span>{{todayInfo.todayAmount || 0}}</p>
           <p>今日收益</p>
         </li>
         <li>
-          <p><span>¥</span>{{todayInfo.todayOrderAmount}}</p>
+          <p><span>¥</span>{{todayInfo.todayOrderAmount || 0}}</p>
           <p>今日下单金额</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.invitePayNum}}</p>
+          <p><span>¥</span>{{profileInfo.invitePayAmount || 0}}</p>
           <p>用户累计下单</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.totalAmount}}</p>
+          <p><span>¥</span>{{profileInfo.totalAmount || 0}}</p>
           <p>累计收益</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.totalAmount - profileInfo.canWithdrawAmount - profileInfo.alreadyWithdrawAmount}}</p>
+          <p><span>¥</span>{{(profileInfo.totalAmount - profileInfo.canWithdrawAmount - profileInfo.alreadyWithdrawAmount) || 0}}</p>
           <p>预估收益余额</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.alreadyWithdrawAmount}}</p>
+          <p><span>¥</span>{{profileInfo.alreadyWithdrawAmount || 0}}</p>
           <p>已累计提现</p>
         </li>
         <li>
-          <p><span>¥</span>{{profileInfo.canWithdrawAmount}}</p>
+          <p><span>¥</span>{{profileInfo.canWithdrawAmount || 0}}</p>
           <p>可提现金额</p>
         </li>
         <li>
-          <div class="btn">申请提现</div>
+          <div class="btn" :class="{'disabled': profileInfo.canWithdrawAmount <= 0}" @click="withdraws(profileInfo.canWithdrawAmount)">申请提现</div>
         </li>
       </ul>
       <div class="tips">
@@ -82,38 +83,22 @@
   import {
     accountsInfo,
     todayProfit,
-    rewardGrade
+    rewardGrade,
+    withdraws,
+    rewardGrades
   } from '../../../service/getData'
   export default {
     data () {
       return {
         profileInfo: {},
         todayInfo: {},
-        levels: [
-          {
-            id: 1,
-            name: '短工'
-          },
-          {
-            id: 2,
-            name: '长工'
-          },
-          {
-            id: 3,
-            name: '贫民'
-          },
-          {
-            id: 4,
-            name: '富农'
-          },
-          {
-            id: 5,
-            name: '土豪'
-          }
-        ],
-        level: null
+        levels: [],
+        level: null,
+        busy: false,
+        rewardGrades: {}
       }
     },
+    props: ['showErrMsg'],
     created () {
       this.getInfo();
     },
@@ -127,7 +112,32 @@
           that.todayInfo = res.data
         })
         rewardGrade().then((res) => {
-          that.level = res.data.id
+          that.level = res.data.sortNo
+        })
+        rewardGrades().then(res => {
+          that.levels = res.data.data
+        })
+      },
+      withdraws (amount) {
+        var that = this;
+        if (that.busy) {
+          return;
+        }
+        that.busy = true;
+        setTimeout(function () {
+          that.busy = false;
+        }, 2000)
+        if (amount <= 0) {
+          // that.$parent.showErrMsg('可提现金额需大于0');
+          return;
+        }
+        withdraws(amount).then(res => {
+          if (res.errno !== 0) {
+            that.$parent.showErrMsg(res.errmsg);
+          } else {
+            that.$parent.showErrMsg('提现成功');
+            that.getInfo();
+          }
         })
       }
     },
@@ -310,6 +320,9 @@
             line-height: .3rem;
             border-radius: .15rem;
             margin: .2075rem 0 0 .05rem;
+          }
+          .btn.disabled {
+            background-color: #999;
           }
         }
         li:nth-child(even) {

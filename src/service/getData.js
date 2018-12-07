@@ -473,7 +473,9 @@ export const rewardGrade = () => fetch('/accounts/0/rewardGrade', {})
 /**
  * 申请提现
  */
-export const withdraws = () => fetch('/accounts/0/withdraws', {})
+export const withdraws = (amount) => fetch('/accounts/0/withdraws', {
+    amount: amount
+}, 'POST')
 
 /**
  * 提成奖励段位信息
