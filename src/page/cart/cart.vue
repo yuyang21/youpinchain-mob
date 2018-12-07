@@ -11,24 +11,31 @@
                             <span>{{cartList.brandName}}</span>
                         </div>
                         <ul class="goods">
-                            <li v-for="item in cartList.cartListDtos" :key="item.cartId">
-                                <span :class="[item.choose && item.available ? 'choose' : 'unselected']"
-                                      @click="checkCart(item)"></span>
-                                <img :src="item.thumbnailPic" alt="" class="img"
-                                     :class="{'noImage': !item.thumbnailPic}">
-                                <div class="goods_info">
-                                    <p class="name">{{item.productName}}</p>
-                                    <p class="price"><span class="RMB">￥</span>{{item.presentPrice}}</p>
-                                </div>
-                                <div class="cart_btns">
+                            <div class="left">
+                                <li v-for="item in cartList.cartListDtos" :key="item.cartId">
+                                    <span :class="[item.choose && item.available ? 'choose' : 'unselected']"
+                                        @click="checkCart(item)"></span>
+                                </li>
+                            </div>
+                            <div class="right">
+                                <li v-for="item in cartList.cartListDtos" :key="item.cartId">
+                                    <img :src="item.thumbnailPic" alt="" class="img"
+                                    :class="{'noImage': !item.thumbnailPic}">
+                                    <div class="goods_info">
+                                        <p class="name">{{item.productName}}</p>
+                                        <p class="price"><span class="RMB">￥</span>{{item.presentPrice}}</p>
+                                    </div>
+                                    <div class="cart_btns">
+                                        <span class="subduction" :class="{'disabled': item.number <= 1}"
+                                            @click="item.number > 1 ? addNumber(item, -1) : deleteCart(item)"></span>
+                                        <span class="num">{{item.number}}</span>
+                                        <span class="add" @click="addNumber(item, 1)"></span>
+                                    </div>
+
                                     <p class="red" v-if="!item.isShow">已下架</p>
                                     <p class="red" v-else-if="!item.available">库存不足</p>
-                                    <span class="subduction" :class="{'disabled': item.number <= 1}"
-                                          @click="item.number > 1 ? addNumber(item, -1) : deleteCart(item)"></span>
-                                    <span class="num">{{item.number}}</span>
-                                    <span class="add" @click="addNumber(item, 1)"></span>
-                                </div>
-                            </li>
+                                </li>
+                            </div>
                         </ul>
                     </div>
                     <ul class="payment_info">
@@ -431,7 +438,7 @@
                 border-radius: 10px;
                 overflow: hidden;
                 .lists {
-                    border-bottom: .36rem solid $f7;
+                    // border-bottom: .36rem solid $f7;
                     .title {
                         padding: .25rem 0;
                         display: flex;
@@ -455,13 +462,29 @@
                     }
                 }
                 .goods {
-                    li {
-                        position: relative;
-                        margin-bottom: 0.26rem;
+                    overflow: hidden;
+                    .left {
+                        li {
+                            height: 1.25rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+                    .right {
+                        width: 90%;
+                        box-shadow: 0rem 0rem .1rem .02rem $bc;
+                        border-radius: .05rem;
+                        margin: .05rem;
+                        padding: .0rem .1rem 0;
+                        li {
+                            position: relative;
+                            padding: .15rem .0rem;
+                        }
                     }
                     .img {
                         display: inline-block;
-                        border-radius: 5px;
+                        border-radius: .05rem;
                         @include wh(0.95rem, 0.945rem);
                         background-color: #000;
                         vertical-align: middle;
@@ -483,8 +506,8 @@
                     }
                     .cart_btns {
                         position: absolute;
-                        right: 0;
-                        bottom: 0;
+                        right: 0rem;
+                        top: 0.88rem;
                         display: flex;
                         .subduction,
                         .num,
@@ -513,9 +536,8 @@
                 }
                 .payment_info {
                     overflow: hidden;
-                    padding: 0.15rem 0;
+                    padding: 0.2rem 0 .15rem;
                     border-bottom: 1px solid $gd;
-                    border-top: 1px solid $gd;
                     li {
                         @include wh(100%, 0.35rem);
                         line-height: 0.35rem;
