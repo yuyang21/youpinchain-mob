@@ -61,7 +61,7 @@
             </li>
         </ul>
         <template v-for="item in goods.footPic">
-            <img :src="item" style="width: 100%">
+            <img :src="item" style="width: 100%;display: block">
         </template>
     </div>
     <div class="add_cart_container">
