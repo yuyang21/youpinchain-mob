@@ -36,7 +36,7 @@ let WechatShareUtils = {
     onMenuShareAppMessage: function (title, subTitle, shareLink, imgUrl) {
         let sessionUserInfo = sessionStorage.getItem("userInfo");
         if (sessionUserInfo) {
-            if (shareLink.contains("?")) {
+            if (shareLink.indexOf("?") !== -1) {
                 shareLink = shareLink + "&inviter=" + JSON.parse(sessionUserInfo).vipId;
             } else {
                 shareLink = shareLink + "?inviter=" + JSON.parse(sessionUserInfo).vipId;
