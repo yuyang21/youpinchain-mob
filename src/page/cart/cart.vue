@@ -247,7 +247,7 @@
                     }
 
                     if (cart.expressCost && cart.expressCost.freeExpress === 1 && brandPrice < cart.expressCost.freeExpressValue) { // 下单金额
-                        this.fare += cartItem.expressCost.expressPrice;
+                        this.fare += cart.expressCost.expressPrice;
                     }
                     if (cart.expressCost && cart.expressCost.freeExpress === 2 && brandNum < cart.expressCost.freeExpressValue) { // 下单金额
                         this.fare += cart.expressCost.expressPrice;
