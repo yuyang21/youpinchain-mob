@@ -41,13 +41,13 @@
     <div class="certificates">
         <p class="abstract">证件资质</p>
         <ul>
-            <li @click="toCredential(0)"><img src="../../images/store/credentials_1.png" alt="">
+            <li v-if="goods.jianyiProv" @click="toCredential(0)"><img src="../../images/store/credentials_1.png" alt="">
                 <p>检疫证</p>
             </li>
-            <li @click="toCredential(1)"><img src="../../images/store/credentials_2.png" alt="">
+            <li v-if="goods.certificate" @click="toCredential(1)"><img src="../../images/store/credentials_2.png" alt="">
                 <p>合格证</p>
             </li>
-            <li @click="toCredential(2)"><img src="../../images/store/credentials_3.png" alt="">
+            <li v-if="goods.businessLicense" @click="toCredential(2)"><img src="../../images/store/credentials_3.png" alt="">
                 <p>经营许可证</p>
             </li>
         </ul>
@@ -59,27 +59,10 @@
                 <p>{{goods.name}}</p>
                 <p>{{goods.describe}}</p>
             </li>
-            <li v-if="goods.preSale">
-                <p class="abstract">预售说明</p>
-                <p align="center" style="text-align:center">为保证新鲜，生猪屠宰排酸后即发货。
-                    <br/>9月18日屠宰，即日其可下单购买。
-                    <br/>数量有限、售完为止。
-                </p>
-            </li>
-            <li>
-                <p class="abstract">物流说明</p>
-                <div class="tip">（以下时效是以快递发出后计算）</div>
-                <p>覆盖区域：仲秋活动仅限北京和江浙沪地区<br> 物流费用：消费不满199元，快递费15元；消费>199元，包邮。
-                    <br/> 快递公司：默认顺丰或者申通。
-                    <br/> 特别提示：北京订单为淮安至北京冷链车统一运送，北京同城快递达至客户手中。
-                </p>
-            </li>
-            <li>
-                <p class="abstract">售后说明</p>
-                <p>若因外箱破损或快递延误发现腐烂变质情况，请在收获后3小时联系客服，我们来为您处理，保证您购物无忧。 <br/> 温馨提示：因生鲜产品特殊性，物流签收超过24小时后，不支持退换货，敬请谅解。
-                </p>
-            </li>
         </ul>
+        <template v-for="item in goods.footPic">
+            <img :src="item" style="width: 100%">
+        </template>
     </div>
     <div class="add_cart_container">
         <router-link class="cart_icon_num left" :to="'/cart'">
