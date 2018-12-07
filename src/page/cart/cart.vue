@@ -4,10 +4,11 @@
             <div class="swiper-container" v-if="carts.length">
                 <div class="topBG"></div>
                 <div class="shop_info">
-                    <div v-for="(cartList, index) in carts" :key="index" :class="{'border-no': index === carts.length - 1}" class="lists">
+                    <div v-for="(cartList, index) in carts" :key="index"
+                         :class="{'border-no': index === carts.length - 1}" class="lists">
                         <div class="title">
                             <span :class="[cartList.choose ? 'choose' : 'unselected']"
-                            @click="checkCart(cartList)"></span>
+                                  @click="checkCart(cartList)"></span>
                             <span>{{cartList.brandName}}</span>
                         </div>
                         <ul class="goods">
@@ -230,20 +231,27 @@
                 this.totalPrice = 0;
                 this.fare = 0;
                 this.carts.forEach(cart => {
-                    if (cart.cartListDtos)
+                    let brandNum = 0;
+                    let brandPrice = 0;
+
+                    if (cart.cartListDtos) {
                         cart.cartListDtos.forEach(cartItem => {
                             if (cartItem.choose && cartItem.available) {
                                 let itemGoodsPrice = cartItem.presentPrice * cartItem.number;
                                 this.goodsPrice += itemGoodsPrice;
                                 this.payment += itemGoodsPrice;
-                                if (cartItem.expressCost && cartItem.expressCost.freeExpress === 1 && itemGoodsPrice < cartItem.expressCost.freeExpressValue) { // 下单金额
-                                    this.fare += cartItem.expressCost.expressPrice;
-                                }
-                                if (cartItem.expressCost && cartItem.expressCost.freeExpress === 2 && cartItem.number < cartItem.expressCost.freeExpressValue) { // 下单金额
-                                    this.fare += cartItem.expressCost.expressPrice;
-                                }
+                                brandNum += cartItem.number;
+                                brandPrice += itemGoodsPrice;
                             }
                         })
+                    }
+
+                    if (cart.expressCost && cart.expressCost.freeExpress === 1 && brandPrice < cart.expressCost.freeExpressValue) { // 下单金额
+                        this.fare += cartItem.expressCost.expressPrice;
+                    }
+                    if (cart.expressCost && cart.expressCost.freeExpress === 2 && brandNum < cart.expressCost.freeExpressValue) { // 下单金额
+                        this.fare += cart.expressCost.expressPrice;
+                    }
                 });
                 this.totalPrice = this.fare + this.payment;
             },
@@ -258,26 +266,24 @@
                 let orderCar = [];
                 this.carts.forEach(cartBrand => {
                     if (cartBrand.cartListDtos) {
+                        let brandItems = [];
                         cartBrand.cartListDtos.forEach(cartItem => {
                             if (cartItem.choose && cartItem.available) {
-                                orderCar.push(cartItem);
+                                brandItems.push(cartItem);
                             }
                         })
+                        if (brandItems.length > 0) {
+                            orderCar.push({
+                                brandId: cartBrand.brandId,
+                                brandName: cartBrand.brandName,
+                                expressCost: cartBrand.expressCost,
+                                cartListDtos: brandItems
+                            })
+                        }
                     }
                 })
-                if (!orderCar || orderCar.length <= 0) {
+                if (orderCar.length <= 0) {
                     return;
-                }
-
-                var arr = [];
-                for (var i = 0; i < sessionStorage.length; i++) {
-                    if (sessionStorage.key(i).substring(0, 9) == "products_") {
-                        arr.push(sessionStorage.key(i));
-                    }
-                }
-
-                for (var i = 0; i < arr.length; i++) {
-                    sessionStorage.removeItem(arr[i]);
                 }
 
                 let currentTime = new Date().getTime();
