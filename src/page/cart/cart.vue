@@ -229,10 +229,10 @@
                                 let itemGoodsPrice = cartItem.presentPrice * cartItem.number;
                                 this.goodsPrice += itemGoodsPrice;
                                 this.payment += itemGoodsPrice;
-                                if (cartItem.expressCost.freeExpress === 1 && itemGoodsPrice < cartItem.expressCost.freeExpressValue) { // 下单金额
+                                if (cartItem.expressCost && cartItem.expressCost.freeExpress === 1 && itemGoodsPrice < cartItem.expressCost.freeExpressValue) { // 下单金额
                                     this.fare += cartItem.expressCost.expressPrice;
                                 }
-                                if (cartItem.expressCost.freeExpress === 2 && cartItem.number < cartItem.expressCost.freeExpressValue) { // 下单金额
+                                if (cartItem.expressCost && cartItem.expressCost.freeExpress === 2 && cartItem.number < cartItem.expressCost.freeExpressValue) { // 下单金额
                                     this.fare += cartItem.expressCost.expressPrice;
                                 }
                             }
