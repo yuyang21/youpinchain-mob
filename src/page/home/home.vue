@@ -192,7 +192,7 @@ export default {
 @import '../../static/mescroll/mescroll.min.css';
 @import '../../style/mixin';
 .header_image {
-    height: 4.2rem;
+    height: 4.1rem;
 }
 
 .move_dot {
