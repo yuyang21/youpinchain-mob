@@ -93,7 +93,7 @@
             </li>
             <li>
                 <p>合计 &nbsp;&nbsp;<span class="red"><span class="RMB">￥</span>{{totalPrice | number}}</span></p>
-                <p>运费 &nbsp;&nbsp;<span class="RMB">￥</span>{{fare}}</p>
+                <p>运费 &nbsp;&nbsp;<span class="RMB">￥</span>{{Number(fare).toFixed(2)}}</p>
             </li>
             <li @click="toSubmitOrder()">去结算</li>
         </ul>
@@ -234,7 +234,7 @@
                     let brandNum = 0;
                     let brandPrice = 0;
 
-                    if (cart.cartListDtos) {
+                    if (cart.cartListDtos && cart.cartListDtos.length > 0) {
                         cart.cartListDtos.forEach(cartItem => {
                             if (cartItem.choose && cartItem.available) {
                                 let itemGoodsPrice = cartItem.presentPrice * cartItem.number;
@@ -244,13 +244,14 @@
                                 brandPrice += itemGoodsPrice;
                             }
                         })
-                    }
-
-                    if (cart.expressCost && cart.expressCost.freeExpress === 1 && brandPrice < cart.expressCost.freeExpressValue) { // 下单金额
-                        this.fare += cart.expressCost.expressPrice;
-                    }
-                    if (cart.expressCost && cart.expressCost.freeExpress === 2 && brandNum < cart.expressCost.freeExpressValue) { // 下单金额
-                        this.fare += cart.expressCost.expressPrice;
+                        if (brandNum > 0) {
+                            if (cart.expressCost && cart.expressCost.freeExpress === 1 && brandPrice < cart.expressCost.freeExpressValue) { // 下单金额
+                                this.fare += cart.expressCost.expressPrice;
+                            }
+                            if (cart.expressCost && cart.expressCost.freeExpress === 2 && brandNum < cart.expressCost.freeExpressValue) { // 下单金额
+                                this.fare += cart.expressCost.expressPrice;
+                            }
+                        }
                     }
                 });
                 this.totalPrice = this.fare + this.payment;

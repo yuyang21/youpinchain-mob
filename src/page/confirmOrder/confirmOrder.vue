@@ -88,16 +88,16 @@
                         </li>
                         <li>
                             <p>包装费</p>
-                            <p><span class="RMB">￥</span>{{Number(packingFee).toFixed(2)}}</p>
+                            <p><span class="RMB">￥</span>{{Number(packingFee | 5).toFixed(2)}}</p>
                         </li>
                         <li>
                             <p>包装费减免</p>
-                            <p><span class="RMB">￥</span>{{Number(packingFeeReduction).toFixed(2)}}</p>
+                            <p><span class="RMB">-￥</span>{{Number(packingFeeReduction | 5).toFixed(2)}}</p>
                         </li>
                     </ul>
                     <div class="right totalPrice">
                         实际支付
-                        <p><span class="RMB">￥</span>{{Number(totalPrice + fare).toFixed(2)}}</p>
+                        <p><span class="RMB">￥</span>{{Number(goodsPrice + fare).toFixed(2)}}</p>
                     </div>
                 </div>
                 <div class="shop_info">
@@ -111,7 +111,7 @@
         </nav>
         <ul class="settlement">
             <li @click="paymentCall()">去付款</li>
-            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{Number(totalPrice + fare).toFixed(2)}}</span></li>
+            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{Number(goodsPrice + fare).toFixed(2)}}</span></li>
         </ul>
     </div>
 </template>
