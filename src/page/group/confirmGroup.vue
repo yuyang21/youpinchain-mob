@@ -681,7 +681,9 @@
                 }
                 .deletesite {
                     display: flex;
-                    margin-top: 0.1rem;
+                    padding-top: 0.1rem;
+                    width: .35rem;
+                    justify-content: flex-end;
                     span {
                         display: block;
                         @include wh(0.1rem, 0.175rem);
