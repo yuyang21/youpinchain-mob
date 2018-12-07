@@ -75,35 +75,35 @@
                     <ul class="payment_info">
                         <li>
                             <p>商品总价</p>
-                            <p><span class="RMB">￥</span>{{goodsPrice}}</p>
+                            <p><span class="RMB">￥</span>{{Number(goodsPrice).toFixed(2)}}</p>
                         </li>
-                        <router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">
-                            <p>优惠券</p>
-                            <p class="RMB" v-if="coupon">￥-{{coupon.money}}</p>
-                            <p class="coupon" v-else>不使用</p>
-                        </router-link>
+                        <!--<router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">-->
+                            <!--<p>优惠券</p>-->
+                            <!--<p class="RMB" v-if="coupon">￥-{{coupon.money}}</p>-->
+                            <!--<p class="coupon" v-else>不使用</p>-->
+                        <!--</router-link>-->
                         <li>
                             <p>运费</p>
-                            <p><span class="RMB">￥</span>{{fare}}</p>
+                            <p><span class="RMB">￥</span>{{Number(fare).toFixed(2)}}</p>
                         </li>
                         <li>
                             <p>包装费</p>
-                            <p><span class="RMB">￥</span>{{packingFee}}</p>
+                            <p><span class="RMB">￥</span>{{Number(packingFee).toFixed(2)}}</p>
                         </li>
                         <li>
                             <p>包装费减免</p>
-                            <p><span class="RMB">￥</span>{{packingFeeReduction}}</p>
+                            <p><span class="RMB">￥</span>{{Number(packingFeeReduction).toFixed(2)}}</p>
                         </li>
                     </ul>
                     <div class="right totalPrice">
                         实际支付
-                        <p><span class="RMB">￥</span>{{totalPrice + fare}}</p>
+                        <p><span class="RMB">￥</span>{{Number(totalPrice + fare).toFixed(2)}}</p>
                     </div>
                 </div>
                 <div class="shop_info">
                     <div class="input-new">
                         <span>留言</span>
-                        <input type="text" maxlength="50" style="width: 100%;" placeholder="建议留言前先与客服进行确认,50字以内"
+                        <input type="text" maxlength="50" style="width: 100%;" placeholder="建议留言前先与客服进行确认，50字以内"
                                v-model="message">
                     </div>
                 </div>
@@ -111,7 +111,7 @@
         </nav>
         <ul class="settlement">
             <li @click="paymentCall()">去付款</li>
-            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{totalPrice + fare}}</span></li>
+            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{Number(totalPrice + fare).toFixed(2)}}</span></li>
         </ul>
     </div>
 </template>
@@ -143,6 +143,7 @@
                 packingFeeReduction: 0,
                 fare: 0,
                 productList: [],
+                payment: 0,
                 butpart: false, //  新增地址按钮的透明度
                 choosedAddress: undefined,
                 address: {
@@ -173,24 +174,43 @@
             }
         },
         created() {
-            this.productList = JSON.parse(
+            this.brandCartList = JSON.parse(
                 sessionStorage.getItem(this.$route.query.cartsKey)
             );
 
-            this.showTotal = this.productList.length > 2;
-            this.productList.forEach(product => {
-                this.totalPrice += product.presentPrice * product.number;
-                this.goodsPrice += product.presentPrice * product.number;
-                this.goodsPrice > 199 ? this.fare = 0 : this.fare = 15;
-                sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
+            this.showTotal = this.brandCartList.length > 2;
+
+            this.productList = [];
+            this.brandCartList.forEach(cart => {
+                let brandNum = 0;
+                let brandPrice = 0;
+
+                cart.cartListDtos.forEach(cartItem => {
+                    let itemGoodsPrice = cartItem.presentPrice * cartItem.number;
+                    this.goodsPrice += itemGoodsPrice;
+                    this.payment += itemGoodsPrice;
+                    brandNum += cartItem.number;
+                    brandPrice += itemGoodsPrice;
+                    this.productList.push(cartItem)
+                })
+
+                if (cart.expressCost && cart.expressCost.freeExpress === 1 && brandPrice < cart.expressCost.freeExpressValue) { // 下单金额
+                    this.fare += cart.expressCost.expressPrice;
+                }
+                if (cart.expressCost && cart.expressCost.freeExpress === 2 && brandNum < cart.expressCost.freeExpressValue) { // 下单金额
+                    this.fare += cart.expressCost.expressPrice;
+                }
             });
+            this.totalPrice = this.fare + this.payment;
+            sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
         },
         methods: {
             // ...mapMutations(["CHOOSE_ADDRESS"]),
 
             loadAllProducts() {
 
-            },
+            }
+            ,
             async paymentCall() {
                 var that = this;
                 if (!that.choosedAddress) {
@@ -203,7 +223,8 @@
                 } else {
                     that.doPayCall();
                 }
-            },
+            }
+            ,
 
             doPayCall() {
                 if (this.orderId != 0) {
@@ -224,7 +245,8 @@
                     that.orderId = res.data.orderId;
                     that.doPay(that.orderId);
                 })
-            },
+            }
+            ,
 
             /**
              * 去支付，调起微信支付
@@ -253,7 +275,8 @@
                         );
                     }
                 })
-            },
+            }
+            ,
 
             /**
              * 校验用户输入的地址
@@ -281,7 +304,8 @@
                 }
 
                 return true;
-            },
+            }
+            ,
             //保存地址
             async submitAddress(address, successFun) {
                 if (!this.checkAddress(address)) {
@@ -302,7 +326,8 @@
                     }
                     successFun();
                 });
-            },
+            }
+            ,
             // 设置地址插件
             setRegions() {
                 var that = this;
@@ -346,7 +371,8 @@
                         }
                     });
                 });
-            },
+            }
+            ,
             // 获取默认地址信息
             getDefaultAddress() {
                 // 默认用户地址
@@ -366,11 +392,14 @@
                     }
                 });
             }
-        },
+        }
+        ,
         components: {
             headTop
-        },
-    };
+        }
+        ,
+    }
+    ;
 </script>
 
 <style lang="scss" scoped>
