@@ -64,10 +64,13 @@ router.beforeEach((to, from, next) => {
             WechatShareUtils.redirectToAuth(to.fullPath)
         }
     } else {
-        next();
+
         userInfo().then(res => {
             if (res.errno === 401) {
                 WechatShareUtils.redirectToAuth(to.fullPath)
+            } else {
+                sessionStorage.setItem("userInfo", JSON.stringify(res.data))
+                next();
             }
         });
     }
