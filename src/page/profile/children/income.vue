@@ -15,7 +15,7 @@
       <div class="panel_title">当前邀请用户奖励提成比</div>
       <div class="content">
         <div class="tips">
-          <u>如何提高比率</u>
+          <u>如何提高</u>
           <img src="../../../images/group/icon.png" alt="">
         </div>
         <ul class="img">
@@ -326,11 +326,11 @@
           }
         }
         li:nth-child(even) {
-          border-left: .01rem solid $bc; 
-          border-bottom: .01rem solid $bc; 
+          border-left: .01rem solid $bc;
+          border-bottom: .01rem solid $bc;
         }
         li:nth-child(odd) {
-          border-bottom: .01rem solid $bc; 
+          border-bottom: .01rem solid $bc;
         }
         li:last-child {
           border-left: none;

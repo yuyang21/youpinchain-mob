@@ -3,8 +3,8 @@
     <head-top head-title="收益明细" go-back='true'></head-top>
     <ul ref="mescroll">
       <li v-for="(item,index) in detailList" :key="index">
-        <p>{{item.createTime | date('.')}}</p>
-        <p class="ellipsis">{{item.describe}}</p>
+        <p>{{item.createTime | dateWithHourMin('.')}}</p>
+        <p class="ellipsis" align="center">{{item.describe}}</p>
         <p>{{item.amount > 0 ? '+' : ''}}{{item.amount}}</p>
       </li>
     </ul>
@@ -84,10 +84,10 @@
         p {
           float: left;
           @include sc(.15rem, $g6);
-          width: 30%;
+          width: 32%;
         }
         p:nth-child(2) {
-          width: 50%;
+          width: 48%;
         }
         p:last-child {
           color: $red;
