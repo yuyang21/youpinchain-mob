@@ -101,7 +101,11 @@
                         }
                     }
                 });
-                that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+
+                // 列表没有数据时，不存在
+                if (that.$refs.mescroll) {
+                    that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+                }
             },
             // 取消订单
             cancelOrder(orderId) {

@@ -17,9 +17,11 @@
                                          class="order_item_top_header_group"
                                          tag="header">
                                 <ul>
-                                    <li><p class="order_time" style="color: #dd3333">{{item.groupOrderDto.suitName}}拼团中</p></li>
+                                    <li><p class="order_time" style="color: #dd3333">
+                                        {{item.groupOrderDto.suitName}}拼团中</p></li>
                                     <li><p class="order_status" style="color: #dd3333">
-                                        已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{item.groupOrderDto.endTime | formatDate}}结束
+                                        已有{{item.groupOrderDto.peoNum}}人参与 当前拼团将在{{item.groupOrderDto.endTime |
+                                        formatDate}}结束
                                     </p></li>
                                 </ul>
                                 <svg fill="#bbb" style="width: 0.15rem;margin-left: 0rem;">
@@ -85,7 +87,7 @@
         confirmOrder,
         prepayOrder
     } from "../../../service/getData";
-    import { formatDate } from '../../../service/Utils'
+    import {formatDate} from '../../../service/Utils'
     import MeScroll from '../../../static/mescroll/mescroll.min.js'
 
     export default {
@@ -126,7 +128,10 @@
                         }
                     }
                 });
-                that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+                // 列表没有数据时，不存在
+                if (that.$refs.mescroll) {
+                    that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+                }
             },
             // 取消订单
             cancelOrder(orderId) {
