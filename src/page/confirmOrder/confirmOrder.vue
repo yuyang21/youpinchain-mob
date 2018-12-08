@@ -78,9 +78,9 @@
                             <p><span class="RMB">￥</span>{{Number(goodsPrice).toFixed(2)}}</p>
                         </li>
                         <!--<router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">-->
-                            <!--<p>优惠券</p>-->
-                            <!--<p class="RMB" v-if="coupon">￥-{{coupon.money}}</p>-->
-                            <!--<p class="coupon" v-else>不使用</p>-->
+                        <!--<p>优惠券</p>-->
+                        <!--<p class="RMB" v-if="coupon">￥-{{coupon.money}}</p>-->
+                        <!--<p class="coupon" v-else>不使用</p>-->
                         <!--</router-link>-->
                         <li>
                             <p>运费</p>
@@ -111,14 +111,19 @@
         </nav>
         <ul class="settlement">
             <li @click="paymentCall()">去付款</li>
-            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{Number(goodsPrice + fare).toFixed(2)}}</span></li>
+            <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{Number(goodsPrice + fare).toFixed(2)}}</span>
+            </li>
         </ul>
+        <transition name="loading">
+            <loading v-show="showLoading"></loading>
+        </transition>
     </div>
 </template>
 
 <script>
     import headTop from '../../components/header/head'
     import AjaxPicker from "ajax-picker";
+    import loading from "src/components/common/loading";
     import {
         mapState,
         mapMutations
@@ -155,7 +160,8 @@
                 orderId: 0,
                 message: '',
                 coupon: '',
-                couponId: ''
+                couponId: '',
+                showLoading: false
             }
         },
         props: ['showErrMsg'],
@@ -212,9 +218,11 @@
             }
             ,
             async paymentCall() {
+                this.showLoading = true;
                 var that = this;
                 if (!that.choosedAddress) {
                     if (!that.checkAddress(that.address)) {
+                        this.showLoading = false;
                         return;
                     }
                     that.submitAddress(that.address, function () {
@@ -241,6 +249,7 @@
                 submitOrder(cartIds, addressId, that.couponId, that.message).then(res => {
                     if (res.errno !== 0) {
                         this.showErrMsg(res.errmsg);
+                        this.showLoading = false;
                         return;
                     }
                     that.orderId = res.data.orderId;
@@ -254,6 +263,7 @@
              */
             doPay(orderId) {
                 prepayOrder(orderId).then(resp => {
+                    this.showLoading = false;
                     var that = this;
                     if (resp.errno === 403) {
                         this.showErrMsg("订单不可支付")
@@ -396,7 +406,8 @@
         }
         ,
         components: {
-            headTop
+            headTop,
+            loading
         }
         ,
     }
