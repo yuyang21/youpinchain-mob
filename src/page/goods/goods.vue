@@ -55,7 +55,7 @@
         </ul>
     </div>
     <div class="description_detail">
-        <img class="abstractImg" src="../../images/store/Impression_bg.png" alt="">
+        <!--<img class="abstractImg" src="../../images/store/Impression_bg.png" alt="">-->
         <ul>
             <li>
                 <p>{{goods.name}}</p>
