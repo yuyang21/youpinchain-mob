@@ -71,8 +71,6 @@ export default {
             showMoveDot: [], //控制下落的小圆点显示隐藏
             elLeft: 0, //当前点击加按钮在网页中的绝对top值
             elBottom: 0, //当前点击加按钮在网页中的绝对left值
-            page: 1,
-            pageSize: 4,
             datasBrandId: "",
             mescroll: null
         }

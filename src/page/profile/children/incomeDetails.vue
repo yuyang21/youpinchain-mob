@@ -1,13 +1,15 @@
 <template>
   <div class="income_details header-top">
     <head-top head-title="收益明细" go-back='true'></head-top>
-    <ul ref="mescroll">
-      <li v-for="(item,index) in detailList" :key="index">
-        <p>{{item.createTime | dateWithHourMin('.')}}</p>
-        <p class="ellipsis" align="center">{{item.describe}}</p>
-        <p>{{item.amount > 0 ? '+' : ''}}{{item.amount}}</p>
-      </li>
-    </ul>
+    <div ref="mescroll">
+      <ul>
+        <li v-for="(item,index) in detailList" :key="index">
+          <p>{{item.createTime | dateWithHourMin('.')}}</p>
+          <p class="ellipsis" align="center">{{item.describe}}</p>
+          <p>{{item.amount > 0 ? '+' : ''}}{{item.amount}}</p>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
