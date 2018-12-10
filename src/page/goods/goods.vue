@@ -38,16 +38,17 @@
         <img v-for="item in goods.footPic" :src="item" alt="" width="100%" class="show">
       </div> -->
     </div>
-    <div class="certificates">
+    <div class="certificates" v-if="(goods.jianyiProv && goods.jianyiProv.length > 0) || (goods.certificate && goods.certificate.length > 0)
+    || (goods.businessLicense && goods.businessLicense.length > 0)">
         <p class="abstract">证件资质</p>
         <ul>
-            <li v-if="goods.jianyiProv" @click="toCredential(0)"><img src="../../images/store/credentials_1.png" alt="">
+            <li v-if="goods.jianyiProv && goods.jianyiProv.length > 0" @click="toCredential(0)"><img src="../../images/store/credentials_1.png" alt="">
                 <p>检疫证</p>
             </li>
-            <li v-if="goods.certificate" @click="toCredential(1)"><img src="../../images/store/credentials_2.png" alt="">
+            <li v-if="goods.certificate && goods.certificate.length > 0" @click="toCredential(1)"><img src="../../images/store/credentials_2.png" alt="">
                 <p>合格证</p>
             </li>
-            <li v-if="goods.businessLicense" @click="toCredential(2)"><img src="../../images/store/credentials_3.png" alt="">
+            <li v-if="goods.businessLicense && goods.businessLicense.length > 0" @click="toCredential(2)"><img src="../../images/store/credentials_3.png" alt="">
                 <p>经营许可证</p>
             </li>
         </ul>
