@@ -5,7 +5,8 @@
         </ul>
         <div class="introduceHome">
             <template v-for="item in brandsPic">
-                <img :src="item" v-if="item !== 'goods'" style="width: 100%">
+                <video :src="item" @click="playVideo('video'+item.id)" :id="'video'+item.id" v-if="item.indexOf('.mp4') !== -1" style="width: 100%" tabindex="-1"></video>
+                <img :src="item" v-else-if="item !== 'goods'" style="width: 100%">
                 <div class="part_2" v-if="item === 'goods'">
                     <div class="goods" v-for="item in productList">
                         <div class="abstract"><strong>·</strong>&nbsp;&nbsp;&nbsp;{{item.name}}&nbsp;&nbsp;&nbsp;<strong>·</strong></div>
@@ -68,6 +69,11 @@
                 that.brandsPic = res.data
                 console.info(that.brandsPic)
             })
+        },
+        playVideo (id) {
+            var video = document.getElementById(id);
+            video.play();
+            video.style.width = '100%'
         }
     },
     components: {
@@ -130,7 +136,7 @@
         }
         .part_2{
             padding-bottom: .5rem;
-            background-color: #efeff4;
+            background-color: $bc;
             .load_more{
                 border-top: 1px solid #f8f8f8;
                 padding: .2rem 0;

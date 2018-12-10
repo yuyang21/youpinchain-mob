@@ -2,11 +2,13 @@
 <div class="goods">
     <head-top class="header" go-back='true' is-share="true" :showShare="showShare" :headTitle="headTitle"></head-top>
     <div class="top_main">
-        <carousel :loop="true" :autoplay="true" :minSwipeDistance="6" :scrollPerPage="true" :speed="500" :perPage="1" :paginationPadding="5" :paginationSize="8" :paginationActiveColor="pagination.activeColor" :paginationColor="pagination.color">
-            <slide v-for="item in goods.headPic" :key="item.id">
-                <img :src="item" alt="" class="show">
-            </slide>
-        </carousel>
+        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+            <swipe-item v-for="item in goods.headPic" :key="item.id">
+                <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                    <img :src="item" alt="" width="100%" class="show">
+                </router-link>
+            </swipe-item>
+        </swipe>
         <div class="presell_box" v-if="goods.preSale">
             <div class="left_price left">
                 <p class="price"><span>￥</span>{{goods.presentPrice}} <s>￥{{goods.originalPrice}}</s></p>
@@ -24,7 +26,7 @@
         </div>
     </div>
     <div class="goods_info">
-        <div class="info_title">商品详情</div>
+        <div class="panel_title">商品详情</div>
         <!--<div class="info_content" v-html="goods.Desc"></div>-->
         <div class="info_content">
             <p>品名：{{goods.name}}</p>
@@ -38,16 +40,17 @@
         <img v-for="item in goods.footPic" :src="item" alt="" width="100%" class="show">
       </div> -->
     </div>
-    <div class="certificates">
+    <div class="certificates" v-if="(goods.jianyiProv && goods.jianyiProv.length > 0) || (goods.certificate && goods.certificate.length > 0)
+    || (goods.businessLicense && goods.businessLicense.length > 0)">
         <p class="abstract">证件资质</p>
         <ul>
-            <li @click="toCredential(0)"><img src="../../images/store/credentials_1.png" alt="">
+            <li v-if="goods.jianyiProv && goods.jianyiProv.length > 0" @click="toCredential(0)"><img src="../../images/store/credentials_1.png" alt="">
                 <p>检疫证</p>
             </li>
-            <li @click="toCredential(1)"><img src="../../images/store/credentials_2.png" alt="">
+            <li v-if="goods.certificate && goods.certificate.length > 0" @click="toCredential(1)"><img src="../../images/store/credentials_2.png" alt="">
                 <p>合格证</p>
             </li>
-            <li @click="toCredential(2)"><img src="../../images/store/credentials_3.png" alt="">
+            <li v-if="goods.businessLicense && goods.businessLicense.length > 0" @click="toCredential(2)"><img src="../../images/store/credentials_3.png" alt="">
                 <p>经营许可证</p>
             </li>
         </ul>
@@ -59,27 +62,10 @@
                 <p>{{goods.name}}</p>
                 <p>{{goods.describe}}</p>
             </li>
-            <li v-if="goods.preSale">
-                <p class="abstract">预售说明</p>
-                <p align="center" style="text-align:center">为保证新鲜，生猪屠宰排酸后即发货。
-                    <br/>9月18日屠宰，即日其可下单购买。
-                    <br/>数量有限、售完为止。
-                </p>
-            </li>
-            <li>
-                <p class="abstract">物流说明</p>
-                <div class="tip">（以下时效是以快递发出后计算）</div>
-                <p>覆盖区域：仲秋活动仅限北京和江浙沪地区<br> 物流费用：消费不满199元，快递费15元；消费>199元，包邮。
-                    <br/> 快递公司：默认顺丰或者申通。
-                    <br/> 特别提示：北京订单为淮安至北京冷链车统一运送，北京同城快递达至客户手中。
-                </p>
-            </li>
-            <li>
-                <p class="abstract">售后说明</p>
-                <p>若因外箱破损或快递延误发现腐烂变质情况，请在收获后3小时联系客服，我们来为您处理，保证您购物无忧。 <br/> 温馨提示：因生鲜产品特殊性，物流签收超过24小时后，不支持退换货，敬请谅解。
-                </p>
-            </li>
         </ul>
+        <template v-for="item in goods.footPic">
+            <img :src="item" style="width: 100%;display: block">
+        </template>
     </div>
     <div class="add_cart_container">
         <router-link class="cart_icon_num left" :to="'/cart'">
@@ -92,10 +78,6 @@
 </template>
 
 <script>
-import {
-    Carousel,
-    Slide
-} from "vue-carousel";
 import shareMask from "src/components/common/shareMask";
 import headTop from "src/components/header/head";
 import {
@@ -120,12 +102,7 @@ export default {
             headTitle: "",
             goodsid: "",
             goods: {},
-            cart_num: 0,
-            number: [1, 2, 3, 4, 5],
-            pagination: {
-                activeColor: "#e4372e",
-                color: "#fff"
-            }
+            cart_num: 0
         };
     },
     watch: {
@@ -139,8 +116,6 @@ export default {
         this.initCartCount();
     },
     components: {
-        Carousel,
-        Slide,
         shareMask,
         headTop
     },
@@ -191,6 +166,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../static/swipe/swipe.min.css';
 @import "src/style/mixin";
 .goods {
     padding: 0.45rem 0 0.5rem;
@@ -275,14 +251,6 @@ export default {
     .goods_info {
         margin-top: 0.15rem;
         background-color: $fc;
-        .info_title {
-            padding-left: 0.16rem;
-            border-left: 7px solid $red;
-            line-height: 0.45rem;
-            border-bottom: 1px solid #f7f7fa;
-            @include wh(100%, 0.45rem);
-            @include sc(0.15rem, $g6);
-        }
         .info_content {
             p {
                 @include sc(0.13rem, $g6);

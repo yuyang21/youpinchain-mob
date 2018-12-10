@@ -1,8 +1,10 @@
 $blue: #3190e8;  
-$red: #e4372e;  
+$red: #e4372e;
+$orange: #fd731c;
 $bc: #efeff4;
 $f5: #f6f5f5;
 $fc:#fff;
+$f7: #f7f7f7;
 $g6:#666;
 $g3:#333;
 $g9:#999;
@@ -74,4 +76,12 @@ $ge: #eee;
 	display: flex;
 	justify-content: $type;
 
+}
+
+@mixin  line-ellipsis($line: 2) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+	-webkit-line-clamp: $line;
 }

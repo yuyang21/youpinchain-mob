@@ -9,7 +9,14 @@ const feeding = r => require.ensure([], () => r(require('../page/home/introduce/
 const goods = r => require.ensure([], () => r(require('../page/goods/goods')), 'goods')
 const credentials = r => require.ensure([], () => r(require('../page/goods/credentials')), 'credentials')
 const cart = r => require.ensure([], () => r(require('../page/cart/cart')), 'cart')
+const group = r => require.ensure([], () => r(require('../page/group/group')), 'group')
+const groupDet = r => require.ensure([], () => r(require('../page/group/groupDet')), 'groupDet')
+const groupMy = r => require.ensure([], () => r(require('../page/group/groupMy')), 'groupMy')
+const confirmGroup = r => require.ensure([], () => r(require('../page/group/confirmGroup')), 'confirmGroup')
+const current = r => require.ensure([], () => r(require('../page/group/children/current')), 'current')
+const preview = r => require.ensure([], () => r(require('../page/group/children/preview')), 'preview')
 const profile = r => require.ensure([], () => r(require('../page/profile/profile')), 'profile')
+const myProfile = r => require.ensure([], () => r(require('../page/profile/children/myProfile')), 'myProfile')
 const order = r => require.ensure([], () => r(require('../page/order/order')), 'order')
 const allOrder = r => require.ensure([], () => r(require('../page/order/children/all')), 'order')
 const unpaid = r => require.ensure([], () => r(require('../page/order/children/unpaid')), 'order')
@@ -22,6 +29,9 @@ const confirmOrder = r => require.ensure([], () => r(require('../page/confirmOrd
 const address = r => require.ensure([], () => r(require('../page/profile/children/address')), 'address')
 const add = r => require.ensure([], () => r(require('../page/profile/children/add')), 'add')
 const coupon = r => require.ensure([], () => r(require('../page/profile/children/coupon')), 'coupon')
+const income = r => require.ensure([], () => r(require('../page/profile/children/income')), 'income')
+const inviteList = r => require.ensure([], () => r(require('../page/profile/children/inviteList')), 'inviteList')
+const incomeDetails = r => require.ensure([], () => r(require('../page/profile/children/incomeDetails')), 'incomeDetails')
 const aboutUs = r => require.ensure([], () => r(require('../page/home/aboutUs')), 'aboutUs')
 const BountyPlan = r => require.ensure([], () => r(require('../page/activity/bounty/bountyPlan')), 'bountyPlan')
 const BountyHome = r => require.ensure([], () => r(require('../page/activity/bounty/children/home')), 'bountyHome')
@@ -98,6 +108,19 @@ export default [{
             path: '/goods/:goodsid',
             component: goods
         },
+        //拼团详情
+        {
+            path: '/groupDet/:suitId',
+            component: groupDet
+        },
+        //我的拼团
+        {
+            path: '/groupMy/:groupMyId',
+            component: groupMy,
+            meta: {
+                title: '拼团详情'
+            }
+        },
         // 证件资质
         {
             path: '/credentials',
@@ -109,15 +132,65 @@ export default [{
             path: '/cart',
             component: cart
         },
+        //秒拼
+        {
+            path: '/group',
+            component: group,
+            children: [{
+                path: '',
+                component: current, //拼团进行中
+                name: 'current'
+            },{
+                path: 'preview',
+                component: preview, //拼团预告
+                name: 'preview'
+            }]
+        },
         //确认订单页
         {
             path: '/confirmOrder',
             component: confirmOrder
         },
+        //拼团确认
+        {
+            path: '/confirmGroup',
+            component: confirmGroup,
+            meta: { title: '订单确认'}
+        },
         //个人信息页
         {
             path: '/profile',
             component: profile,
+            children: [
+                {
+                    path: '',
+                    component: myProfile,
+                },
+                {
+                    path: 'income',
+                    component: income,
+                    name: 'income',
+                    meta: {
+                        title: '我的'
+                    }
+                },
+                {
+                    path: 'incomeDetails',
+                    component: incomeDetails,
+                    name: 'incomeDetails',
+                    meta: {
+                        title: '我的'
+                    }
+                },
+                {
+                    path: 'inviteList',
+                    component: inviteList,
+                    name: 'inviteList',
+                    meta: {
+                        title: '我的'
+                    }
+                }
+            ]
         },
         {
             path: 'address',
@@ -171,6 +244,7 @@ export default [{
         {
             path: '/coupon',
             component: coupon,
+            name: 'couponList'
         },
         {
             path: '/bountyPlan',
@@ -187,7 +261,7 @@ export default [{
                     component: BountyTask,
                     name: 'BountyTask',
                     meta: {title: '淘金任务'}
-                }, 
+                },
                 {
                     path: 'PickGoldTask/:id',
                     component: PickGoldTask,
@@ -199,12 +273,14 @@ export default [{
                     component: Invite,
                     name: 'Invite',
                     meta: {title: '邀请好友'}
-                }, {
+                },
+                {
                     path: 'waiter',
                     component: Waiter,
                     name: 'Waiter',
                     meta: {title: '添加客服'}
-                }, {
+                },
+                {
                     path: 'userCenter',
                     component: BountyUserCenter,
                     name: 'BountyUserCenter',

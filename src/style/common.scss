@@ -66,6 +66,7 @@ html,body{
 
 .clear{
     zoom:1;
+    clear: both;
 }
 
 .back_img{
@@ -171,4 +172,26 @@ body.modal-open{
 }
 .red {
     color: $red;
+}
+.panel_title {
+    padding-left: 0.16rem;
+    border-left: 7px solid $red;
+    line-height: 0.45rem;
+    border-bottom: 1px solid #f7f7fa;
+    background-color: $fc;
+    @include wh(100%, 0.45rem);
+    @include sc(0.15rem, $g6);
+}
+#app {
+    .c-swipe-pagination-item, .c-swipe-pagination-item.active {
+        @include wh(.1rem,.1rem);
+        border-radius: 50%;
+        bottom: .15rem;
+    }
+    .c-swipe-pagination-item.active {
+        background-color: $red;
+    }
+    .c-swipe-pagination-bar {
+        margin-top: -.15rem;
+    }
 }

@@ -280,3 +280,30 @@ export const animate = (element, target, duration = 400, mode = 'ease-out', call
         })
     }, 20);
 }
+/**
+ * 倒计时
+ */
+export const countDown = (time, callback) => {
+    var start_time = new Date().getTime(); //获取开始时间的毫秒数
+    var countDown = time;
+    var timer = setInterval(() => {
+        if (countDown >= 1) {
+            var end_time = new Date().getTime();
+            var diff_time = Math.floor((end_time - start_time) / 1000);
+            //拿到时间差作为时间标记（行走时间）
+            document.addEventListener('visibilitychange', function () {
+                if (document.visibilityState == 'visible') {
+                    countDown = countDown - diff_time
+                } else {}
+            })
+            countDown -= 1
+            if (countDown < 1) {
+                countDown = 0
+            }
+            callback(countDown);
+        } else {
+            clearInterval(timer)
+            return
+        }
+    }, 1000)
+}

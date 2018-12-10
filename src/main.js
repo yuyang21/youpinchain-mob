@@ -12,6 +12,9 @@ import FastClick from 'fastclick'
 import VueHtml2Canvas from 'vue-html2canvas';
 Vue.use(VueHtml2Canvas);
 import VueClipboard from 'vue-clipboard2'
+import { Swipe, SwipeItem } from 'c-swipe';
+Vue.component('swipe', Swipe);
+Vue.component('swipe-item', SwipeItem);
 import { userInfo } from './service/getData'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
@@ -58,13 +61,16 @@ router.beforeEach((to, from, next) => {
             delete query.T
             next({path: to.path, query: query})
         } else {
-            WechatShareUtils.redirectToAuth(to.path)
+            WechatShareUtils.redirectToAuth(to.fullPath)
         }
     } else {
-        next();
+
         userInfo().then(res => {
             if (res.errno === 401) {
-                WechatShareUtils.redirectToAuth(to.path)
+                WechatShareUtils.redirectToAuth(to.fullPath)
+            } else {
+                sessionStorage.setItem("userInfo", JSON.stringify(res.data))
+                next();
             }
         });
     }

@@ -5,9 +5,17 @@
             <loading v-show="showLoading"></loading>
         </transition>
         <div v-show="!showLoading">
-            <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ brand.id}">
-                <img :src="brand.pictureUrl" alt="" width="100%" class="show">
-            </router-link>
+            <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+                <swipe-item v-for="item in brand" :key="item.id">
+                    <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                        <img :src="item.pictureUrl" alt="" width="100%" class="show">
+                    </router-link>
+                </swipe-item>
+            </swipe>
+
+            <!--<router-link tag="div" class="header_image" :to="{path:'/introduce/'+ brand.id}">-->
+                <!--<img :src="brand.pictureUrl" alt="" width="100%" class="show">-->
+            <!--</router-link>-->
             <!-- <ul class="product_nav">
             <li v-for="(tab, index) in product_nav" :key="index" :class="{'active': index === activeTab}" v-if="tab.name !== 'brand'"
                 @click="toggleTab(tab.id,index)">{{tab.name}}</li>
@@ -25,7 +33,7 @@
                                 <p class="price"><span class="RMB">￥</span>{{item.presentPrice}} <s>￥{{item.originalPrice}}</s></p>
                             </div>
                         </router-link>
-                        <div class="shopping_cart" @touchstart="addToCart(item.id, $event)"></div>
+                        <div class="shopping_cart" :class="{'shopping_cart_disabled': item.stock <= 0}" @touchstart="addToCart(item, $event)"></div>
                     </li>
                 </ul>
                 <transition appear @after-appear='afterEnter' @before-appear="beforeEnter" v-for="(item,index) in showMoveDot" :key="index">
@@ -63,8 +71,6 @@ export default {
             showMoveDot: [], //控制下落的小圆点显示隐藏
             elLeft: 0, //当前点击加按钮在网页中的绝对top值
             elBottom: 0, //当前点击加按钮在网页中的绝对left值
-            page: 1,
-            pageSize: 4,
             datasBrandId: "",
             mescroll: null
         }
@@ -72,20 +78,20 @@ export default {
     mounted() {
         //获取商品列表
         homeIndex().then(res => {
-            this.product_nav = res.data.brandDatas
+            // this.product_nav = res.data.brandDatas
             this.brand = res.data.brand
             this.showLoading = false;
             this.getDatasBrandId(res.data.brandDatas)
         })
         var that = this
-        that.mescroll = new MeScroll(that.$refs.mescroll, { 
+        that.mescroll = new MeScroll(that.$refs.mescroll, {
             down: {
                 use: true,
             },
             up: {
               callback: that.upCallback,
               page: {
-                num: 0, 
+                num: 0,
                 size: 4,
               }
             }
@@ -101,19 +107,24 @@ export default {
         footGuide,
         loading
     },
+    props: ['showErrMsg'],
     computed: {},
     methods: {
         toggleTab(dataId, index) {
             this.$router.push("/growing-environment?dataId=" + dataId);
             this.activeTab = index
         },
-        addToCart(productId, event) { // 加入购物车，计算按钮位置。
+        addToCart(product, event) { // 加入购物车，计算按钮位置。
+            if (product.stock <= 0) {
+                this.showErrMsg('库存不足');
+                return;
+            }
             let elLeft = event.target.getBoundingClientRect().left;
             let elBottom = event.target.getBoundingClientRect().bottom;
             this.showMoveDot.push(true);
             let that = this;
             this.showMoveDotFun(this.showMoveDot, elLeft, elBottom);
-            addToCart(productId, 1).then(res => {
+            addToCart(product.id, 1).then(res => {
                 that.$parent.getCartNum();
             })
         },
@@ -134,6 +145,9 @@ export default {
             el.style.opacity = 1;
         },
         getDatasBrandId(nav) {
+            if (nav == undefined) {
+                return
+            }
             nav.forEach(key => {
                 if (key.name === 'brand') {
                     this.datasBrandId = key.id
@@ -144,14 +158,15 @@ export default {
           productList(page.num, page.size).then(res => {
             this.showLoading = false;
             let arr = res.data.productList;
-            if (page.num == 1) this.hotgoodslist = [];
-            var that = this
+            if (page.num === 1) this.hotgoodslist = [];
+            var that = this;
             setTimeout(function () {
               that.hotgoodslist = that.hotgoodslist.concat(arr);
               that.$nextTick(() => {
-                that.mescroll.endSuccess(arr.length);
+                that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
               })
             },300)
+
           }).catch((e)=> {
             this.mescroll.endErr();
           })
@@ -161,10 +176,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../static/swipe/swipe.min.css';
 @import '../../static/mescroll/mescroll.min.css';
 @import '../../style/mixin';
 .header_image {
-    height: 4.2rem;
+    height: 4.1rem;
 }
 
 .move_dot {
@@ -269,12 +285,15 @@ export default {
                 }
             }
         }
-        .shopping_cart {
+        .shopping_cart, .shopping_cart_disabled {
             position: absolute;
             right: 0;
             bottom: .25rem;
             @include wh(.315rem, .315rem);
             @include bis('../../images/shopping_cart.png');
+        }
+        .shopping_cart_disabled {
+            @include bis('../../images/shopping_cart_disabled.png');
         }
     }
 }

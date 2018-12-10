@@ -135,7 +135,7 @@
       }
     }
     .growth {
-      background: #efeff4;
+      background: $bc;
       padding-bottom: .375rem;
       .text {
         @include sc(.13rem,$g6);
@@ -144,7 +144,7 @@
         margin: 0 auto;
       }
       .part{
-        background: #efeff4;
+        background: $bc;
       }
       .header {
         padding: 0rem 0 .25rem;
@@ -195,7 +195,7 @@
       }
       .part6, .part7, .part8 {
         overflow: hidden;
-        background: #f7f7f7 !important;
+        background: $f7 !important;
         .text {
           width: 44%;
           margin-top: .63rem;
@@ -267,7 +267,7 @@
         }
       }
       .part:first-child{
-        background: #efeff4;
+        background: $bc;
       }
     }
   }

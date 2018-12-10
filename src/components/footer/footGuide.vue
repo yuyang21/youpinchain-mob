@@ -4,6 +4,10 @@
         	<a></a>
           <span>首页</span>
         </section>
+        <section @click = "gotoAddress({path: '/group'})" class="guide_item" :class="[$route.path.indexOf('group') !== -1 ? 'icon4_style' : 'icon4_style2']">
+            <a></a>
+            <span>拼团购</span>
+        </section>
         <section @click = "gotoAddress({path: '/cart'})" class="guide_item" :class="[$route.path.indexOf('cart') !== -1 ? 'icon2_style' : 'icon2_style2']">
         	<a class="position-re"><b class="red-points" v-if="cartNum > 0">{{cartNum}}</b></a>
           <span>购物车</span>
@@ -68,7 +72,7 @@
       @include sc(.1rem, $red);
     }
   }
-  .icon1_style, .icon2_style, .icon3_style, .icon1_style2, .icon2_style2, .icon3_style2 {
+  .icon1_style, .icon2_style, .icon3_style, .icon4_style, .icon1_style2, .icon2_style2, .icon3_style2, .icon4_style2 {
     a {
       margin-top: .06rem;
       @include wh(.22rem, .22rem);
@@ -82,6 +86,9 @@
   .icon3_style a {
     @include bis('../../images/tab-mine-highlight.png')
   }
+  .icon4_style a {
+      @include bis('../../images/tab-group-highlight.png')
+  }
   .icon1_style2 a {
     @include bis('../../images/tab-home-normol.png')
   }
@@ -91,7 +98,10 @@
   .icon3_style2 a {
     @include bis('../../images/tab-mine-normal.png')
   }
-  .icon1_style2, .icon2_style2, .icon3_style2 {
+  .icon4_style2 a {
+      @include bis('../../images/tab-group-normal.png')
+  }
+  .icon1_style2, .icon2_style2, .icon3_style2, .icon4_style2 {
     span {
       color: #7f8389;
     }
