@@ -77,3 +77,11 @@ $ge: #eee;
 	justify-content: $type;
 
 }
+
+@mixin  line-ellipsis($line: 2) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+	-webkit-line-clamp: $line;
+}

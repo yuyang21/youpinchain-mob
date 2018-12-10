@@ -13,7 +13,7 @@
                         <p class="desr">{{item.describe}}</p>
                         <p class="tip"><span>固定地址享受超高优惠</span></p>
                         <p class="price"><span class="RMB">￥</span>{{item.minimumPrice}} <span class="lable">3人成团</span></p>
-                        <p class="single_price">单买价￥{{item.suitPrice}}</p>
+                        <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p>
                     </div>
                     <div class="shopping_cart"><p>立即拼团</p></div>
                 </router-link>
@@ -200,6 +200,11 @@
                 }
                 .single_price {
                     @include sc(.12rem, $g9);
+                    span {
+                        font-size: .12rem;
+                        transform: scale(0.85) translateY(.01rem);
+                        display: inline-block;
+                    }
                 }
             }
             .shopping_cart {

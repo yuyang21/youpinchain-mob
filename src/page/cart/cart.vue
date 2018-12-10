@@ -23,7 +23,7 @@
                                     <img :src="item.thumbnailPic" alt="" class="img"
                                          :class="{'noImage': !item.thumbnailPic}">
                                     <div class="goods_info">
-                                        <p class="name">{{item.productName}}</p>
+                                        <p class="name" style="-webkit-box-orient: vertical;">{{item.productName}}</p>
                                         <p class="price"><span class="RMB">￥</span>{{item.presentPrice}}</p>
                                     </div>
                                     <div class="cart_btns">
@@ -500,10 +500,11 @@
                         li {
                             position: relative;
                             padding: .15rem .0rem;
+                            overflow: hidden;
                         }
                     }
                     .img {
-                        display: inline-block;
+                        float: left;
                         border-radius: .05rem;
                         @include wh(0.95rem, 0.945rem);
                         background-color: #000;
@@ -511,17 +512,18 @@
                         margin-left: 0.05rem;
                     }
                     .goods_info {
-                        display: inline-block;
+                        float: left;
+                        width: 60%;
+                        margin-left: .08rem;
                         .name {
                             @include sc(0.15rem, $g3);
-                            top: -0.1rem;
-                            position: relative;
+                            height: .45rem;
+                            margin-bottom: .27rem;
+                            @include line-ellipsis(2);
                         }
                         .price {
                             @include sc(0.18rem, $red);
                             font-weight: bold;
-                            position: relative;
-                            top: 0.38rem;
                         }
                     }
                     .cart_btns {
