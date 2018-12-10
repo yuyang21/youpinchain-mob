@@ -2,11 +2,13 @@
 <div class="goods">
     <head-top class="header" go-back='true' is-share="true" :showShare="showShare" :headTitle="headTitle"></head-top>
     <div class="top_main">
-        <carousel :loop="true" :autoplay="true" :minSwipeDistance="6" :scrollPerPage="true" :speed="500" :perPage="1" :paginationPadding="5" :paginationSize="8" :paginationActiveColor="pagination.activeColor" :paginationColor="pagination.color">
-            <slide v-for="item in goods.headPic" :key="item.id">
-                <img :src="item" alt="" class="show">
-            </slide>
-        </carousel>
+        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+            <swipe-item v-for="item in goods.headPic" :key="item.id">
+                <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                    <img :src="item" alt="" width="100%" class="show">
+                </router-link>
+            </swipe-item>
+        </swipe>
         <div class="presell_box" v-if="goods.preSale">
             <div class="left_price left">
                 <p class="price"><span>￥</span>{{goods.presentPrice}} <s>￥{{goods.originalPrice}}</s></p>
@@ -75,10 +77,6 @@
 </template>
 
 <script>
-import {
-    Carousel,
-    Slide
-} from "vue-carousel";
 import shareMask from "src/components/common/shareMask";
 import headTop from "src/components/header/head";
 import {
@@ -103,12 +101,7 @@ export default {
             headTitle: "",
             goodsid: "",
             goods: {},
-            cart_num: 0,
-            number: [1, 2, 3, 4, 5],
-            pagination: {
-                activeColor: "#e4372e",
-                color: "#fff"
-            }
+            cart_num: 0
         };
     },
     watch: {
@@ -122,8 +115,6 @@ export default {
         this.initCartCount();
     },
     components: {
-        Carousel,
-        Slide,
         shareMask,
         headTop
     },
@@ -174,6 +165,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../static/swipe/swipe.min.css';
 @import "src/style/mixin";
 .goods {
     padding: 0.45rem 0 0.5rem;

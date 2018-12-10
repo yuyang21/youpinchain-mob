@@ -182,7 +182,7 @@ body.modal-open{
     @include wh(100%, 0.45rem);
     @include sc(0.15rem, $g6);
 }
-.home {
+#app {
     .c-swipe-pagination-item, .c-swipe-pagination-item.active {
         @include wh(.1rem,.1rem);
         border-radius: 50%;

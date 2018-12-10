@@ -47,10 +47,6 @@
 </template>
 
 <script>
-import {
-    Carousel,
-    Slide
-} from "vue-carousel";
 import footGuide from '../../components/footer/footGuide'
 import {
     homeIndex,
@@ -78,11 +74,7 @@ export default {
             page: 1,
             pageSize: 4,
             datasBrandId: "",
-            mescroll: null,
-            pagination: {
-                activeColor: "#e4372e",
-                color: "#fff"
-            }
+            mescroll: null
         }
     },
     mounted() {
@@ -115,9 +107,7 @@ export default {
     },
     components: {
         footGuide,
-        loading,
-        Carousel,
-        Slide
+        loading
     },
     props: ['showErrMsg'],
     computed: {},
