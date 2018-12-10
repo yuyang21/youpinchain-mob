@@ -4,7 +4,7 @@
     <div class="top_main">
         <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
             <swipe-item v-for="item in goods.headPic" :key="item.id">
-                <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                <router-link tag="div" class="header_image">
                     <img :src="item" alt="" width="100%" class="show">
                 </router-link>
             </swipe-item>
@@ -34,7 +34,6 @@
             <p>包装形式：{{goods.packing}}</p>
             <p>保存状态：{{goods.storage}}</p>
             <p>保存期限：{{goods.qualityGuaranteePeriod}}</p>
-            <p>温馨提示：打开包装后尽快食用，未使用部分冷冻保存。</p>
         </div>
         <!-- <div>
         <img v-for="item in goods.footPic" :src="item" alt="" width="100%" class="show">
