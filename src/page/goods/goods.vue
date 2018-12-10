@@ -4,9 +4,9 @@
     <div class="top_main">
         <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
             <swipe-item v-for="item in goods.headPic" :key="item.id">
-                <router-link tag="div" class="header_image">
+                <div class="header_image">
                     <img :src="item" alt="" width="100%" class="show">
-                </router-link>
+                </div>
             </swipe-item>
         </swipe>
         <div class="presell_box" v-if="goods.preSale">
