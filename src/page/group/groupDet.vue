@@ -4,11 +4,16 @@
         <head-top class="header" go-back='true' is-share="true" :showShare="showShare"
                   :headTitle="headTitle"/>
         <div class="top_main">
-            <carousel :loop="true" :autoplay="true" :minSwipeDistance="6" :scrollPerPage="true" :speed="500"
-                      :perPage="1" :paginationPadding="5" :paginationSize="8"
-                      :paginationActiveColor="pagination.activeColor" :paginationColor="pagination.color">
+            <div v-if="headPic && headPic.length <= 0">
                 <img :src="groupSuit.normalPic" alt="" class="show">
-            </carousel>
+            </div>
+            <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" v-else>
+                <swipe-item v-for="(item,index) in headPic" :key="index">
+                    <div class="header_image">
+                        <img :src="item" alt="" width="100%" class="show">
+                    </div>
+                </swipe-item>
+            </swipe>
             <div class="presell_box">
 
                 <div class="left_price left" v-if="groupSuit.preSaleDelivery !== undefined">
@@ -72,9 +77,9 @@
                 <p class="mode">模式二：<span>社区拼团，团长选择收货地址，团员线下与团长进行后续收货服务。团员享受更高的价格优惠，团长获得现金返利。</span></p><br>
             </div>
         </div>
-        <!-- 拼团详情 -->
+        <!-- 拼团商品 -->
         <div class="goods_info">
-            <div class="panel_title">拼团详情</div>
+            <div class="panel_title">拼团商品</div>
             <ul class="goodslistul clear">
                 <li v-for="item in suitDet" :key="item.id">
                     <router-link tag="div" :to="'/goods/' + item.productId">
@@ -91,6 +96,13 @@
                 </li>
             </ul>
         </div>
+        <!-- 拼团详情 -->
+        <div class="goods_info" v-if="footPic && footPic.length > 0">
+            <div class="panel_title">拼团详情</div>
+            <div class="goodsImgs">
+                <img :src="item" alt="" v-for="(item,index) in footPic" :key="index" width="100%">
+            </div>
+        </div>
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
             <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupMy.discountPrice}} <br> 参与拼团</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupPrice}} <br> 发起拼团</div>
@@ -105,10 +117,6 @@
 </template>
 
 <script>
-    import {
-        Carousel,
-        Slide
-    } from "vue-carousel";
     import shareMask from "src/components/common/shareMask";
     import headTop from "src/components/header/head";
     import {
@@ -139,14 +147,11 @@
                 suitDet: [],
                 groupPrice: 0,
                 cart_num: 0,
-                number: [1, 2, 3, 4, 5],
-                pagination: {
-                    activeColor: "#e4372e",
-                    color: "#fff"
-                },
                 endTimeDown: null,
                 startTimeDown: null,
                 timer: null,
+                headPic: [],
+                footPic: []
             };
         },
         watch: {
@@ -169,8 +174,6 @@
             this.initData();
         },
         components: {
-            Carousel,
-            Slide,
             shareMask,
             headTop
         },
@@ -187,6 +190,8 @@
                     that.suitDet = res.data.suitDet;
                     that.headTitle = res.data.groupSuit.suitName;
                     that.suitTypes = res.data.suitTypes;
+                    that.headPic = res.data.headPic;
+                    that.footPic = res.data.footPic;
 
                     // that.startTimeDown = res.data.startTimeDown;
                     wx.ready(function () {
@@ -255,6 +260,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../static/swipe/swipe.min.css';
     @import "src/style/mixin";
 
     .goods {
@@ -369,7 +375,7 @@
         }
         .goods_info {
             background-color: $fc;
-            margin: .15rem 0 .5rem;
+            margin: .15rem 0;
             .info_content {
                 p {
                     @include sc(0.13rem, $g6);
@@ -381,59 +387,11 @@
             .single_price {
                 @include sc(.12rem, $g9);
             }
-        }
-        .certificates {
-            text-align: center;
-            background-color: $bc;
-            padding: 0.3rem 0.08rem;
-            .abstract {
-                @include sc(0.2rem, $g3);
-                margin-bottom: 0.27rem;
-            }
-            ul {
-                display: flex;
-                li {
-                    flex: 1;
-                    background-color: #fcfbfc;
-                    margin: 0 0.04rem;
-                    padding: 0.1rem 0;
-                    border-radius: 0.05rem;
-                    img {
-                        width: 0.34rem;
-                    }
-                    p {
-                        @include sc(0.13rem, $g6);
-                    }
-                }
-            }
-        }
-        .description_detail {
-            .abstractImg {
-                width: 100%;
-                display: block;
-            }
-            ul {
-                li {
-                    padding: 0.3rem;
-                    background-color: #fcfbfc;
-                    .abstract {
-                        @include sc(0.2rem, $g3);
-                        text-align: center;
-                    }
-                    p {
-                        @include sc(0.13rem, $g6);
-                        text-align: justify;
-                    }
-                    p:last-child {
-                        margin-top: 0.25rem;
-                    }
-                    .tip {
-                        @include sc(0.13rem, $g6);
-                        text-align: center;
-                    }
-                }
-                li:nth-child(even) {
-                    background-color: $bc;
+
+            .goodsImgs {
+                img {
+                    width: 100%;
+                    display: block;
                 }
             }
         }
