@@ -99,7 +99,7 @@ export default {
         that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
         wx.ready(function () {
             var shareLink = window.location.href
-            WechatShareUtils.onMenuShareAppMessage('区块苏淮猪，不含抗生素，农业大学的优质猪肉，限量预售！', '仲秋钜惠，全场6.8折！', shareLink, 'https://mmbiz.qpic.cn/mmbiz_png/puDuBHDXJkwPdHoIeZJneedu9tqjA7cVVbZpCOfEtor98FNCibhzZBqE0fbY9IVMLepDaxnVM3q3RvZ8apibiaFicA/0?wx_fmt=png')
+            WechatShareUtils.onMenuShareAppMessage('链上臻品！', '优质商品精心臻选！', shareLink, 'https://mmbiz.qpic.cn/mmbiz_jpg/jV5hZicRoCyPicial3ca4gicOUOETlqX0koqEcDxNC9mUkmFzbdq801Wwu2U335MWicZxI1Zlqnfa9hbxciayOFeB94w/0?wx_fmt=jpeg')
         })
 
     },

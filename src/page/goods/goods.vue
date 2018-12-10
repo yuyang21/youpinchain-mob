@@ -136,7 +136,7 @@ export default {
                     null;
                 wx.ready(function () {
                     var shareLink = window.location.href
-                    WechatShareUtils.onMenuShareAppMessage('区块苏淮猪 ' + that.goods.name + that.goods.netContent + '*1' + that.goods.packing, that.goods.describe + ' 仲秋钜惠，全场6.8折!', shareLink, that.goods.thumbnailPic)
+                    WechatShareUtils.onMenuShareAppMessage('链上臻品！', '优质商品精心臻选！', shareLink, 'https://mmbiz.qpic.cn/mmbiz_jpg/jV5hZicRoCyPicial3ca4gicOUOETlqX0koqEcDxNC9mUkmFzbdq801Wwu2U335MWicZxI1Zlqnfa9hbxciayOFeB94w/0?wx_fmt=jpeg')
                 })
             });
 
