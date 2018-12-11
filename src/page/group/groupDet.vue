@@ -3,104 +3,106 @@
     <div class="goods">
         <head-top class="header" go-back='true' is-share="true" :showShare="showShare"
                   :headTitle="headTitle"/>
-        <div class="top_main">
-            <div v-if="headPic && headPic.length <= 0">
-                <img :src="groupSuit.normalPic" alt="" class="show">
-            </div>
-            <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" v-else>
-                <swipe-item v-for="(item,index) in headPic" :key="index">
-                    <div class="header_image">
-                        <img :src="item" alt="" width="100%" class="show">
-                    </div>
-                </swipe-item>
-            </swipe>
-            <div class="presell_box">
+        <div class="scrollBox">
+            <div class="top_main">
+                <div v-if="headPic && headPic.length <= 0">
+                    <img :src="groupSuit.normalPic" alt="" class="show">
+                </div>
+                <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" v-else>
+                    <swipe-item v-for="(item,index) in headPic" :key="index">
+                        <div class="header_image">
+                            <img :src="item" alt="" width="100%" class="show">
+                        </div>
+                    </swipe-item>
+                </swipe>
+                <div class="presell_box">
 
-                <div class="left_price left" v-if="groupSuit.preSaleDelivery !== undefined">
-                    <p class="price"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.suitPrice}}</s></p>
-                    <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
+                    <div class="left_price left" v-if="groupSuit.preSaleDelivery !== undefined">
+                        <p class="price"><span>￥</span>{{groupPrice}} <s>￥{{groupSuit.suitPrice}}</s></p>
+                        <p class="tip">商品预计{{(groupSuit.preSaleDelivery.split('T')[0]) | dateCharacter}}发货</p>
+                    </div>
+                    <div class="left_price left" v-else>
+                        <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}">
+                            <span>￥</span>{{groupPrice}} <s>￥{{groupSuit.suitPrice}}</s>
+                        </p>
+                    </div>
+                    <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
+                        <p>距开团结束</p>
+                        <p v-if="endTimeDown > 24*60*60">
+                            <span class="shadow_box">{{Math.floor(endTimeDown/60/60/24)}}</span>天<span class="shadow_box">{{endTimeDown - Math.floor(endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分
+                        </p>
+                        <p v-else>
+                            <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>秒
+                        </p>
+                    </div>
+                    <div class="right_tip right" v-if="groupMyId && endTimeDown>0">
+                        <p>距拼团结束</p>
+                        <p>
+                            <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
+                        </p>
+                    </div>
+                    <div class="right_tip right" :class="{'activityEnd': endTimeDown <= 0}" v-if="endTimeDown <= 0">
+                        <p>拼团结束</p>
+                    </div>
                 </div>
-                <div class="left_price left" v-else>
-                    <p class="price" :class="{'margin-t-p8': groupSuit.preSaleDelivery === undefined}">
-                        <span>￥</span>{{groupPrice}} <s>￥{{groupSuit.suitPrice}}</s>
+                <div class="title">
+                    <!--<p class="price" v-if="!groupSuit.presentPrice"><span>￥</span>{{groupSuit.presentPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>-->
+                    <p class="name"><span class="presell_text" v-if="groupSuit.presentPrice">【预售】</span>{{groupSuit.suitName}}
                     </p>
-                </div>
-                <div class="right_tip right" v-if="!groupMyId && endTimeDown>0 && startTimeDown<1">
-                    <p>距开团结束</p>
-                    <p v-if="endTimeDown > 24*60*60">
-                        <span class="shadow_box">{{Math.floor(endTimeDown/60/60/24)}}</span>天<span class="shadow_box">{{endTimeDown - Math.floor(endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分
-                    </p>
-                    <p v-else>
-                        <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>时<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>分<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>秒
-                    </p>
-                </div>
-                <div class="right_tip right" v-if="groupMyId && endTimeDown>0">
-                    <p>距拼团结束</p>
-                    <p>
-                        <span class="shadow_box">{{endTimeDown | timeArry(0)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(1)}}</span>:<span class="shadow_box">{{endTimeDown | timeArry(2)}}</span>
-                    </p>
-                </div>
-                <div class="right_tip right" :class="{'activityEnd': endTimeDown <= 0}" v-if="endTimeDown <= 0">
-                    <p>拼团结束</p>
+                    <p class="desr">{{groupSuit.describe}}</p>
                 </div>
             </div>
-            <div class="title">
-                <!--<p class="price" v-if="!groupSuit.presentPrice"><span>￥</span>{{groupSuit.presentPrice}} <s>￥{{groupSuit.originalPrice}}</s></p>-->
-                <p class="name"><span class="presell_text" v-if="groupSuit.presentPrice">【预售】</span>{{groupSuit.suitName}}
-                </p>
-                <p class="desr">{{groupSuit.describe}}</p>
+            <!-- 拼团流程 -->
+            <div class="assembling_process">
+                <div class="panel_title">拼团流程</div>
+                <div class="content">
+                    <ul class="process">
+                        <li>
+                            <img src="../../images/group/process01.png" alt="">
+                            <p class="text">团长开团</p>
+                        </li>
+                        <li>
+                            <img src="../../images/group/process02.png" alt="">
+                            <p class="text">邀请好友</p>
+                        </li>
+                        <li>
+                            <img src="../../images/group/process03.png" alt="">
+                            <p class="text">拼团成功</p>
+                        </li>
+                        <li>
+                            <img src="../../images/group/process04.png" alt="">
+                            <p class="text">等待发货</p>
+                        </li>
+                    </ul>
+                    <p class="mode">模式一：<span>普通拼团，享受价格优惠</span></p>
+                    <p class="mode">模式二：<span>社区拼团，团长选择收货地址，团员线下与团长进行后续收货服务。</span></p><br>
+                </div>
             </div>
-        </div>
-        <!-- 拼团流程 -->
-        <div class="assembling_process">
-            <div class="panel_title">拼团流程</div>
-            <div class="content">
-                <ul class="process">
-                    <li>
-                        <img src="../../images/group/process01.png" alt="">
-                        <p class="text">团长开团</p>
-                    </li>
-                    <li>
-                        <img src="../../images/group/process02.png" alt="">
-                        <p class="text">邀请好友</p>
-                    </li>
-                    <li>
-                        <img src="../../images/group/process03.png" alt="">
-                        <p class="text">拼团成功</p>
-                    </li>
-                    <li>
-                        <img src="../../images/group/process04.png" alt="">
-                        <p class="text">等待发货</p>
+            <!-- 拼团商品 -->
+            <div class="goods_info">
+                <div class="panel_title">拼团商品</div>
+                <ul class="goodslistul clear">
+                    <li v-for="item in suitDet" :key="item.id">
+                        <router-link tag="div" :to="'/goods/' + item.productId">
+                            <img :src="item.productThumbnailPic" alt="" class="left"
+                                :class="{'noImage': !item.productThumbnailPic}">
+                            <div class="left goods_li">
+                                <p class="name">{{item.productName + ' ' +
+                                    item.productNetContent}}*1{{item.productPacking}}</p>
+                                <p class="desr">{{item.productDescribe}}</p>
+                                <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
+                                <!--<p class="single_price">单买价￥{{item.productOriginalPrice}}</p>-->
+                            </div>
+                        </router-link>
                     </li>
                 </ul>
-                <p class="mode">模式一：<span>普通拼团，享受价格优惠</span></p>
-                <p class="mode">模式二：<span>社区拼团，团长选择收货地址，团员线下与团长进行后续收货服务。</span></p><br>
             </div>
-        </div>
-        <!-- 拼团商品 -->
-        <div class="goods_info">
-            <div class="panel_title">拼团商品</div>
-            <ul class="goodslistul clear">
-                <li v-for="item in suitDet" :key="item.id">
-                    <router-link tag="div" :to="'/goods/' + item.productId">
-                        <img :src="item.productThumbnailPic" alt="" class="left"
-                             :class="{'noImage': !item.productThumbnailPic}">
-                        <div class="left goods_li">
-                            <p class="name">{{item.productName + ' ' +
-                                item.productNetContent}}*1{{item.productPacking}}</p>
-                            <p class="desr">{{item.productDescribe}}</p>
-                            <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
-                            <!--<p class="single_price">单买价￥{{item.productOriginalPrice}}</p>-->
-                        </div>
-                    </router-link>
-                </li>
-            </ul>
-        </div>
-        <!-- 拼团详情 -->
-        <div class="goods_info" v-if="footPic && footPic.length > 0">
-            <div class="panel_title">拼团详情</div>
-            <div class="goodsImgs">
-                <img :src="item" alt="" v-for="(item,index) in footPic" :key="index" width="100%">
+            <!-- 拼团详情 -->
+            <div class="goods_info" v-if="footPic && footPic.length > 0">
+                <div class="panel_title">拼团详情</div>
+                <div class="goodsImgs">
+                    <img :src="item" alt="" v-for="(item,index) in footPic" :key="index" width="100%">
+                </div>
             </div>
         </div>
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
@@ -172,6 +174,7 @@
             this.groupSuitId = this.$route.params.suitId;
             this.groupMyId = this.$route.query.groupMyId;
             this.initData();
+            document.querySelector('.scrollBox').style.height = document.documentElement.clientHeight - document.querySelector('.header').clientHeight - document.querySelector('.add_cart_container').clientHeight + 'px';
         },
         components: {
             shareMask,
@@ -266,6 +269,7 @@
     .goods {
         padding: 0.45rem 0 0.5rem;
         background-color: $bc;
+        overflow: hidden;
         .top_main {
             .show {
                 @include wh(100%, 3.75rem);
@@ -552,5 +556,10 @@
             @include wh(.315rem, .315rem);
             @include bis('../../images/shopping_cart.png');
         }
+    }
+    .scrollBox {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        z-index: 1;
     }
 </style>
