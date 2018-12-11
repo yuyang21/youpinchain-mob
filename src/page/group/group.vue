@@ -24,6 +24,9 @@
     import footGuide from 'src/components/footer/footGuide'
     import { homeIndex } from '../../service/getData'
     import wx from 'weixin-js-sdk'
+    import {
+        WechatShareUtils
+    } from '../../service/WechatShareUtils'
 
     export default {
         data(){
