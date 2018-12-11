@@ -93,6 +93,7 @@
     .order_page{
         background-color: #f1f1f1;
         margin-bottom: .59rem;
+        padding-bottom: .5rem;
         p, span, h4{
             font-family: Helvetica Neue,Tahoma,Arial;
         }
