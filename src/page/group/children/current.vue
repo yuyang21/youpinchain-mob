@@ -48,7 +48,7 @@
             var that = this
             that.mescroll = new MeScroll(that.$refs.mescroll, {
                 down: {
-                    use: true,
+                    use: false,
                 },
                 up: {
                     callback: that.upCallback,
