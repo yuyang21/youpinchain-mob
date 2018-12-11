@@ -1,20 +1,25 @@
 <template>
   <div class="income_details header-top">
     <head-top head-title="收益明细" go-back='true'></head-top>
-    <div ref="mescroll">
-      <ul>
+    <div ref="mescroll" v-show="!showLoading">
+      <ul v-if="detailList.length > 0">
         <li v-for="(item,index) in detailList" :key="index">
           <p>{{item.createTime | dateWithHourMin('.')}}</p>
           <p class="ellipsis" align="center">{{item.describe}}</p>
           <p>{{item.amount > 0 ? '+' : ''}}{{item.amount}}</p>
         </li>
       </ul>
+      <div v-else class="no_list">暂无记录</div>
     </div>
+    <transition name="loading">
+        <loading v-show="showLoading"></loading>
+    </transition>
   </div>
 </template>
 <script>
   import headTop from '../../../components/header/head'
   import MeScroll from '../../../static/mescroll/mescroll.min.js'
+  import loading from "src/components/common/loading"
   import {
     incomeDeals
   } from '../../../service/getData'
@@ -22,7 +27,8 @@
     data () {
       return {
         detailList: [],
-        mescroll: null
+        mescroll: null,
+        showLoading: true
       }
     },
     mounted() {
@@ -46,12 +52,12 @@
     methods: {
       upCallback (page) {
         incomeDeals(page.num, page.size).then(res => {
-          this.showLoading = false;
           let arr = res.data.data;
           if (page.num === 1) this.detailList = [];
           var that = this;
           setTimeout(function () {
             that.detailList = that.detailList.concat(arr);
+            that.showLoading = false;
             that.$nextTick(() => {
               that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
             })
@@ -62,7 +68,8 @@
       }
     },
     components: {
-      headTop
+      headTop,
+      loading
     }
   }
 </script>
@@ -70,6 +77,13 @@
   @import '../../../static/mescroll/mescroll.min.css';
   @import "src/style/mixin";
   .income_details {
+    .no_list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3rem;
+      color: $g9;
+    }
     ul {
       overflow: hidden;
       background-color: $fc;
