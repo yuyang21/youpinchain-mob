@@ -92,7 +92,7 @@
 
     .order_page{
         background-color: #f1f1f1;
-        margin-bottom: .39rem;
+        margin-bottom: .59rem;
         p, span, h4{
             font-family: Helvetica Neue,Tahoma,Arial;
         }
