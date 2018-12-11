@@ -8,7 +8,7 @@
       </li>
       <li>
         <p>下单人数</p>
-        <p>{{profileInfo.inviteOrderNum}}人</p>
+        <p>{{profileInfo.invitePayNum}}人</p>
       </li>
     </ul>
     <div class="royalty_ratio">
