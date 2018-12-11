@@ -4,6 +4,13 @@
         <!-- <ul class="nav_tab">
             <li v-for="(item,index) in tabList" :key="index" :class="{active: activeTab == index }" @click="findOrder(index)">{{item.tab}}</li>
         </ul> -->
+        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+            <swipe-item v-for="item in brand" :key="item.id">
+                <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                    <img :src="item.pictureUrl" alt="" width="100%" class="show">
+                </router-link>
+            </swipe-item>
+        </swipe>
         <transition name="router-slid" mode="out-in">
             <router-view @findOrder="updateOrder()" :sendData="activeTab"></router-view>
         </transition>
@@ -15,6 +22,9 @@
     import {loadMore} from 'src/components/common/mixin'
     import headTop from 'src/components/header/head'
     import footGuide from 'src/components/footer/footGuide'
+    import {
+        homeIndex
+    } from '../../service/getData'
 
     export default {
         data(){
@@ -30,7 +40,8 @@
                         name: 'preview'
                     }
                 ],
-                routerPath: ''
+                routerPath: '',
+                brand: {}
             }
         },
         props: ['showErrMsg'],
@@ -43,6 +54,10 @@
             }
         },
         mounted(){
+            //获取商品列表
+            homeIndex().then(res => {
+                this.brand = res.data.brand
+            })
         },
         mixins: [loadMore],
         components: {
@@ -66,6 +81,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../static/swipe/swipe.min.css';
     @import 'src/style/mixin';
 
     .order_page{
