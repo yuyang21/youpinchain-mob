@@ -49,10 +49,14 @@
                                 choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
-                            <div v-if="groupMyId === 'undefined' && groupType === '1'" class="label"
-                                 :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
-                                 :key="index" @click="selectSuitType(item.type)">{{item.text}}
-                            </div>
+                            <!-- 拼团方式 -->
+                            <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === '1'">
+                                <li class="left">拼团方式</li>
+                                <li class="right" @click="suitTypeBox = true;showTipsBox();">
+                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '社区拼团'}}</span>
+                                    <img src="../../images/path.png" alt="">
+                                </li>
+                            </ul>
                             <div class="tips" v-if="!groupMy && groupSuitType === 2">
                                 您的地址及电话会展示给您的团员 <br>
                                 <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
@@ -149,7 +153,19 @@
             <li @click="paymentCall()">去付款</li>
             <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{(totalPrice + fare) | number}}</span></li>
         </ul>
-        <div class="mask_box" v-show="showTip" @click="showTip = false;"></div>
+        <div class="mask_box" v-show="showTip" @click="showTipsBox"></div>
+        <div class="suitTypeBox" v-show="suitTypeBox">
+            <div class="title">
+                拼团方式
+                <img src="../../images/close.png" alt="" @click="suitTypeBox = false;showTip = false;">
+            </div>
+            <ul class="levels">
+                <li class="label"
+                    :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
+                    :key="index" @click="selectSuitType(item.type)">{{item.text}}
+                </li>
+            </ul>
+        </div>
         <transition name="loading">
             <loading v-show="showLoading"></loading>
         </transition>
@@ -211,11 +227,12 @@
                 couponId: '',
                 suitNum: 1,
                 showTip: false,
-                groupSuitType: 1,
+                groupSuitType: null,
                 suitTypes: [],
                 tuanAddress: {},
                 expressCostData: null,
-                showLoading: false
+                showLoading: false,
+                suitTypeBox: false
             }
         },
         props: ['showErrMsg'],
@@ -294,6 +311,9 @@
                 })
             },
             showTipsBox() {
+                if (this.suitTypeBox && this.showTip) {
+                    return
+                }
                 this.showTip = true;
                 document.querySelector('.mask_box').style.height = document.documentElement.clientHeight + 'px';
             },
@@ -304,6 +324,11 @@
             },
             async paymentCall() {
                 var that = this;
+                if (!that.groupSuitType) {
+                    that.suitTypeBox = true;
+                    that.showTipsBox();
+                    return;
+                }
                 if (that.payButton) {
                     return;
                 }
@@ -591,7 +616,6 @@
         top: 0;
         z-index: 3;
     }
-
     .shop_list_container {
         background-color: $bc;
         .swiper-container {
@@ -603,6 +627,7 @@
             .address_info {
                 background-color: $fc;
                 width: 95%;
+                position: relative;
                 margin: -0.48rem auto 0;
                 padding: 0.2rem 0.15rem 0.2rem 0.57rem;
                 @include fj(space-between);
@@ -610,7 +635,7 @@
                 box-shadow: 0px 1px 13.9px 0.6px rgba(181, 184, 188, 0.51);
                 .address-detail {
                     position: relative;
-                    width: 84%;
+                    width: 97%;
                     p {
                         line-height: 1.6;
                         @include sc(0.15rem, $g3);
@@ -622,25 +647,13 @@
                     p:nth-of-type(1) {
                         margin-bottom: 0.15rem;
                     }
-                    .label {
-                        @include wh(.625rem, .24rem);
-                        @include sc(.13rem, $g9);
-                        border: .01rem solid $g9;
-                        border-radius: .025rem;
-                        margin: .12rem .22rem .12rem 0;
-                        text-align: center;
-                        line-height: .23rem;
-                        float: left;
-                    }
-                    .label.selected {
-                        @include sc(.13rem, $red);
-                        border: .01rem solid $red;
-                    }
                     .tips {
                         @include sc(.13rem, $g9);
                         line-height: 1.9;
                         overflow: hidden;
                         clear: both;
+                        border-top: .01rem solid $bc;
+                        padding-top: .1rem;
                         span {
                             @include sc(.13rem, $g9);
                         }
@@ -681,12 +694,13 @@
                     @include wh(0.16rem, 0.22rem);
                 }
                 .deletesite {
-                    display: flex;
+                    position: absolute;
+                    right: 0rem;
                     padding-top: 0.1rem;
-                    width: .35rem;
-                    justify-content: flex-end;
+                    @include wh(.35rem,.5rem);
+                    display: flex;
+                    justify-content: center;
                     span {
-                        display: block;
                         @include wh(0.1rem, 0.175rem);
                         @include bis("../../images/path.png");
                     }
@@ -881,7 +895,6 @@
             }
         }
     }
-
     .settlement {
         position: fixed;
         bottom: 0;
@@ -922,7 +935,6 @@
             vertical-align: text-bottom;
         }
     }
-
     .load_more {
         @include wh(100%, 0.36rem);
         @include sc(0.15rem, $g6);
@@ -930,9 +942,68 @@
         text-align: center;
         line-height: 0.36rem;
     }
-
-
     .shop_info.margin-t-p3 {
         margin-top: .3rem;
+    }
+    .groupSuitType {
+        @include wh(103%,.45rem);
+        overflow: hidden;
+        line-height: .45rem;
+        margin-top: .12rem;
+        border-top: .01rem solid $bc;
+        .left {
+            @include sc(.15rem,$g6);
+        }
+        .right {
+            span {
+                display: inline-flex;
+                @include sc(.15rem,$red);
+            }
+            img {
+                @include wh(.1rem,0.175rem);
+                vertical-align: text-top;
+                margin-left: .05rem;
+            }
+        }
+    }
+    .suitTypeBox {
+        position: fixed;
+        bottom: 0;
+        z-index: 99;
+        background-color: $fc;
+        border-radius: .1rem .1rem 0 0;
+        @include wh(100%,2.75rem);
+        .title {
+            @include sc(.18rem, $g3);
+            font-weight: bold;
+            height: .45rem;
+            line-height: .45rem;
+            border-bottom: .01rem solid $bc;
+            padding: 0 .15rem;
+            img {
+                float: right;
+                width: .15rem;
+                margin-top: .13rem;
+            }
+        }
+        .levels {
+            overflow: hidden;
+            clear: both;
+            padding: .05rem .15rem;
+            .label {
+                @include wh(.715rem, .275rem);
+                @include sc(.15rem, $g9);
+                border: .01rem solid $g9;
+                border-radius: .025rem;
+                margin: .12rem .22rem .12rem 0;
+                text-align: center;
+                line-height: .275rem;
+                float: left;
+            }
+            .label.selected {
+                @include sc(.15rem, $red);
+                border: .01rem solid $red;
+            }
+        }
     }
 </style>
