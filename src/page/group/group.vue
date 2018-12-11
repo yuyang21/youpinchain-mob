@@ -22,9 +22,8 @@
     import {loadMore} from 'src/components/common/mixin'
     import headTop from 'src/components/header/head'
     import footGuide from 'src/components/footer/footGuide'
-    import {
-        homeIndex
-    } from '../../service/getData'
+    import { homeIndex } from '../../service/getData'
+    import wx from 'weixin-js-sdk'
 
     export default {
         data(){
@@ -57,6 +56,10 @@
             //获取商品列表
             homeIndex().then(res => {
                 this.brand = res.data.brand
+            })
+            wx.ready(function () {
+                var shareLink = window.location.href
+                WechatShareUtils.onMenuShareAppMessage('链上臻品！', '优质商品精心臻选！', shareLink, 'https://mmbiz.qpic.cn/mmbiz_jpg/jV5hZicRoCyPicial3ca4gicOUOETlqX0koqEcDxNC9mUkmFzbdq801Wwu2U335MWicZxI1Zlqnfa9hbxciayOFeB94w/0?wx_fmt=jpeg')
             })
         },
         mixins: [loadMore],
