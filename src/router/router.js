@@ -65,7 +65,8 @@ export default [{
         //首页
         {
             path: '/home',
-            component: home
+            redirect: '/group'
+            // component: home
         },
         //黑猪溯源
         {
