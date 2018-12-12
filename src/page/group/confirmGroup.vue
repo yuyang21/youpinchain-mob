@@ -227,7 +227,7 @@
                 couponId: '',
                 suitNum: 1,
                 showTip: false,
-                groupSuitType: null,
+                groupSuitType: 2,
                 suitTypes: [],
                 tuanAddress: {},
                 expressCostData: null,
