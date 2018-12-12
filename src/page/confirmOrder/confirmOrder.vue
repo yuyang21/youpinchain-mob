@@ -446,7 +446,7 @@
                 background-color: $fc;
                 width: 95%;
                 margin: -0.48rem auto 0;
-                padding: 0.2rem 0.15rem 0.2rem 0.57rem;
+                padding: 0.2rem 0.15rem 0.2rem 0.47rem;
                 @include fj(space-between);
                 border-radius: 10px;
                 box-shadow: 0px 1px 13.9px 0.6px rgba(181, 184, 188, 0.51);

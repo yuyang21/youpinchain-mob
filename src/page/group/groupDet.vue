@@ -79,24 +79,24 @@
                 </div>
             </div>
             <!-- 拼团商品 -->
-            <div class="goods_info">
-                <div class="panel_title">拼团商品</div>
-                <ul class="goodslistul clear">
-                    <li v-for="item in suitDet" :key="item.id">
-                        <router-link tag="div" :to="'/goods/' + item.productId">
-                            <img :src="item.productThumbnailPic" alt="" class="left"
-                                :class="{'noImage': !item.productThumbnailPic}">
-                            <div class="left goods_li">
-                                <p class="name">{{item.productName + ' ' +
-                                    item.productNetContent}}*1{{item.productPacking}}</p>
-                                <p class="desr">{{item.productDescribe}}</p>
-                                <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
-                                <!--<p class="single_price">单买价￥{{item.productOriginalPrice}}</p>-->
-                            </div>
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
+            <!--<div class="goods_info">-->
+                <!--<div class="panel_title">拼团商品</div>-->
+                <!--<ul class="goodslistul clear">-->
+                    <!--<li v-for="item in suitDet" :key="item.id">-->
+                        <!--<router-link tag="div" :to="'/goods/' + item.productId">-->
+                            <!--<img :src="item.productThumbnailPic" alt="" class="left"-->
+                                <!--:class="{'noImage': !item.productThumbnailPic}">-->
+                            <!--<div class="left goods_li">-->
+                                <!--<p class="name">{{item.productName + ' ' +-->
+                                    <!--item.productNetContent}}*1{{item.productPacking}}</p>-->
+                                <!--<p class="desr">{{item.productDescribe}}</p>-->
+                                <!--<p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>-->
+                                <!--&lt;!&ndash;<p class="single_price">单买价￥{{item.productOriginalPrice}}</p>&ndash;&gt;-->
+                            <!--</div>-->
+                        <!--</router-link>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
             <!-- 拼团详情 -->
             <div class="goods_info" v-if="footPic && footPic.length > 0">
                 <div class="panel_title">拼团详情</div>
