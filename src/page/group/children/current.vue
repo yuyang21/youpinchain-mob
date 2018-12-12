@@ -1,5 +1,12 @@
 <template>
     <div class="mescroll" ref="mescroll">
+        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+            <swipe-item v-for="item in brand" :key="item.id">
+                <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                    <img :src="item.pictureUrl" alt="" width="100%" class="show">
+                </router-link>
+            </swipe-item>
+        </swipe>
         <section id="hot_goods">
             <ul class="goodslistul clear">
                 <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
@@ -27,7 +34,8 @@
     import {
         findCart,
         groupList,
-        systemTime
+        systemTime,
+        homeIndex
     } from "../../../service/getData";
     import {
         countDown
@@ -39,7 +47,8 @@
                 goOn: [],
                 timer: null,
                 mescroll: null,
-                systemTime: null
+                systemTime: null,
+                brand: {}
             };
         },
         watch: {},
@@ -59,6 +68,10 @@
                 }
             });
             that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
+            //获取商品列表
+            homeIndex().then(res => {
+                that.brand = res.data.brand
+            })
         },
         created() {
             systemTime().then((res) => {
@@ -100,6 +113,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../../static/swipe/swipe.min.css';
     @import '../../../static/mescroll/mescroll.min.css';
     @import '../../../style/mixin';
     #hot_goods {
