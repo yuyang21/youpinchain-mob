@@ -50,19 +50,19 @@
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
                             <!-- 拼团方式 -->
-                            <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === '1'">
+                            <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === 1">
                                 <li class="left">拼团方式</li>
                                 <li class="right" @click="suitTypeBox = true;showTipsBox();">
                                     <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '社区拼团(推荐)'}}</span>
                                     <img src="../../images/path.png" alt="">
                                 </li>
                             </ul>
-                            <div class="tips" v-if="!groupMy && groupSuitType === 2">
+                            <div class="tips" v-if="!groupMy && groupSuitType === 2 && groupType === 1">
                                 选择社区拼团，支持“大美乡村计划”—扶持农业，收获健康，感谢您选择更环保·更温暖的生活方式。<br>
                                 <span class="left">团长职责：</span><span class="left">邀请您附近伙伴拼团，团长统一收货并组织团员取货。</span>
                                 <span class="left">大美奖励：</span><span class="left">订单结束后团长获得鼓励金</span>
                             </div>
-                            <div class="tips" v-if="!groupMy && groupSuitType === 1">
+                            <div class="tips" v-if="!groupMy && groupSuitType === 1 && groupType === 1">
                                 快来邀请好友分享美味吧~<br>
                                 <span>3人即可成团享受优惠价格，如收货地址相同推荐选择“社区拼团”更划算，更温暖。</span>
                             </div>
@@ -288,7 +288,7 @@
 
             // 最低起售份数
             this.suitNum = this.groupSuit.minimum;
-            this.groupType = this.$route.query.type
+            this.groupType = Number(this.$route.query.type)
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
             this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
@@ -304,6 +304,7 @@
                 }
 
             })
+
         },
         methods: {
             getGroupMyAddress() {
@@ -418,8 +419,13 @@
                             function (res) {
                                 that.payButton = false;
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                    window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
-                                    // that.$router.push('/groupMy/' + groupMyId);
+                                    if (groupType === 1) {
+                                        window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
+                                        // that.$router.push('/groupMy/' + groupMyId);
+                                    } else {
+                                        window.location.href = process.env.DOMAIN + '/order';
+                                    }
+
                                 }
                                 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                             }
@@ -553,14 +559,21 @@
                     this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
                 } else {
                     // 开团根据拼团的类型计算不同的套装价格
-                    this.suitTypes.forEach(suitType => {
-                        if (suitType.type === this.groupSuitType) {
-                            if (this.groupSuit.id === suitType.productId) {
-                                this.packPrice = suitType.discountPrice;
-                                this.goodsPrice += suitType.discountPrice * this.suitNum;
+                    let that = this
+                    if (that.groupType === 0) {
+                        this.packPrice = that.groupSuit.suitPrice;
+                        this.goodsPrice += that.groupSuit.suitPrice * this.suitNum;
+                    } else {
+                        this.suitTypes.forEach(suitType => {
+                            if (suitType.type === this.groupSuitType) {
+                                if (this.groupSuit.id === suitType.productId) {
+                                    this.packPrice = suitType.discountPrice;
+                                    this.goodsPrice += suitType.discountPrice * this.suitNum;
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
+
                 }
 
                 this.totalPrice = this.goodsPrice;
