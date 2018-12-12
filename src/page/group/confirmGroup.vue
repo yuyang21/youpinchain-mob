@@ -419,7 +419,7 @@
                             function (res) {
                                 that.payButton = false;
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                    if (groupType === 1) {
+                                    if (that.groupType === 1) {
                                         window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
                                         // that.$router.push('/groupMy/' + groupMyId);
                                     } else {
