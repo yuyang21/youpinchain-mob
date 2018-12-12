@@ -53,14 +53,14 @@
                             <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === '1'">
                                 <li class="left">拼团方式</li>
                                 <li class="right" @click="suitTypeBox = true;showTipsBox();">
-                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '社区拼团'}}</span>
+                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '社区拼团(推荐)'}}</span>
                                     <img src="../../images/path.png" alt="">
                                 </li>
                             </ul>
                             <div class="tips" v-if="!groupMy && groupSuitType === 2">
-                                您的地址及电话会展示给您的团员 <br>
-                                <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
-                                <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
+                                选择社区拼团，支持“大美乡村计划”—扶持农业，收获健康，感谢您选择更环保·更温暖的生活方式。<br>
+                                <span class="left">团长职责：</span><span class="left">邀请您附近伙伴拼团，团长统一收货并组织团员取货。</span>
+                                <span class="left">大美奖励：</span><span class="left">订单结束后团长获得鼓励金</span>
                             </div>
                             <div v-if="groupMy && groupMy.groupSuitType === 2">
                                 <br>
@@ -229,7 +229,7 @@
                 couponId: '',
                 suitNum: 1,
                 showTip: false,
-                groupSuitType: null,
+                groupSuitType: 2,
                 suitTypes: [],
                 tuanAddress: {},
                 expressCostData: null,
