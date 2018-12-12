@@ -234,7 +234,7 @@
                 var that = this;
                 prepayOrder(orderId).then(resp => {
                     if (resp.errno === 403) {
-                        that.showErrMsg("订单不可支付")
+                        that.showErrMsg(resp.errmsg)
                     } else {
                         WeixinJSBridge.invoke(
                             'getBrandWCPayRequest', {

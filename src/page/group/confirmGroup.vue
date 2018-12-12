@@ -405,7 +405,7 @@
                     that.showLoading = false;
                     that.payButton = false;
                     if (resp.errno === 403) {
-                        this.showErrMsg("订单不可支付")
+                        this.showErrMsg(resp.errmsg)
                     } else {
                         WeixinJSBridge.invoke(
                             'getBrandWCPayRequest', {
