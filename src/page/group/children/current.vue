@@ -1,8 +1,8 @@
 <template>
     <div class="mescroll" ref="mescroll">
-        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500">
+        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" class="header_image">
             <swipe-item v-for="item in brand" :key="item.id">
-                <router-link tag="div" class="header_image" :to="{path:'/introduce/'+ item.id}">
+                <router-link tag="div" :to="{path:'/introduce/'+ item.id}">
                     <img :src="item.pictureUrl" alt="" width="100%" class="show">
                 </router-link>
             </swipe-item>
@@ -21,7 +21,7 @@
                         <!-- <p class="tip"><span>固定地址享受超高优惠</span></p> -->
                         <div class="left">
                             <p class="price"><span class="lable">3人成团</span><span class="RMB">￥</span>{{item.minimumPrice}}</p>
-                            <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p>
+                            <!-- <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p> -->
                         </div>
                         <div class="right shopping_cart"><p>立即拼团</p></div>
                     </div>
@@ -244,5 +244,8 @@
                 }
             }
         }
+    }
+    .header_image {
+        min-height: 4.15rem; 
     }
 </style>
