@@ -10,19 +10,21 @@
         <section id="hot_goods">
             <ul class="goodslistul clear">
                 <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
-                    <div class="left position-re">
+                    <!-- <div class="left position-re">
                         <p class="count_down" v-if="item.endTimeDown > 24*60*60">距结束 <span>{{Math.floor(item.endTimeDown/60/60/24)}}天{{item.endTimeDown - Math.floor(item.endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分</span></p>
                         <p class="count_down" v-else>距结束 <span>{{item.endTimeDown | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分{{item.endTimeDown | timeArry(2)}}秒</span></p>
-                        <img :src="item.thumbnailPic" alt="" class="left" :class="{'noImage': !item.thumbnailPic}">
+                    </div> -->
+                    <img :src="item.thumbnailPic" alt="" class="image" :class="{'noImage': !item.thumbnailPic}">
+                    <div class="goods_info">
+                        <p class="name ellipsis">{{item.suitName}}</p>
+                        <p class="desr ellipsis">{{item.describe}}</p>
+                        <!-- <p class="tip"><span>固定地址享受超高优惠</span></p> -->
+                        <div class="left">
+                            <p class="price"><span class="lable">3人成团</span><span class="RMB">￥</span>{{item.minimumPrice}}</p>
+                            <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p>
+                        </div>
+                        <div class="right shopping_cart"><p>立即拼团</p></div>
                     </div>
-                    <div class="left goods_info">
-                        <p class="name">{{item.suitName}}</p>
-                        <p class="desr">{{item.describe}}</p>
-                        <p class="tip"><span>固定地址享受超高优惠</span></p>
-                        <p class="price"><span class="RMB">￥</span>{{item.minimumPrice}} <span class="lable">3人成团</span></p>
-                        <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p>
-                    </div>
-                    <div class="shopping_cart"><p>立即拼团</p></div>
                 </router-link>
             </ul>
         </section>
@@ -151,33 +153,34 @@
                 width: 100%;
                 clear: both;
                 overflow: hidden;
-                margin-bottom: .12rem;
+                margin-bottom: .15rem;
                 position: relative;
                 border-bottom: 1px solid #f8f8f8;
                 padding-bottom: .15rem;
-                .left.position-re {
-                    @include wh(1.4rem,1.4rem);
-                    img {
+                // .left.position-re {
+                    // @include wh(1.4rem,1.4rem);
+                    .image {
                         margin-right: .12rem;
                         width: 100%;
-                        height: 100%;
+                        height: 1.75rem;
                         border-radius: 5px;
                         background-color: #F8DCE8;
+                        // border: .03rem solid $red;
+                        box-sizing: border-box;
                     }
                     img.noImage {
                         background-color: #000;
                     }
-                }
+                // }
             }
             li:last-child {
                 margin-bottom: 0;
             }
             .goods_info {
-                width: 55%;
-                padding-left: .08rem;
+                width: 100%;
                 .name {
                     @include sc(.15rem, $g3);
-                    padding: .05rem 0 .03rem;
+                    padding: .03rem 0;
                 }
                 .desr {
                     @include sc(.12rem, $g6);
@@ -193,38 +196,41 @@
                     // margin: 0.04rem 0 .12rem;
                     transform: scale(.55) translateX(-.72rem);
                 }
-                .price {
-                    // margin-top: .6rem;
-                    @include sc(.18rem, $red);
-                    font-weight: bold;
-                    s {
-                        @include sc(.12rem, $g9);
-                        font-weight: normal;
+                .left {
+                    width: 75%;
+                    .price {
+                        // margin-top: .6rem;
+                        @include sc(.18rem, $red);
+                        font-weight: bold;
+                        s {
+                            @include sc(.12rem, $g9);
+                            font-weight: normal;
+                        }
+                        .RMB {
+                            margin-left: -.3rem;
+                        }
                     }
-                }
-                .lable {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    @include wh(.75rem, .3rem);
-                    @include sc(.18rem, #E42826);
-                    border: .02rem solid rgba(228,40,38,1);
-                    border-radius: .025rem;
-                    transform: scale(.5) translateX(-.35rem);
-                }
-                .single_price {
-                    @include sc(.12rem, $g9);
-                    span {
-                        font-size: .12rem;
-                        transform: scale(0.85) translateY(.01rem);
-                        display: inline-block;
+                    .lable {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        @include wh(.75rem, .3rem);
+                        @include sc(.18rem, #E42826);
+                        border: .02rem solid rgba(228,40,38,1);
+                        border-radius: .025rem;
+                        transform: scale(.55) translateX(-.3rem);
+                    }
+                    .single_price {
+                        @include sc(.12rem, $g9);
+                        span {
+                            font-size: .12rem;
+                            transform: scale(0.85) translateY(.01rem);
+                            display: inline-block;
+                        }
                     }
                 }
             }
             .shopping_cart {
-                position: absolute;
-                right: 0;
-                bottom: .29rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
