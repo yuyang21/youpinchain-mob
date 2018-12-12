@@ -63,13 +63,24 @@
             <div class="invite_landing" ref="test">
                 <img :src="output" width="100%" ref="output" v-if="showImages"/>
                 <div class="box" v-else>
-                    <img :src="groupSuit.sharePic" class="boxImg" alt="">
+                    <div class="header">
+                        <div class="groupMyInfo">
+                            <p><strong>{{nickName}}</strong>邀请您参加她的团购</p>
+                            <p>统一收获地址：{{leaderAddress.address}}</p>
+                        </div>
+                        <img src="../../images/group/icon_share.png" alt="" class="icon_head">
+                        <img :src="groupSuit.sharePic" class="boxImg" alt="">
+                        <div class="descrInfo">
+                            <p class="left"><span>¥&nbsp;{{groupMy.discountPrice}}</span>/盒 &nbsp; <span>{{groupSuit.minimum}}盒起订</span></p>
+                            <p class="right">拼团中</p>
+                        </div>
+                    </div>
                     <div class="container" >
                         <div class="left">
                             <div class="title ellipsis">{{groupSuit.suitName}}</div>
                             <div class="content" style="-webkit-box-orient: vertical;">{{groupSuit.describe || '这是描述'}}</div>
-                            <p class="discountPrice">拼团价：<span>¥</span>{{groupMy.discountPrice}}</p>
-                            <s class="originalPrice">单买价：<span>¥</span>{{groupMy.originalPrice}}</s>
+                            <p class="discountPrice">同一地址团购：<span>¥</span>{{groupMy.discountPrice}}</p>
+                            <p class="originalPrice">单买价：<span>¥</span>{{groupMy.originalPrice}}</p>
                         </div>
                         <div class="right">
                             <div class="qrcode" id="qrcode_1"></div>
@@ -105,7 +116,7 @@
     export default {
         data() {
             return {
-                showShare: false,
+                showShare: true,
                 showImages: false,
                 groupMyId: '',
                 groupSuit: {},
@@ -120,7 +131,8 @@
                 systemTime: null,
                 shareLink: '',
                 qrcode: Object,
-                output: null
+                output: null,
+                nickName: ''
             };
         },
         mounted() {
@@ -169,7 +181,7 @@
                     that.showShare = true;
                     setTimeout(function () {
                         if (that.shareLink) {
-                            that.print();
+                            // that.print();
                         }
                     }, 100);
                 }
@@ -204,6 +216,7 @@
                         that.groupSuit = res.data.groupSuit;
                         var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                         let sessionUserInfo = sessionStorage.getItem("userInfo");
+                        that.nickName = JSON.parse(sessionUserInfo).nickName;
                         if (sessionUserInfo) {
                             if (shareLink.indexOf("?") !== -1) {
                                 shareLink = shareLink + "&inviter=" + JSON.parse(sessionUserInfo).vipId;
@@ -469,34 +482,88 @@
                 right: 0;
                 margin: 0 auto;
                 background: rgba(0, 0, 0, 0.8);
-                width: 80%;
+                width: 95%;
                 .box {
                     width: 100%;
                     height: 100%;
                     background-color: $fc;
+                    padding: .5rem .25rem .2rem;
                     border-radius: .05rem;
+                    .header {
+                        border: .03rem solid #A40000;
+                        border-radius: .05rem;
+                        position: relative;
+                        .icon_head {
+                            position: absolute;
+                            top: -.35rem;
+                            left: -.04rem;
+                            @include wh(.61rem,.6rem);
+                        }
+                        .groupMyInfo {
+                            position: absolute;
+                            top: -.38rem;
+                            left: .65rem;
+                            p:first-child {
+                                @include sc(.13rem,$g3B);
+                                strong {
+                                    @include sc(.13rem,$black);
+                                    margin-right: .05rem;
+                                }
+                            }
+                            p:last-child {
+                                @include sc(.12rem,$g3B);
+                                transform: scale(.87) translateX(-.16rem);
+                            }
+                        }
+                        .descrInfo {
+                            @include wh(100%,.4rem);
+                            line-height: .45rem;
+                            background-color: #A40000;
+                            overflow: hidden;
+                            padding: 0 .12rem;
+                            .left {
+                                @include sc(.13rem,$fc);
+                                span:first-child {
+                                    font-size: .18rem;
+                                    font-weight: bold;
+                                }
+                                span:last-child {
+                                    font-size: .12rem;
+                                }
+                            }
+                            .right {
+                                @include wh(1rem,.15rem);
+                                @include sc(.12rem,#A40000);
+                                background-color: #FFFF00;
+                                border-radius: .08rem;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                margin-top: .15rem;
+                            }
+                        }
+                    }
                     .boxImg{
                         display: block;
                         width: 100%;
-                        border-radius: .05rem .05rem 0 0;
+                        border-radius: .02rem .02rem 0 0;
                     }
                     .container {
                         overflow: hidden;
-                        padding: .15rem .1rem .15rem .15rem;
+                        padding: .12rem .0rem .15rem .01rem;
                         .left {
                             width: 63%;
                             .title {
-                                @include sc(.14rem, $g3);
+                                @include sc(.14rem, #262424);
                                 max-height: .36rem;
-                                margin-bottom: .08rem;
                                 font-weight: bold;
                             }
                             .content {
-                                @include sc(.12rem, $g6);
+                                @include sc(.12rem, #434343);
                                 @include line-ellipsis();
                             }
                             .discountPrice {
-                                @include sc(.15rem, $red);
+                                @include sc(.15rem, #A40000);
                                 font-weight: bold;
                                 margin-top: .05rem;
                                 span {
@@ -507,7 +574,7 @@
                                 }
                             }
                             .originalPrice {
-                                @include sc(.12rem, $g6);
+                                @include sc(.12rem, $black);
                                 font-weight: bold;
                                 span {
                                     display: inline-block;
