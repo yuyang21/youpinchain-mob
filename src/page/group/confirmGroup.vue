@@ -62,6 +62,10 @@
                                 <span class="left">团长职责：</span><span class="left">邀请您附近伙伴拼团，团长统一收货并组织团员取货。</span>
                                 <span class="left">大美奖励：</span><span class="left">订单结束后团长获得鼓励金</span>
                             </div>
+                            <div class="tips" v-if="!groupMy && groupSuitType === 1">
+                                快来邀请好友分享美味吧~<br>
+                                <span>3人即可成团享受优惠价格，如收货地址相同推荐选择“社区拼团”更划算，更温暖。</span>
+                            </div>
                             <div v-if="groupMy && groupMy.groupSuitType === 2">
                                 <br>
                                 <div class="position-re">
