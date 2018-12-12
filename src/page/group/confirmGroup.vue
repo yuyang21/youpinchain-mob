@@ -157,7 +157,9 @@
         <div class="suitTypeBox" v-show="suitTypeBox">
             <div class="title">
                 拼团方式
-                <img src="../../images/close.png" alt="" @click="suitTypeBox = false;showTip = false;">
+                <p class="right" @click="suitTypeBox = false;showTip = false;">
+                    <img src="../../images/close.png" alt="">
+                </p>
             </div>
             <ul class="levels">
                 <li class="label"
@@ -979,11 +981,15 @@
             height: .45rem;
             line-height: .45rem;
             border-bottom: .01rem solid $bc;
-            padding: 0 .15rem;
-            img {
-                float: right;
-                width: .15rem;
-                margin-top: .13rem;
+            padding: 0 0 0 .15rem;
+            p.right {
+                @include wh(.5rem,.45rem);
+                line-height: .5rem;
+                text-align: right;
+                padding: 0 .15rem 0 0;
+                img {
+                    width: .15rem;
+                }
             }
         }
         .levels {
