@@ -418,6 +418,7 @@
                             },
                             function (res) {
                                 that.payButton = false;
+                                alert(res.err_msg)
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                                     if (that.groupType === 1) {
                                         window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
