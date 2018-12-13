@@ -46,7 +46,7 @@
                         </section>
                         <div class="order_item_bottom">
                         <span class="order_text">实际支付<b class="red"><span class="RMB">￥</span><strong
-                                style="font-size:.2rem;font-weight:bold;">{{item.actualPrice}}</strong></b></span>
+                                class="order_price_size">{{item.actualPrice}}</strong></b></span>
                             <div class="order_button_border_grey" @click="showAlertTip = !showAlertTip">联系客服</div>
                             <div class="order_again">
                                 <compute-time v-if="item.handleOption.pay" :time="item.expiryTime"
