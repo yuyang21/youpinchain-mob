@@ -236,9 +236,9 @@
                         })
                         res.data.suitTypes.forEach(item => {
                             if (item.type === 1) {
-                                that.sameAddressPrice = item.discountPrice;
-                            } else {
                                 that.diffetentAddressPrice = item.discountPrice;
+                            } else {
+                                that.sameAddressPrice = item.discountPrice;
                             }
                         });
                     })
