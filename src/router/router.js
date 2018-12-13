@@ -61,7 +61,7 @@ export default [{
         //地址为空时跳转home页面
         {
             path: '',
-            redirect: '/group'
+            redirect: '/home'
         },
         //首页
         {
