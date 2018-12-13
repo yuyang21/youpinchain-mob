@@ -14,7 +14,7 @@
                         <p class="count_down" v-if="item.endTimeDown > 24*60*60">距结束 <span>{{Math.floor(item.endTimeDown/60/60/24)}}天{{item.endTimeDown - Math.floor(item.endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分</span></p>
                         <p class="count_down" v-else>距结束 <span>{{item.endTimeDown | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分{{item.endTimeDown | timeArry(2)}}秒</span></p>
                     </div> -->
-                    <img :src="item.thumbnailPic" alt="" class="image" :class="{'noImage': !item.thumbnailPic}">
+                    <img :src="item.normalPic" alt="" class="image" :class="{'noImage': !item.normalPic}">
                     <div class="goods_info">
                         <p class="name ellipsis">{{item.suitName}}</p>
                         <p class="desr ellipsis">{{item.describe}}</p>
@@ -246,6 +246,6 @@
         }
     }
     .header_image {
-        min-height: 4.15rem; 
+        min-height: 4.15rem;
     }
 </style>
