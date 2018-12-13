@@ -61,24 +61,24 @@
             <p class="text">1.长按屏幕保存图片</p>
             <p class="text">2.将图片分享给好友或朋友圈</p>
             <div class="invite_landing" ref="test">
-                <img :src="output" width="100%" ref="output" v-if="showImages"/>
+                <img :src="output" width="100%" ref="output" v-if="output"/>
                 <div class="box" v-else>
                     <div class="groupMyInfo">
-                        <p :class="{'padd-t': groupMy.groupSuitType === 1}"><strong>{{leaderAddress.consignee}}</strong>邀请您参加她的团购</p>
+                        <p :class="{'padd-t': groupMy.groupSuitType === 1}"><strong>{{leaderAddress.consignee}}</strong>邀请您参加{{!sex ? '' : sex === '女' ? '她的' : '他的'}}团购</p>
                         <p v-if="groupMy.groupSuitType === 2" class="ellipsis">统一收货地址：{{leaderAddress.address}}</p>
                     </div>
                     <div class="header">
                         <img src="../../images/group/icon_share.png" alt="" class="icon_head">
                         <img :src="groupSuit.sharePic" class="boxImg" alt="">
                         <div class="descrInfo">
-                            <p class="left"><span>¥&nbsp;{{groupMy.discountPrice}}</span>/盒 &nbsp; <span>{{groupSuit.minimum}}盒起订</span></p>
+                            <p class="left"><span>¥&nbsp;{{groupMy.discountPrice}}</span>/份 &nbsp; <span>{{groupSuit.minimum}}份起订</span></p>
                             <p class="right">拼团中</p>
                         </div>
                     </div>
                     <div class="container" >
                         <div class="left">
-                            <div class="title ellipsis">{{groupSuit.suitName+ '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊'}}</div>
-                            <p class="content">{{groupSuit.describe + '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊'}}</p>
+                            <div class="title ellipsis">{{groupSuit.suitName}}</div>
+                            <p class="content">{{groupSuit.describe}}</p>
                             <p class="discountPrice">同一地址团购：<span>¥</span>{{sameAddressPrice}}</p>
                             <p class="tips">(团长发起，并享劳动鼓励金)</p>
                             <p class="originalPrice">不同地址团购：<span>¥</span>{{diffetentAddressPrice}}</p>
@@ -119,7 +119,6 @@
         data() {
             return {
                 showShare: false,
-                showImages: false,
                 groupMyId: '',
                 groupSuit: {},
                 groupMy: {},
@@ -135,7 +134,8 @@
                 qrcode: Object,
                 output: null,
                 sameAddressPrice: 0,
-                diffetentAddressPrice: 0
+                diffetentAddressPrice: 0,
+                sex: ''
             };
         },
         mounted() {
@@ -171,9 +171,6 @@
                     that.showShare = true;
                     return;
                 } else {
-                    convertImgToBase64(that.groupSuit.sharePic, function (base64Img) {
-                        that.groupSuit.sharePic = base64Img;
-                    });
                     that.qrcode = new QRCode(document.getElementById('qrcode_1'), {
                         text: that.shareLink,
                         width: 150,
@@ -182,11 +179,14 @@
                         colorLight: '#ffffff'
                     })
                     that.showShare = true;
-                    setTimeout(function () {
-                        if (that.shareLink) {
-                            that.print();
-                        }
-                    }, 100);
+                    convertImgToBase64(that.groupSuit.sharePic, function (base64Img) {
+                        that.groupSuit.sharePic = base64Img;
+                        setTimeout(function () {
+                            if (that.shareLink) {
+                                that.print();
+                            }
+                        }, 100);
+                    });
                 }
             },
             print() {
@@ -199,7 +199,6 @@
                 }
                 var that = this;
                 that.$html2canvas(el, options).then(function(result) {
-                    that.showImages = true;
                     that.output = result;
                 });
             },
@@ -219,6 +218,7 @@
                         that.groupSuit = res.data.groupSuit;
                         var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                         let sessionUserInfo = sessionStorage.getItem("userInfo");
+                        that.sex = JSON.parse(sessionUserInfo).sex;
                         if (sessionUserInfo) {
                             if (shareLink.indexOf("?") !== -1) {
                                 shareLink = shareLink + "&inviter=" + JSON.parse(sessionUserInfo).vipId;
@@ -491,10 +491,11 @@
                 right: 0;
                 margin: 0 auto;
                 background: rgba(0, 0, 0, 0.8);
-                width: 95%;
+                width: 84%;
                 .box {
+                    overflow: auto;
                     width: 100%;
-                    height: 100%;
+                    max-height: 4.8rem;
                     background-color: $fc;
                     padding: .05rem .15rem .12rem;
                     border-radius: .05rem;
@@ -560,14 +561,14 @@
                     .boxImg{
                         display: block;
                         width: 100%;
-                        min-height: 2.35rem;
+                        height: 2.35rem;
                         border-radius: .02rem .02rem 0 0;
                     }
                     .container {
                         overflow: hidden;
                         padding: .12rem .0rem 0rem .01rem;
                         .left {
-                            width: 68%;
+                            width: 63%;
                             .title {
                                 @include sc(.15rem, #262424);
                                 max-height: .36rem;
@@ -613,7 +614,7 @@
                             @include wh(1rem,1rem);
                             border-radius: .05rem;
                             background: #000;
-                            margin-top: .2rem;
+                            margin-top: .1rem;
                         }
                     }
                 }
