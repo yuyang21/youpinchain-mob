@@ -321,7 +321,7 @@
                 if (this.suitTypeBox && this.showTip) {
                     return
                 }
-                this.showTip = true;
+                this.showTip = !this.showTip;
                 document.querySelector('.mask_box').style.height = document.documentElement.clientHeight + 'px';
             },
             // ...mapMutations(["CHOOSE_ADDRESS"]),
