@@ -1,33 +1,35 @@
 <template>
-    <div class="mescroll" ref="mescroll">
-        <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" class="header_image">
-            <swipe-item v-for="item in brand" :key="item.id">
-                <router-link tag="div" :to="{path:'/introduce/'+ item.id}">
-                    <img :src="item.pictureUrl" alt="" width="100%" class="show">
-                </router-link>
-            </swipe-item>
-        </swipe>
-        <section id="hot_goods">
-            <ul class="goodslistul clear">
-                <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
-                    <!-- <div class="left position-re">
-                        <p class="count_down" v-if="item.endTimeDown > 24*60*60">距结束 <span>{{Math.floor(item.endTimeDown/60/60/24)}}天{{item.endTimeDown - Math.floor(item.endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分</span></p>
-                        <p class="count_down" v-else>距结束 <span>{{item.endTimeDown | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分{{item.endTimeDown | timeArry(2)}}秒</span></p>
-                    </div> -->
-                    <img :src="item.normalPic" alt="" class="image" :class="{'noImage': !item.normalPic}">
-                    <div class="goods_info">
-                        <p class="name ellipsis">{{item.suitName}}</p>
-                        <p class="desr ellipsis">{{item.describe}}</p>
-                        <!-- <p class="tip"><span>固定地址享受超高优惠</span></p> -->
-                        <div class="left">
-                            <p class="price"><span class="lable">3人成团</span><span class="RMB">￥</span>{{item.minimumPrice}}</p>
-                            <!-- <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p> -->
+    <div>
+        <div class="mescroll" ref="mescroll">
+            <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" class="header_image">
+                <swipe-item v-for="item in brand" :key="item.id">
+                    <router-link tag="div" :to="{path:'/introduce/'+ item.id}">
+                        <img :src="item.pictureUrl" alt="" width="100%" class="show">
+                    </router-link>
+                </swipe-item>
+            </swipe>
+            <section id="hot_goods">
+                <ul class="goodslistul clear">
+                    <router-link tag="li" :to="'/groupDet/' + item.id" class="overflow-hi" v-for="item in goOn" :key="item.id">
+                        <!-- <div class="left position-re">
+                            <p class="count_down" v-if="item.endTimeDown > 24*60*60">距结束 <span>{{Math.floor(item.endTimeDown/60/60/24)}}天{{item.endTimeDown - Math.floor(item.endTimeDown/60/60/24)*24*60*60 | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分</span></p>
+                            <p class="count_down" v-else>距结束 <span>{{item.endTimeDown | timeArry(0)}}时{{item.endTimeDown | timeArry(1)}}分{{item.endTimeDown | timeArry(2)}}秒</span></p>
+                        </div> -->
+                        <img :src="item.normalPic" alt="" class="image" :class="{'noImage': !item.normalPic}">
+                        <div class="goods_info">
+                            <p class="name ellipsis">{{item.suitName}}</p>
+                            <p class="desr ellipsis">{{item.describe}}</p>
+                            <!-- <p class="tip"><span>固定地址享受超高优惠</span></p> -->
+                            <div class="left">
+                                <p class="price"><span class="lable">3人成团</span><span class="RMB">￥</span>{{item.minimumPrice}}</p>
+                                <!-- <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p> -->
+                            </div>
+                            <div class="right shopping_cart"><p>立即拼团</p></div>
                         </div>
-                        <div class="right shopping_cart"><p>立即拼团</p></div>
-                    </div>
-                </router-link>
-            </ul>
-        </section>
+                    </router-link>
+                </ul>
+            </section>
+        </div>
         <foot-guide></foot-guide>
     </div>
 </template>
