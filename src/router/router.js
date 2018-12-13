@@ -1,4 +1,5 @@
 import App from '../App'
+
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const traceability = r => require.ensure([], () => r(require('../page/home/traceability')), 'traceability')
 const origins = r => require.ensure([], () => r(require('../page/home/origins')), 'origins')
@@ -60,13 +61,20 @@ export default [{
         //地址为空时跳转home页面
         {
             path: '',
-            redirect: '/group'
+            redirect: '/home'
         },
         //首页
         {
             path: '/home',
-            redirect: '/group'
-            // component: home
+            children: [{
+                path: '',
+                component: current, //拼团进行中
+                name: 'current'
+            }, {
+                path: 'preview',
+                component: preview, //拼团预告
+                name: 'preview'
+            }]
         },
         //黑猪溯源
         {
@@ -141,7 +149,7 @@ export default [{
                 path: '',
                 component: current, //拼团进行中
                 name: 'current'
-            },{
+            }, {
                 path: 'preview',
                 component: preview, //拼团预告
                 name: 'preview'
@@ -156,7 +164,7 @@ export default [{
         {
             path: '/confirmGroup',
             component: confirmGroup,
-            meta: { title: '订单确认'}
+            meta: {title: '订单确认'}
         },
         //个人信息页
         {
@@ -199,8 +207,8 @@ export default [{
             name: 'addressList'
         },
         {
-            path:'add',
-            component:add,     //编辑地址
+            path: 'add',
+            component: add,     //编辑地址
             name: 'editAddress'
         },
         // 关于我们
@@ -224,19 +232,19 @@ export default [{
                 path: '',
                 component: allOrder, //全部订单
                 name: 'all'
-            },{
+            }, {
                 path: 'unpaid',
                 component: unpaid, //待支付订单
                 name: 'unpaid'
-            },{
+            }, {
                 path: 'undelivery',
                 component: undelivery, //未发货
                 name: 'undelivery'
-            },{
+            }, {
                 path: 'delivered',
                 component: delivered, // 已发货
                 name: 'delivered'
-            },{
+            }, {
                 path: 'completed',
                 component: completed, //已完成
                 name: 'completed'
