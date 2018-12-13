@@ -45,7 +45,8 @@
                     </div>
                     <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.provinceName +
+                            <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">
+                                {{choosedAddress.provinceName +
                                 choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
@@ -285,7 +286,6 @@
             });
 
 
-
             // 最低起售份数
             this.suitNum = this.groupSuit.minimum;
             this.groupType = Number(this.$route.query.type)
@@ -341,6 +341,9 @@
                 }
                 that.payButton = true;
                 this.showLoading = true;
+                setTimeout(function () {
+                    that.showLoading = false;
+                }, 3000);
                 if (!that.choosedAddress) {
                     if (!that.checkAddress(that.address)) {
                         that.payButton = false;
@@ -636,6 +639,7 @@
         top: 0;
         z-index: 3;
     }
+
     .shop_list_container {
         background-color: $bc;
         .swiper-container {
@@ -717,7 +721,7 @@
                     position: absolute;
                     right: 0rem;
                     padding-top: 0.1rem;
-                    @include wh(.35rem,.5rem);
+                    @include wh(.35rem, .5rem);
                     display: flex;
                     justify-content: center;
                     span {
@@ -915,6 +919,7 @@
             }
         }
     }
+
     .settlement {
         position: fixed;
         bottom: 0;
@@ -955,6 +960,7 @@
             vertical-align: text-bottom;
         }
     }
+
     .load_more {
         @include wh(100%, 0.36rem);
         @include sc(0.15rem, $g6);
@@ -962,37 +968,40 @@
         text-align: center;
         line-height: 0.36rem;
     }
+
     .shop_info.margin-t-p3 {
         margin-top: .3rem;
     }
+
     .groupSuitType {
-        @include wh(103%,.45rem);
+        @include wh(103%, .45rem);
         overflow: hidden;
         line-height: .45rem;
         margin-top: .12rem;
         border-top: .01rem solid $bc;
         .left {
-            @include sc(.15rem,$g6);
+            @include sc(.15rem, $g6);
         }
         .right {
             span {
                 display: inline-flex;
-                @include sc(.15rem,$red);
+                @include sc(.15rem, $red);
             }
             img {
-                @include wh(.1rem,0.175rem);
+                @include wh(.1rem, 0.175rem);
                 vertical-align: text-top;
                 margin-left: .05rem;
             }
         }
     }
+
     .suitTypeBox {
         position: fixed;
         bottom: 0;
         z-index: 99;
         background-color: $fc;
         border-radius: .1rem .1rem 0 0;
-        @include wh(100%,2.75rem);
+        @include wh(100%, 2.75rem);
         .title {
             @include sc(.18rem, $g3);
             font-weight: bold;
@@ -1001,7 +1010,7 @@
             border-bottom: .01rem solid $bc;
             padding: 0 0 0 .15rem;
             p.right {
-                @include wh(.5rem,.45rem);
+                @include wh(.5rem, .45rem);
                 line-height: .5rem;
                 text-align: right;
                 padding: 0 .15rem 0 0;
