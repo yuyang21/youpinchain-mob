@@ -479,7 +479,7 @@
             }
             .close_model {
                 position: absolute;
-                bottom: .1rem;
+                bottom: .4rem;
                 left: 47%;
             }
             .invite_landing {
@@ -561,7 +561,7 @@
                     .boxImg{
                         display: block;
                         width: 100%;
-                        height: 2.35rem;
+                        height: 1.75rem;
                         border-radius: .02rem .02rem 0 0;
                     }
                     .container {
