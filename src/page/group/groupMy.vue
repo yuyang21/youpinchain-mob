@@ -63,11 +63,11 @@
             <div class="invite_landing" ref="test">
                 <img :src="output" width="100%" ref="output" v-if="showImages"/>
                 <div class="box" v-else>
+                    <div class="groupMyInfo">
+                        <p :class="{'padd-t': groupMy.groupSuitType === 1}"><strong>{{leaderAddress.consignee}}</strong>邀请您参加她的团购</p>
+                        <p v-if="groupMy.groupSuitType === 2" class="ellipsis">统一收货地址：{{leaderAddress.address}}</p>
+                    </div>
                     <div class="header">
-                        <div class="groupMyInfo">
-                            <p><strong>{{nickName}}</strong>邀请您参加她的团购</p>
-                            <p>统一收获地址：{{leaderAddress.address}}</p>
-                        </div>
                         <img src="../../images/group/icon_share.png" alt="" class="icon_head">
                         <img :src="groupSuit.sharePic" class="boxImg" alt="">
                         <div class="descrInfo">
@@ -77,10 +77,12 @@
                     </div>
                     <div class="container" >
                         <div class="left">
-                            <div class="title ellipsis">{{groupSuit.suitName}}</div>
-                            <div class="content" style="-webkit-box-orient: vertical;">{{groupSuit.describe || '这是描述'}}</div>
-                            <p class="discountPrice">同一地址团购：<span>¥</span>{{groupMy.discountPrice}}</p>
-                            <p class="originalPrice">单买价：<span>¥</span>{{groupMy.originalPrice}}</p>
+                            <div class="title ellipsis">{{groupSuit.suitName+ '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊'}}</div>
+                            <p class="content">{{groupSuit.describe + '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊'}}</p>
+                            <p class="discountPrice">同一地址团购：<span>¥</span>{{sameAddressPrice}}</p>
+                            <p class="tips">(团长发起，并享劳动鼓励金)</p>
+                            <p class="originalPrice">不同地址团购：<span>¥</span>{{diffetentAddressPrice}}</p>
+                            <p class="originalPrice">单买价：<span>¥</span>{{groupSuit.suitPrice}}</p>
                         </div>
                         <div class="right">
                             <div class="qrcode" id="qrcode_1"></div>
@@ -116,7 +118,7 @@
     export default {
         data() {
             return {
-                showShare: true,
+                showShare: false,
                 showImages: false,
                 groupMyId: '',
                 groupSuit: {},
@@ -132,7 +134,8 @@
                 shareLink: '',
                 qrcode: Object,
                 output: null,
-                nickName: ''
+                sameAddressPrice: 0,
+                diffetentAddressPrice: 0
             };
         },
         mounted() {
@@ -181,7 +184,7 @@
                     that.showShare = true;
                     setTimeout(function () {
                         if (that.shareLink) {
-                            // that.print();
+                            that.print();
                         }
                     }, 100);
                 }
@@ -216,7 +219,6 @@
                         that.groupSuit = res.data.groupSuit;
                         var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                         let sessionUserInfo = sessionStorage.getItem("userInfo");
-                        that.nickName = JSON.parse(sessionUserInfo).nickName;
                         if (sessionUserInfo) {
                             if (shareLink.indexOf("?") !== -1) {
                                 shareLink = shareLink + "&inviter=" + JSON.parse(sessionUserInfo).vipId;
@@ -232,6 +234,13 @@
                             }
                             WechatShareUtils.onMenuShareAppMessage(title, that.groupSuit.describe, shareLink, that.groupSuit.thumbnailPic)
                         })
+                        res.data.suitTypes.forEach(item => {
+                            if (item.type === 1) {
+                                that.sameAddressPrice = item.discountPrice;
+                            } else {
+                                that.diffetentAddressPrice = item.discountPrice;
+                            }
+                        });
                     })
 
                 })
@@ -462,7 +471,7 @@
             z-index: 9999;
             @include wh(100vw,100vh);
             background: rgba(0, 0, 0, 1);
-            padding-top: .2rem;
+            padding-top: .12rem;
             .text {
                 @include sc(.15rem, $fc);
                 text-align: center;
@@ -470,13 +479,13 @@
             }
             .close_model {
                 position: absolute;
-                bottom: 16%;
+                bottom: .1rem;
                 left: 47%;
             }
             .invite_landing {
                 overflow: hidden;
                 position: relative;
-                top: 0.3rem;
+                top: 0.1rem;
                 bottom: 0;
                 left: 0;
                 right: 0;
@@ -487,33 +496,38 @@
                     width: 100%;
                     height: 100%;
                     background-color: $fc;
-                    padding: .5rem .25rem .2rem;
+                    padding: .05rem .15rem .12rem;
                     border-radius: .05rem;
+                    .groupMyInfo {
+                        margin: 0.15rem 0 0.0rem .7rem;
+                        text-align: left;
+                        height: .3rem;
+                        p:first-child {
+                            @include sc(.13rem,$g3B);
+                            line-height: .13rem;
+                            strong {
+                                @include sc(.13rem,$black);
+                                margin-right: .05rem;
+                            }
+                        }
+                        p:nth-child(2) {
+                            @include sc(.12rem,$g3B);
+                            transform: scale(.87) translateX(-.2rem);
+                            width: 113%;
+                        }
+                        p.padd-t {
+                            padding-top: .05rem;
+                        }
+                    }
                     .header {
                         border: .03rem solid #A40000;
                         border-radius: .05rem;
                         position: relative;
                         .icon_head {
                             position: absolute;
-                            top: -.35rem;
+                            top: -.37rem;
                             left: -.04rem;
                             @include wh(.61rem,.6rem);
-                        }
-                        .groupMyInfo {
-                            position: absolute;
-                            top: -.38rem;
-                            left: .65rem;
-                            p:first-child {
-                                @include sc(.13rem,$g3B);
-                                strong {
-                                    @include sc(.13rem,$black);
-                                    margin-right: .05rem;
-                                }
-                            }
-                            p:last-child {
-                                @include sc(.12rem,$g3B);
-                                transform: scale(.87) translateX(-.16rem);
-                            }
                         }
                         .descrInfo {
                             @include wh(100%,.4rem);
@@ -524,7 +538,7 @@
                             .left {
                                 @include sc(.13rem,$fc);
                                 span:first-child {
-                                    font-size: .18rem;
+                                    font-size: .2rem;
                                     font-weight: bold;
                                 }
                                 span:last-child {
@@ -546,21 +560,24 @@
                     .boxImg{
                         display: block;
                         width: 100%;
+                        min-height: 2.35rem;
                         border-radius: .02rem .02rem 0 0;
                     }
                     .container {
                         overflow: hidden;
-                        padding: .12rem .0rem .15rem .01rem;
+                        padding: .12rem .0rem 0rem .01rem;
                         .left {
-                            width: 63%;
+                            width: 68%;
                             .title {
-                                @include sc(.14rem, #262424);
+                                @include sc(.15rem, #262424);
                                 max-height: .36rem;
                                 font-weight: bold;
                             }
                             .content {
                                 @include sc(.12rem, #434343);
-                                @include line-ellipsis();
+                                // @include line-ellipsis(2);
+                                max-height: .32rem;
+                                overflow: hidden;
                             }
                             .discountPrice {
                                 @include sc(.15rem, #A40000);
@@ -569,18 +586,25 @@
                                 span {
                                     display: inline-block;
                                     font-weight: bold;
-                                    @include sc(.12rem, $red);
+                                    @include sc(.13rem, #A40000);
                                     margin-right: .04rem;
                                 }
+                            }
+                            .tips {
+                                @include sc(.12rem, $black);
+                                font-weight:bold;
+                                margin: .02rem 0;
+                                transform: scale(.9) translateX(-.1rem);
                             }
                             .originalPrice {
                                 @include sc(.12rem, $black);
                                 font-weight: bold;
+                                margin-top: .05rem;
                                 span {
                                     display: inline-block;
                                     font-weight: bold;
-                                    @include sc(.12rem, $g6);
-                                    transform: scale(.8) translateY(.01rem);
+                                    @include sc(.12rem, $black);
+                                    transform: scale(.85) translateY(.01rem);
                                     margin-right: .02rem;
                                 }
                             }
@@ -589,6 +613,7 @@
                             @include wh(1rem,1rem);
                             border-radius: .05rem;
                             background: #000;
+                            margin-top: .2rem;
                         }
                     }
                 }
