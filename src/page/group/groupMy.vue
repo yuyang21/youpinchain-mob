@@ -502,7 +502,7 @@
                     .groupMyInfo {
                         margin: 0.15rem 0 0.0rem .7rem;
                         text-align: left;
-                        height: .3rem;
+                        // height: .3rem;
                         p:first-child {
                             @include sc(.13rem,$g3B);
                             line-height: .13rem;

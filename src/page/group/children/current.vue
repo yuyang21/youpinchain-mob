@@ -28,6 +28,7 @@
                 </router-link>
             </ul>
         </section>
+        <foot-guide></foot-guide>
     </div>
 </template>
 
