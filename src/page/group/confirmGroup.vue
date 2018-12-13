@@ -53,25 +53,25 @@
                             <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === 1">
                                 <li class="left">拼团方式</li>
                                 <li class="right" @click="suitTypeBox = true;showTipsBox();">
-                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '社区拼团(推荐)'}}</span>
+                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '同一地址拼团(推荐)'}}</span>
                                     <img src="../../images/path.png" alt="">
                                 </li>
                             </ul>
                             <div class="tips" v-if="!groupMy && groupSuitType === 2 && groupType === 1">
-                                选择社区拼团，支持“大美乡村计划”—扶持农业，收获健康，感谢您选择更环保·更温暖的生活方式。<br>
+                                选择同一地址拼团，支持“大美乡村计划”—扶持农业，收获健康，感谢您选择更环保·更温暖的生活方式。<br>
                                 <span class="left">团长职责：</span><span class="left">邀请您附近伙伴拼团，团长统一收货并组织团员取货。</span>
                                 <span class="left">大美奖励：</span><span class="left">订单结束后团长获得鼓励金</span>
                             </div>
                             <div class="tips" v-if="!groupMy && groupSuitType === 1 && groupType === 1">
                                 快来邀请好友分享美味吧~<br>
-                                <span>3人即可成团享受优惠价格，如收货地址相同推荐选择“社区拼团”更划算，更温暖。</span>
+                                <span>3人即可成团享受优惠价格，如收货地址相同推荐选择“同一地址拼团”更划算，更温暖。</span>
                             </div>
                             <div v-if="groupMy && groupMy.groupSuitType === 2">
                                 <br>
                                 <div class="position-re">
                                     <p class="left address-tuan">{{tuanAddress.address}}</p>
                                     <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
-                                    <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
+                                    <span class="tip_box" v-if="showTip">因为您参与的是同一地址拼团，所以您的商品会寄送到此地址（团长地址）</span>
                                 </div>
                                 <p class="clear"><span>{{tuanAddress.consignee}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{tuanAddress.mobile}}</span>
                                 </p>
@@ -276,7 +276,7 @@
                 if (t.type === 1) {
                     t.text = '普通拼团';
                 } else if (t.type === 2) {
-                    t.text = '社区拼团';
+                    t.text = '同一地址拼团';
                 }
                 if (t.type === this.groupSuitType && this.groupSuit.id === t.productId) {
                     this.packPrice = t.discountPrice;
@@ -1015,7 +1015,7 @@
             clear: both;
             padding: .05rem .15rem;
             .label {
-                @include wh(.715rem, .275rem);
+                @include wh(1rem, .275rem);
                 @include sc(.15rem, $g9);
                 border: .01rem solid $g9;
                 border-radius: .025rem;

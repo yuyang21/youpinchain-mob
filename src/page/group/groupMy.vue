@@ -65,7 +65,7 @@
                 <div class="box" v-else>
                     <div class="groupMyInfo">
                         <p :class="{'padd-t': groupMy.groupSuitType === 1}"><strong>{{leaderAddress.consignee}}</strong>邀请您参加{{!sex ? '' : sex === '女' ? '她的' : '他的'}}团购</p>
-                        <p v-if="groupMy.groupSuitType === 2" class="ellipsis">统一收货地址：{{leaderAddress.address}}</p>
+                        <p v-if="groupMy.groupSuitType === 2" class="ellipsis">同一收货地址：{{leaderAddress.address}}</p>
                     </div>
                     <div class="header">
                         <img src="../../images/group/icon_share.png" alt="" class="icon_head">

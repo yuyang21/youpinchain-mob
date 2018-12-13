@@ -66,15 +66,8 @@ export default [{
         //首页
         {
             path: '/home',
-            children: [{
-                path: '',
-                component: current, //拼团进行中
-                name: 'current'
-            }, {
-                path: 'preview',
-                component: preview, //拼团预告
-                name: 'preview'
-            }]
+            component: current, //拼团进行中
+            name: 'current'
         },
         //黑猪溯源
         {
