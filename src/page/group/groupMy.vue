@@ -80,7 +80,7 @@
                             <div class="title ellipsis">{{groupSuit.suitName}}</div>
                             <p class="content">{{groupSuit.describe}}</p>
                             <p class="discountPrice">同一地址团购：<span>¥</span>{{sameAddressPrice}}</p>
-                            <p class="tips">(团长发起，并享劳动鼓励金)</p>
+                            <p class="tips" v-if="groupMy.groupSuitType === 2">(团长发起，并享劳动鼓励金)</p>
                             <p class="originalPrice">不同地址团购：<span>¥</span>{{diffetentAddressPrice}}</p>
                             <p class="originalPrice">单买价：<span>¥</span>{{groupSuit.suitPrice}}</p>
                         </div>
@@ -517,7 +517,7 @@
                             width: 113%;
                         }
                         p.padd-t {
-                            padding-top: .05rem;
+                            padding: .05rem 0 .1rem;
                         }
                     }
                     .header {
