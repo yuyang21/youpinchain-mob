@@ -74,7 +74,7 @@
                             <p class="text">等待发货</p>
                         </li>
                     </ul>
-                    <p class="mode">模式一：<span>普通拼团，享受价格优惠</span></p>
+                    <p class="mode">模式一：<span>不同地址拼团，享受价格优惠</span></p>
                     <p class="mode">模式二：<span>同一地址拼团，团长选择收货地址，团员线下与团长进行后续收货服务。团长获得劳动鼓励金。</span></p><br>
                 </div>
             </div>

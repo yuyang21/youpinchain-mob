@@ -14,10 +14,10 @@
     <div class="royalty_ratio">
       <div class="panel_title">当前邀请用户奖励提成比</div>
       <div class="content">
-        <div class="tips">
-          <u>如何提高</u>
-          <img src="../../../images/group/icon.png" alt="">
-        </div>
+        <!--<div class="tips">-->
+          <!--<u>如何提高</u>-->
+          <!--<img src="../../../images/group/icon.png" alt="">-->
+        <!--</div>-->
         <ul class="img">
           <li v-for="(item,index) in levels" :key="index" :class="{'level': level === item.sortNo}"></li>
           <hr color="#FCC931" width="88%" height=".025rem">

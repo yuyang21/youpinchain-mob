@@ -54,7 +54,7 @@
                             <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === 1">
                                 <li class="left">拼团方式</li>
                                 <li class="right" @click="suitTypeBox = true;showTipsBox();">
-                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '普通拼团': '同一地址拼团(推荐)'}}</span>
+                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '不同地址拼团': '同一地址拼团(推荐)'}}</span>
                                     <img src="../../images/path.png" alt="">
                                 </li>
                             </ul>
@@ -275,7 +275,7 @@
             );
             this.suitTypes.forEach(t => {
                 if (t.type === 1) {
-                    t.text = '普通拼团';
+                    t.text = '不同地址拼团';
                 } else if (t.type === 2) {
                     t.text = '同一地址拼团';
                 }
