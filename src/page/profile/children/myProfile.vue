@@ -139,7 +139,7 @@ export default {
             if (stat.status == 101) {
               this.userInfo.unpaid = stat.count;
             }
-            if (stat.status == 201) {
+            if (stat.status == 201 || stat.status == 200) {
               this.userInfo.undelivery = stat.count;
             }
 
