@@ -108,7 +108,7 @@
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
             <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupMy.discountPrice}} <br> 参与拼团</div>
             <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupPrice}} <br> 发起拼团</div>
-            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.suitPrice}} <br> 单独购买</div>
+            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.suitPrice}} <br> 立即支付</div>
         </div>
         <div class="add_cart_container activityEnd_btns" v-if="endTimeDown <= 0">
             <div class="cart_btn right" @click="toSubmitOrder(1)">{{!groupMyId ? '我要开团' : '查看其他拼团'}}</div>
@@ -424,11 +424,11 @@
             }
             .cart_btn {
                 background-color: $red;
-                width: 70%;
+                width: 60%;
             }
             .cart_btn_alone {
                 background-color: #FF9FA2;
-                width: 30%;
+                width: 40%;
             }
         }
         .add_cart_container.activityEnd_btns {
