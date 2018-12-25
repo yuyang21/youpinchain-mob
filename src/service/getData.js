@@ -430,7 +430,15 @@ export const groupList = (page, size) => fetch('/groups', {
  * 根据拼团id查询商品详情
  * @param {拼团id} suitId
  */
-export const groupDet = (suitId) => fetch('/groups/' + suitId, {});
+export const groupSuit = (suitId) => fetch('/groups/' + suitId, {});
+
+/**
+ * 拼团商品套装商品详情(新)
+
+ * @param {拼团id} suitId
+ */
+export const groupDet = (suitId) => fetch('/groups/' + suitId + '/pro', {});
+
 
 /**
  * 我的拼团详情

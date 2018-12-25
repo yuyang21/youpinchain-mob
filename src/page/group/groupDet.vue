@@ -129,7 +129,8 @@
     } from "src/config/mUtils";
     import {
         groupMyAddress,
-        groupDet
+        groupDet,
+        groupSuit
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -185,12 +186,11 @@
         methods: {
             initData() {
                 var that = this;
-                groupDet(that.groupSuitId).then(res => {
+                groupSuit(that.groupSuitId).then(res => {
                     if (res.errno !== 0) {
                         return;
                     }
                     that.groupSuit = res.data.groupSuit;
-                    that.suitDet = res.data.suitDet;
                     that.headTitle = res.data.groupSuit.suitName;
                     that.suitTypes = res.data.suitTypes;
                     that.headPic = res.data.headPic;
@@ -231,6 +231,12 @@
                         })
                     });
                 }
+                groupDet(that.groupSuitId).then(res => {
+                    if (res.errno !== 0) {
+                        return;
+                    }
+                    that.suitDet = res.data;
+                })
             },
             /**
              * 到提交订单页面
