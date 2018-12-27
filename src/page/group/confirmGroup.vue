@@ -92,8 +92,13 @@
                                 <p class="name">{{item.productName}}</p>
                                 <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
                             </div>
-                            <div class="cart_btns">
+                            <div class="cart_btns" v-if="groupSuit.type === 1">
                                 <span class="num">x {{item.suitNumber}}</span>
+                            </div>
+                            <div class="cart_btns2" v-else>
+                                <span class="subduction" @click="addProNum(item.productId,-1)"></span>
+                                <span class="num">{{item.buyNum ? item.buyNum: 0}}</span>
+                                <span class="add" @click="addProNum(item.productId,1)"></span>
                             </div>
                         </li>
                         <transition name="fade">
@@ -365,6 +370,7 @@
                 let groupSuitType = that.groupSuitType;
                 let suitNum = that.suitNum;
                 let groupMyId = that.groupMyId === 'undefined' ? null : Number(that.groupMyId);
+                let products = that.productList
 
                 // 开团
                 if (!groupMyId) {
@@ -375,24 +381,24 @@
                             return;
                         }
                         groupMyId = res.data;
-                        submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
+                        submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId,products).then(res => {
                             if (res.errno !== 0) {
                                 that.showErrMsg(res.errmsg)
                                 that.payButton = false;
                                 return;
                             }
-                            that.orderId = res.data.orderId;
+                            that.orderId = res.data;
                             that.doPay(that.orderId, groupMyId);
                         })
                     })
                 } else { // 参团
-                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
+                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId,products).then(res => {
                         if (res.errno !== 0) {
                             that.showErrMsg(res.errmsg)
                             that.payButton = false;
                             return;
                         }
-                        that.orderId = res.data.orderId;
+                        that.orderId = res.data;
                         that.doPay(that.orderId, groupMyId);
                     })
                 }
@@ -598,6 +604,14 @@
                     return;
                 }
                 this.suitNum += number
+                this.reComputePrice();
+            },
+            addProNum(productId,number) {
+                this.productList.forEach(item =>{
+                    if(item.productId === productId){
+                        item.buyNum+= number
+                    }
+                })
                 this.reComputePrice();
             }
         },
@@ -838,6 +852,35 @@
                         @include sc(0.18rem, $g9);
                         vertical-align: top;
                         font-weight: bold;
+                    }
+                }
+                .cart_btns2 {
+                    position: absolute;
+                    right: 0rem;
+                    top: 0.88rem;
+                    display: flex;
+                    .subduction,
+                    .num,
+                    .add {
+                        @include wh(0.23rem, 0.23rem);
+                        display: inline-flex;
+                        flex: 1;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .num {
+                        @include sc(0.18rem, $red);
+                        vertical-align: top;
+                        margin: 0 0.1rem;
+                    }
+                    .subduction {
+                        @include bis("../../images/sub-icon.png");
+                    }
+                    .subduction.disabled {
+                        @include bis("../../images/sub-disable-icon.png");
+                    }
+                    .add {
+                        @include bis("../../images/add-icon.png");
                     }
                 }
             }

@@ -187,13 +187,14 @@ export const submitOrder = (cartIds, addressId, couponId, message) => fetch('/or
  * @param groupMyId 我的拼团id
  * @returns {Promise<*>}
  */
-export const submitGroup = (suitId, addressId, couponId, message, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMys/' + groupMyId + '/order', {
+export const submitGroup = (suitId, addressId, couponId, message, suitNum, groupMyId,products) => fetch('/groups/' + suitId + '/groupMys/' + groupMyId + '/order', {
     suitId: suitId,
     addressId: addressId,
     couponId: couponId,
     message: message,
     suitNum: suitNum,
-    groupMyId: groupMyId
+    groupMyId: groupMyId,
+    products:products
 }, 'POST');
 
 /**
@@ -439,6 +440,13 @@ export const groupSuit = (suitId) => fetch('/groups/' + suitId, {});
  */
 export const groupDet = (suitId) => fetch('/groups/' + suitId + '/pro', {});
 
+
+/**
+ * 查询套装内商品详情
+ * @param suitId
+ * @returns {Promise<*>}
+ */
+export const groupPro = (suitId) => fetch('/groups/' + suitId+'/pro', {});
 
 /**
  * 我的拼团详情

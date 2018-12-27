@@ -130,7 +130,8 @@
     import {
         groupMyAddress,
         groupDet,
-        groupSuit
+        groupSuit,
+        groupPro
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -215,7 +216,12 @@
                         })
                     }
                 });
-
+                groupPro(that.groupSuitId).then(res => {
+                    if (res.errno !== 0) {
+                        return;
+                    }
+                    that.suitDet = res.data;
+                });
                 // 有用户拼团Id，说明这是一个已开的团，只能参团
                 if (this.groupMyId) {
                     groupMyAddress(this.groupSuitId, this.groupMyId).then(res => {
