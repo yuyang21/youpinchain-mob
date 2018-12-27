@@ -252,7 +252,7 @@
                         this.showLoading = false;
                         return;
                     }
-                    that.orderId = res.data.orderId;
+                    that.orderId = res.data;
                     that.doPay(that.orderId);
                 })
             }
