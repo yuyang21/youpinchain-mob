@@ -28,8 +28,8 @@ Vue.use(VueRouter, wx)
 const router = new VueRouter({
     routes,
     hashbang: true, // 将路径格式化为#!开头
-    // history: false, // use history=false when testing
-    // mode: 'history',
+    history: true, // use history=false when testing
+    mode: 'history',
     strict: process.env.NODE_ENV !== 'production',
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
