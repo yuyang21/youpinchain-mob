@@ -90,7 +90,7 @@
                             <img :src="item.productThumbnailPic" alt="" class="img">
                             <div class="goods_info">
                                 <p class="name">{{item.productName}}</p>
-                                <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
+                                <p class="price"><span class="RMB">￥</span>{{item.realProductPrice}}</p>
                             </div>
                             <div class="cart_btns" v-if="groupSuit.type === 1">
                                 <span class="num">x {{item.suitNumber}}</span>
@@ -106,7 +106,7 @@
                                 <img src="../../images/path-2.png" width="4%"></div>
                         </transition>
                     </ul>
-                    <div class="purchase_num">
+                    <div class="purchase_num" v-if="groupSuit.type === 1">
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
                             <!--:class="{'disabled': suitNum <= groupSuit.minimum}"-->
@@ -116,7 +116,7 @@
                             <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
                         </div>
                     </div>
-                    <div class="right totalPrice red">
+                    <div class="right totalPrice red" v-if="groupSuit.type === 1">
                         套装单价
                         <p><span class="RMB">￥</span>{{packPrice | number}}</p>
                     </div>
@@ -127,11 +127,11 @@
                             <p>商品总价</p>
                             <p><span class="RMB">￥</span>{{goodsPrice | number}}</p>
                         </li>
-                        <router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">
-                            <p>优惠价格</p>
-                            <p class="RMB coupon">-￥{{coupon ? coupon.money : 0 | number}}</p>
-                            <!-- <p class="coupon" v-else>不使用</p> -->
-                        </router-link>
+                        <!--<router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">-->
+                            <!--<p>优惠价格</p>-->
+                            <!--<p class="RMB coupon">-￥{{coupon ? coupon.money : 0 | number}}</p>-->
+                            <!--&lt;!&ndash; <p class="coupon" v-else>不使用</p> &ndash;&gt;-->
+                        <!--</router-link>-->
                         <li>
                             <p>运费{{fareInfo}}</p>
                             <p><span class="RMB">￥</span>{{fare}}</p>
@@ -563,28 +563,58 @@
                 this.goodsPrice = 0;
                 this.totalPrice = 0;
 
-                // 参团
-                if (this.groupMy) {
-                    this.packPrice = this.groupMy.discountPrice;
-                    this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
-                } else {
-                    // 开团根据拼团的类型计算不同的套装价格
+                if (this.groupSuit.type === 1) {
+                    // 参团
+                    if (this.groupMy) {
+                        this.packPrice = this.groupMy.discountPrice;
+                        this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
+                    } else {
+                        // 开团根据拼团的类型计算不同的套装价格
+                        let that = this
+                        if (that.groupType === 0) {
+                            this.packPrice = that.groupSuit.suitPrice;
+                            this.goodsPrice += that.groupSuit.suitPrice * this.suitNum;
+                        } else {
+                            this.suitTypes.forEach(suitType => {
+                                if (suitType.type === this.groupSuitType) {
+                                    if (this.groupSuit.id === suitType.productId) {
+                                        this.packPrice = suitType.discountPrice;
+                                        this.goodsPrice += suitType.discountPrice * this.suitNum;
+                                    }
+                                }
+                            })
+                        }
+
+                    }
+                } else if (this.groupSuit.type === 2) { // 自定义拼团
+                    // 参团
+                    if (this.groupMy) {
+                        // 代表不同拼团类型，groupType=0表示同一地址，1不同地址
+                        this.groupType = this.groupMy.groupSuitType === 1 ? 0 : 1;
+                    }
+                    // 根据拼团的类型计算不同的套装价格
                     let that = this
                     if (that.groupType === 0) {
-                        this.packPrice = that.groupSuit.suitPrice;
-                        this.goodsPrice += that.groupSuit.suitPrice * this.suitNum;
-                    } else {
-                        this.suitTypes.forEach(suitType => {
-                            if (suitType.type === this.groupSuitType) {
-                                if (this.groupSuit.id === suitType.productId) {
-                                    this.packPrice = suitType.discountPrice;
-                                    this.goodsPrice += suitType.discountPrice * this.suitNum;
+                        this.productList.forEach(pro => {
+                            pro.groupProductPrice.forEach(productPrice => {
+                                if (productPrice.buyType === 3) {
+                                    pro.realProductPrice = productPrice.presentPrice;
+                                    that.goodsPrice += pro.buyNum * productPrice.presentPrice;
                                 }
-                            }
+                            })
+                        })
+                    } else {
+                        this.productList.forEach(pro => {
+                            pro.groupProductPrice.forEach(productPrice => {
+                                if (productPrice.buyType === 2) {
+                                    pro.realProductPrice = productPrice.presentPrice;
+                                    that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                }
+                            })
                         })
                     }
-
                 }
+
 
                 this.totalPrice = this.goodsPrice;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
