@@ -94,7 +94,7 @@
                                 <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
                                 <div class="cart_btns right">
                                     <span class="subduction" @click="addNumber(index, -1)"><img src="../../images/sub-icon.png"/></span>
-                                    <span class="num">{{item.suitNum}}</span>
+                                    <span class="num">{{item.buyNum}}</span>
                                     <span class="add" @click="addNumber(index, 1)"><img src="../../images/add-icon.png"/></span>
                                 </div>
                             </div>
@@ -251,20 +251,13 @@
              * 到提交订单页面
              */
             toSubmitOrder(type) {
-                let isNO = true;
+                let isNum = 0;
                 if (this.groupSuit.type === 2) {
                     this.suitDet.forEach(s => {
-                        if (s.suitNum === 0) {
-                            isNO = true;
-                        } else {
-                            isNO = false;
-                            return
-                        }
+                        isNum += s.buyNum
                     })
-                } else {
-                    isNO = false;
                 }
-                if (isNO) {
+                if (isNum < 1) {
                     this.$parent.showErrMsg('至少选择一件');
                     return;
                 }
@@ -291,11 +284,11 @@
                 this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
             },
             addNumber(index, number) {
-                if (this.suitDet[index].suitNum <= 0 && number < 0) {
+                if (this.suitDet[index].buyNum <= 0 && number < 0) {
                     this.$parent.showErrMsg('购买数量大于0');
                     return
                 }
-                this.suitDet[index].suitNum = this.suitDet[index].suitNum + number;
+                this.suitDet[index].buyNum = this.suitDet[index].buyNum + number;
             },
         }
     };
