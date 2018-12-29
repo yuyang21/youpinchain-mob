@@ -79,24 +79,30 @@
                 </div>
             </div>
             <!-- 拼团商品 -->
-            <!--<div class="goods_info">-->
-                <!--<div class="panel_title">拼团商品</div>-->
-                <!--<ul class="goodslistul clear">-->
-                    <!--<li v-for="item in suitDet" :key="item.id">-->
-                        <!--<router-link tag="div" :to="'/goods/' + item.productId">-->
-                            <!--<img :src="item.productThumbnailPic" alt="" class="left"-->
-                                <!--:class="{'noImage': !item.productThumbnailPic}">-->
-                            <!--<div class="left goods_li">-->
-                                <!--<p class="name">{{item.productName + ' ' +-->
-                                    <!--item.productNetContent}}*1{{item.productPacking}}</p>-->
-                                <!--<p class="desr">{{item.productDescribe}}</p>-->
-                                <!--<p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>-->
-                                <!--&lt;!&ndash;<p class="single_price">单买价￥{{item.productOriginalPrice}}</p>&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</router-link>-->
-                    <!--</li>-->
-                <!--</ul>-->
-            <!--</div>-->
+            <div class="goods_info">
+                <div class="panel_title">拼团商品</div>
+                <ul class="goodslistul clear">
+                    <li v-for="(item, index) in suitDet" :key="item.id">
+                        <!-- <router-link tag="div" :to="'/goods/' + item.productId"> -->
+                        <div>
+                            <img :src="item.productThumbnailPic" alt="" class="left"
+                                :class="{'noImage': !item.productThumbnailPic}">
+                            <div class="left goods_li">
+                                <p class="name">{{item.productName + ' ' +
+                                    item.productNetContent}}*1{{item.productPacking}}</p>
+                                <p class="desr">{{item.productDescribe}}</p>
+                                <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
+                                <div class="cart_btns right">
+                                    <span class="subduction" @click="addNumber(index, -1)"><img src="../../images/sub-icon.png"/></span>
+                                    <span class="num">{{item.suitNum}}</span>
+                                    <span class="add" @click="addNumber(index, 1)"><img src="../../images/add-icon.png"/></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </router-link> -->
+                    </li>
+                </ul>
+            </div>
             <!-- 拼团详情 -->
             <div class="goods_info" v-if="footPic && footPic.length > 0">
                 <div class="panel_title">拼团详情</div>
@@ -129,7 +135,6 @@
     } from "src/config/mUtils";
     import {
         groupMyAddress,
-        groupDet,
         groupSuit,
         groupPro
     } from "../../service/getData";
@@ -221,6 +226,10 @@
                         return;
                     }
                     that.suitDet = res.data;
+                    that.suitDet.forEach(s => {
+                        s.suitNum = 0
+                    })
+
                 });
                 // 有用户拼团Id，说明这是一个已开的团，只能参团
                 if (this.groupMyId) {
@@ -237,17 +246,28 @@
                         })
                     });
                 }
-                groupDet(that.groupSuitId).then(res => {
-                    if (res.errno !== 0) {
-                        return;
-                    }
-                    that.suitDet = res.data;
-                })
             },
             /**
              * 到提交订单页面
              */
             toSubmitOrder(type) {
+                let isNO = true;
+                if (this.groupSuit.type === 2) {
+                    this.suitDet.forEach(s => {
+                        if (s.suitNum === 0) {
+                            isNO = true;
+                        } else {
+                            isNO = false;
+                            return
+                        }
+                    })
+                } else {
+                    isNO = false;
+                }
+                if (isNO) {
+                    this.$parent.showErrMsg('至少选择一件');
+                    return;
+                }
                 if (this.groupMyId && this.endTimeDown <= 0) {
                     this.$router.push('/group');
                     return;
@@ -269,7 +289,14 @@
                     JSON.stringify(this.suitTypes)
                 );
                 this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
-            }
+            },
+            addNumber(index, number) {
+                if (this.suitDet[index].suitNum <= 0 && number < 0) {
+                    this.$parent.showErrMsg('购买数量大于0');
+                    return
+                }
+                this.suitDet[index].suitNum = this.suitDet[index].suitNum + number;
+            },
         }
     };
 </script>
@@ -506,7 +533,7 @@
 
     .goodslistul {
         padding: .25rem .15rem 0rem;
-        img {
+        img.left {
             margin-right: .12rem;
             width: .95rem;
             height: .95rem;
@@ -560,13 +587,34 @@
                     font-weight: normal;
                 }
             }
-        }
-        .shopping_cart {
-            position: absolute;
-            right: 0;
-            bottom: .25rem;
-            @include wh(.315rem, .315rem);
-            @include bis('../../images/shopping_cart.png');
+            .cart_btns {
+                position: absolute;
+                right: .2rem;
+                bottom: .2rem;
+                .subduction img,
+                .num,
+                .add img {
+                    width: .2rem;
+                    height: .2rem;
+                    display: inline-flex;
+                    flex: 1;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .num {
+                    font-size: .18rem;
+                    color: #e4372e;
+                    vertical-align: top;
+                    margin: 0 .05rem;
+                }
+                .subduction,
+                .add {
+                    display: inline-flex;
+                    flex: 1;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
         }
     }
     .scrollBox {
