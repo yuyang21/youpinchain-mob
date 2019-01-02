@@ -49,8 +49,8 @@
                             <div class="order_again">
                                 <compute-time v-if="item.handleOption.pay" :time="item.expiryTime"
                                               @click.native="toPay(item.id)"></compute-time>
-                                <span class="order_button_border_red" @click="cancelOrder(item.id)"
-                                      v-if="item.handleOption.cancel">取消订单</span>
+                                <!--<span class="order_button_border_red" @click="cancelOrder(item.id)"-->
+                                      <!--v-if="item.handleOption.cancel">取消订单</span>-->
                                 <router-link :to="{path:'/orderTrack/' + item.expNo + '/' + item.expCode}" tag="span"
                                              class="order_button_border_red"
                                              v-if="item.handleOption.confirm">查看物流
