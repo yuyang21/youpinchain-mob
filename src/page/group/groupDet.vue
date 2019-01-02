@@ -117,7 +117,7 @@
             <div :class="groupSuit.type == 2?'cart_btn_alone right cart_btn_center':'cart_btn_alone right'" @click="toSubmitOrder(true)"><template v-if="groupSuit.type != 2">￥{{groupSuit.suitPrice}} <br></template> 立即支付</div>
         </div>
         <div class="add_cart_container activityEnd_btns" v-if="endTimeDown <= 0">
-            <div class="cart_btn right" @click="toSubmitOrder(1)">{{groupMyId ? '我要开团' : '查看其他拼团'}}</div>
+            <div class="cart_btn right" @click="toSubmitOrder(false, true)">{{groupMyId ? '我要开团' : '查看其他拼团'}}</div>
             <div class="cart_btn_alone right">拼团结束</div>
         </div>
         <share-mask v-if="showShare" :showShare="showShare"></share-mask>
@@ -250,7 +250,7 @@
             /**
              * 到提交订单页面
              */
-            toSubmitOrder(isAloneBuy) {
+            toSubmitOrder(isAloneBuy, isOpenGroup) {
                 let isNum = 0;
                 if (this.groupSuit.type === 2) {
                     let isNum = 0;
@@ -282,7 +282,11 @@
                     "suitType_" + currentTime,
                     JSON.stringify(this.suitTypes)
                 );
-                this.$router.push("/confirmGroup?isAloneBuy="+isAloneBuy+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
+                let path = "/confirmGroup?isAloneBuy="+isAloneBuy+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime;
+                if (!isOpenGroup) {
+                    path = path + '&groupMyId=' + groupMyId;
+                }
+                this.$router.push(path);
             },
             addNumber(index, number) {
                 if (this.suitDet[index].buyNum <= 0 && number < 0) {
