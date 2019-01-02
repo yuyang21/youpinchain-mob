@@ -639,16 +639,18 @@
                     }
                 }
 
-                if (this.buyNum > 0) {
-                    this.suitNum = this.buyNum;
+                let buyNum = 0;
+                if (this.groupSuit.type === 2) {
+                    buyNum = this.buyNum;
+                } else {
+                    buyNum = this.suitNum
                 }
-
                 this.totalPrice = this.goodsPrice;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
                 this.fare = this.expressCostData.expressPrice;
                 if (this.expressCostData.freeExpress === 1 && this.goodsPrice >= this.expressCostData.freeExpressValue) { // 金额包邮
                     this.fare = 0;
-                } else if (this.expressCostData.freeExpress === 2 && this.suitNum >= this.expressCostData.freeExpressValue) { // 数量包邮
+                } else if (this.expressCostData.freeExpress === 2 && buyNum >= this.expressCostData.freeExpressValue) { // 数量包邮
                     this.fare = 0;
                 }
 
