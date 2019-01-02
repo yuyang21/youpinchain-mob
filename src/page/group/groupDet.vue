@@ -257,10 +257,10 @@
                     this.suitDet.forEach(s => {
                         isNum += s.buyNum
                     })
-                    if (isNum < 1) {
-                        this.$parent.showErrMsg('至少选择一件');
-                        return;
-                    }
+                    // if (isNum < 1) {
+                    //     this.$parent.showErrMsg('至少选择一件');
+                    //     return;
+                    // }
                 }
                 if (this.groupMyId && this.endTimeDown <= 0) {
                     this.$router.push('/group');
@@ -285,8 +285,10 @@
                 this.$router.push("/confirmGroup?isAloneBuy="+isAloneBuy+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
             },
             addNumber(index, number) {
-                if (this.suitDet[index].buyNum <= 0 && number < 0) {
-                    this.$parent.showErrMsg('购买数量大于0');
+                if (this.suitDet[index].buyNum <= this.suitDet[index].minimum && number < 0) {
+                    if (this.suitDet[index].minimum > 0) {
+                        this.$parent.showErrMsg('该商品至少购买' + this.suitDet[index].minimum + '份');
+                    }
                     return
                 }
                 this.suitDet[index].buyNum = this.suitDet[index].buyNum + number;

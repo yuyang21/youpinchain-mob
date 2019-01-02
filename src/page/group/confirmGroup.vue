@@ -238,6 +238,7 @@
                 coupon: '',
                 couponId: '',
                 suitNum: 1,
+                buyNum: 0,
                 showTip: false,
                 groupSuitType: 2, // 默认推荐同一地址
                 suitTypes: [],
@@ -335,6 +336,13 @@
 
             },
             async paymentCall() {
+
+                // 自定义购买商品判断
+                if (this.groupSuit.type === 2 && this.buyNum <= 0) {
+                    this.showErrMsg('请至少选择一件商品！')
+                    return
+                }
+
                 var that = this;
                 if (!that.groupSuitType) {
                     that.suitTypeBox = true;
@@ -588,6 +596,7 @@
                     }
                 } else if (this.groupSuit.type === 2) { // 自定义拼团
 
+                    this.buyNum = 0;
                     // 单独购买
                     if (this.isAloneBuy) {
                         this.productList.forEach(pro => {
@@ -595,6 +604,7 @@
                                 if (productPrice.buyType === 1) {
                                     pro.realProductPrice = productPrice.presentPrice;
                                     that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                    that.buyNum += pro.buyNum;
                                 }
                             })
                         })
@@ -611,6 +621,7 @@
                                     if (productPrice.buyType === 2) {
                                         pro.realProductPrice = productPrice.presentPrice;
                                         that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                        that.buyNum += pro.buyNum;
                                     }
                                 })
                             })
@@ -620,16 +631,17 @@
                                     if (productPrice.buyType === 3) {
                                         pro.realProductPrice = productPrice.presentPrice;
                                         that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                        that.buyNum += pro.buyNum;
                                     }
                                 })
                             })
                         }
                     }
-
                 }
 
-
-
+                if (this.buyNum > 0) {
+                    this.suitNum = this.buyNum;
+                }
 
                 this.totalPrice = this.goodsPrice;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
@@ -652,9 +664,18 @@
                 this.reComputePrice();
             },
             addProNum(productId,number) {
+                let that = this
                 this.productList.forEach(item =>{
                     if(item.productId === productId){
-                        item.buyNum+= number
+                        if (item.buyNum <= (item.minimum ? item.minimum : 0) && number <= 0) {
+                            if (item.minimum > 0) {
+                                that.showErrMsg('该商品至少购买' + item.minimum + '份');
+                            }
+                            return
+                        }
+
+                        item.buyNum += number
+
                     }
                 })
                 this.reComputePrice();
