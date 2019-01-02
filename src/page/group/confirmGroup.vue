@@ -297,7 +297,7 @@
             this.isAloneBuy = this.$route.query.isAloneBuy === 'true'
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
-            this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
+            this.groupMyId !== 'undefined' && this.groupMyId ? this.getGroupMyAddress() : null;
             // 运费
             var that = this
             expressCost(this.groupSuit.expressCostId).then(res => {
