@@ -922,7 +922,7 @@
                 .cart_btns2 {
                     position: absolute;
                     right: 0rem;
-                    top: 0.88rem;
+                    bottom: 0rem;
                     display: flex;
                     .subduction,
                     .num,

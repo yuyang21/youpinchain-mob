@@ -1,11 +1,13 @@
 <template>
     <div>
         <div class="mescroll" ref="mescroll">
-            <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" class="header_image">
+            <swipe ref="swipe" :speed="1000" :loop="true" :autoplayTime="2000" class="header_image">
                 <swipe-item v-for="item in brand" :key="item.id">
-                    <router-link tag="div" :to="{path:'/introduce/'+ item.id}">
+                    <!-- <router-link tag="div" :to="{path:'/introduce/'+ item.id}"> -->
+                    <div>
                         <img :src="item.pictureUrl" alt="" width="100%" class="show">
-                    </router-link>
+                    </div>
+                    <!-- </router-link> -->
                 </swipe-item>
             </swipe>
             <section id="hot_goods">
