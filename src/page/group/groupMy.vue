@@ -382,7 +382,6 @@
                         img {
                             @include wh(.42rem,.42rem);
                             border-radius: 50%;
-                            background-color: #000000;
                         }
                         p {
                             @include wh(.74rem,.26rem);

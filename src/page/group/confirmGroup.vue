@@ -853,7 +853,6 @@
                     display: inline-block;
                     border-radius: 5px;
                     @include wh(0.95rem, 0.945rem);
-                    background-color: #000;
                     vertical-align: middle;
                     margin-left: 0.05rem;
                 }

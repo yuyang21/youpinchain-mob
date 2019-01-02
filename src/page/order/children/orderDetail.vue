@@ -416,7 +416,6 @@
                 display: inline-block;
                 border-radius: 5px;
                 @include wh (.95rem, .945rem);
-                background-color: #000;
                 vertical-align: middle;
                 margin-left: .05rem;
             }

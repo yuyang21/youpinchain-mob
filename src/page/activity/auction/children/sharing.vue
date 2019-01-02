@@ -229,7 +229,6 @@
                         img {
                             @include wh(.52rem,.52rem);
                             border-radius: .05rem;
-                            background-color: #000000;
                             margin-bottom: .15rem;
                         }
                     }

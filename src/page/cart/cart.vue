@@ -387,7 +387,6 @@
             li {
                 @include wh(47.5%, 2.35rem);
                 .img {
-                    background-color: #000;
                     @include wh(100%, 1.65rem);
                     display: block;
                     border-radius: 5px;
@@ -507,7 +506,6 @@
                         float: left;
                         border-radius: .05rem;
                         @include wh(0.95rem, 0.945rem);
-                        background-color: #000;
                         vertical-align: middle;
                         margin-left: 0.05rem;
                     }
