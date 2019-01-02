@@ -285,10 +285,7 @@
                 this.$router.push("/confirmGroup?isAloneBuy="+isAloneBuy+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
             },
             addNumber(index, number) {
-                if (this.suitDet[index].buyNum <= this.suitDet[index].minimum && number < 0) {
-                    if (this.suitDet[index].minimum > 0) {
-                        this.$parent.showErrMsg('该商品至少购买' + this.suitDet[index].minimum + '份');
-                    }
+                if (this.suitDet[index].buyNum <= 0 && number < 0) {
                     return
                 }
                 this.suitDet[index].buyNum = this.suitDet[index].buyNum + number;
