@@ -112,9 +112,9 @@
             </div>
         </div>
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
-            <div :class="groupSuit.type == 2?'cart_btn right cart_btn_center':'cart_btn right'" v-if="groupMyId" @click="toSubmitOrder(1)"><template v-if="groupSuit.type != 2">￥{{groupMy.discountPrice}} <br></template> 参与拼团</div>
-            <div :class="groupSuit.type == 2?'cart_btn right cart_btn_center':'cart_btn right'" v-else @click="toSubmitOrder(1)"><template v-if="groupSuit.type != 2">￥{{groupPrice}} <br></template> 发起拼团</div>
-            <div :class="groupSuit.type == 2?'cart_btn_alone right cart_btn_center':'cart_btn_alone right'" @click="toSubmitOrder(0)"><template v-if="groupSuit.type != 2">￥{{groupSuit.suitPrice}} <br></template> 立即支付</div>
+            <div :class="groupSuit.type == 2?'cart_btn right cart_btn_center':'cart_btn right'" v-if="groupMyId" @click="toSubmitOrder(false)"><template v-if="groupSuit.type != 2">￥{{groupMy.discountPrice}} <br></template> 参与拼团</div>
+            <div :class="groupSuit.type == 2?'cart_btn right cart_btn_center':'cart_btn right'" v-else @click="toSubmitOrder(false)"><template v-if="groupSuit.type != 2">￥{{groupPrice}} <br></template> 发起拼团</div>
+            <div :class="groupSuit.type == 2?'cart_btn_alone right cart_btn_center':'cart_btn_alone right'" @click="toSubmitOrder(true)"><template v-if="groupSuit.type != 2">￥{{groupSuit.suitPrice}} <br></template> 立即支付</div>
         </div>
         <div class="add_cart_container activityEnd_btns" v-if="endTimeDown <= 0">
             <div class="cart_btn right" @click="toSubmitOrder(1)">{{!groupMyId ? '我要开团' : '查看其他拼团'}}</div>
@@ -250,7 +250,8 @@
             /**
              * 到提交订单页面
              */
-            toSubmitOrder(type) {
+            toSubmitOrder(isAloneBuy) {
+                let isNum = 0;
                 if (this.groupSuit.type === 2) {
                     let isNum = 0;
                     this.suitDet.forEach(s => {
@@ -281,7 +282,7 @@
                     "suitType_" + currentTime,
                     JSON.stringify(this.suitTypes)
                 );
-                this.$router.push("/confirmGroup?type="+type+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
+                this.$router.push("/confirmGroup?isAloneBuy="+isAloneBuy+"&groupKey=groupSuit_"+currentTime+"&suitKey=suit_" + currentTime+"&suitTypeKey=suitType_" + currentTime+"&groupMyId="+groupMyId);
             },
             addNumber(index, number) {
                 if (this.suitDet[index].buyNum <= 0 && number < 0) {

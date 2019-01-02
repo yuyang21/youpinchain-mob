@@ -532,9 +532,9 @@ export const incomeDeals = (page, pageSize) => fetch('/accounts/0/deals', {
 /**
  * 开团 / 参团(新)
  */
-export const openGroup = (suitId, type, groupSuitType, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMys', {
+export const openGroup = (suitId, isAloneBuy, groupSuitType, suitNum, groupMyId) => fetch('/groups/' + suitId + '/groupMys', {
     suitId: suitId,
-    type: type,
+    isAloneBuy: isAloneBuy,
     groupSuitType: groupSuitType,
     suitNum: suitNum,
     groupMyId: groupMyId
