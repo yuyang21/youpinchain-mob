@@ -90,8 +90,8 @@
                             <div class="left goods_li">
                                 <p class="name">{{item.productName + ' ' +
                                     item.productNetContent}}*1{{item.productPacking}}</p>
-                                <p class="desr">{{item.productDescribe}}</p>
-                                <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
+                                <!--<p class="desr">{{item.productDescribe}}</p>-->
+                                <!--<p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>-->
                                 <div class="cart_btns right">
                                     <span class="subduction" @click="addNumber(index, -1)"><img src="../../images/sub-icon.png"/></span>
                                     <span class="num">{{item.buyNum}}</span>
