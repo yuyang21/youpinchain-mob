@@ -51,19 +51,19 @@
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
                             <!-- 拼团方式 -->
-                            <ul class="groupSuitType" v-if="groupMyId === 'undefined' && groupType === 1">
+                            <ul class="groupSuitType" v-if="!groupMy && !isAloneBuy">
                                 <li class="left">拼团方式</li>
                                 <li class="right" @click="suitTypeBox = true;showTipsBox();">
                                     <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '不同地址拼团': '同一地址拼团(推荐)'}}</span>
                                     <img src="../../images/path.png" alt="">
                                 </li>
                             </ul>
-                            <div class="tips" v-if="!groupMy && groupSuitType === 2 && groupType === 1">
+                            <div class="tips" v-if="!groupMy && groupSuitType === 2 && !isAloneBuy">
                                 选择同一地址拼团，支持“大美乡村计划”—扶持农业，收获健康，感谢您选择更环保·更温暖的生活方式。<br>
                                 <span class="left">团长职责：</span><span class="left">邀请您附近伙伴拼团，团长统一收货并组织团员取货。</span>
                                 <span class="left">大美奖励：</span><span class="left">订单结束后团长获得鼓励金</span>
                             </div>
-                            <div class="tips" v-if="!groupMy && groupSuitType === 1 && groupType === 1">
+                            <div class="tips" v-if="!groupMy && groupSuitType === 1 && !isAloneBuy">
                                 快来邀请好友分享美味吧~<br>
                                 <span>3人即可成团享受优惠价格，如收货地址相同推荐选择“同一地址拼团”更划算，更温暖。</span>
                             </div>
@@ -101,10 +101,10 @@
                                 <span class="add" @click="addProNum(item.productId,1)"></span>
                             </div>
                         </li>
-                        <transition name="fade">
-                            <div v-if="showTotal" class="load_more" @click="loadAllProducts();">共{{productList.length}}件
-                                <img src="../../images/path-2.png" width="4%"></div>
-                        </transition>
+                        <!--<transition name="fade">-->
+                            <!--<div v-if="showTotal" class="load_more" @click="loadAllProducts();">共{{productList.length}}件-->
+                                <!--<img src="../../images/path-2.png" width="4%"></div>-->
+                        <!--</transition>-->
                     </ul>
                     <div class="purchase_num" v-if="groupSuit.type === 1">
                         <p class="left">购买数量</p>
@@ -231,15 +231,16 @@
                 },
                 orderId: 0,
                 message: '',
-                groupType: '',
+                isAloneBuy: false,
                 groupMyId: null,
                 groupMy: null,
                 payButton: false,
                 coupon: '',
                 couponId: '',
                 suitNum: 1,
+                buyNum: 0,
                 showTip: false,
-                groupSuitType: 2,
+                groupSuitType: 2, // 默认推荐同一地址
                 suitTypes: [],
                 tuanAddress: {},
                 expressCostData: null,
@@ -293,7 +294,7 @@
 
             // 最低起售份数
             this.suitNum = this.groupSuit.minimum;
-            this.groupType = Number(this.$route.query.type)
+            this.isAloneBuy = this.$route.query.isAloneBuy === 'true'
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
             this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
@@ -335,6 +336,13 @@
 
             },
             async paymentCall() {
+
+                // 自定义购买商品判断
+                if (this.groupSuit.type === 2 && this.buyNum <= 0) {
+                    this.showErrMsg('请至少选择一件商品！')
+                    return
+                }
+
                 var that = this;
                 if (!that.groupSuitType) {
                     that.suitTypeBox = true;
@@ -366,7 +374,7 @@
                 let that = this;
                 let suitId = that.groupSuit.id
                 let addressId = that.choosedAddress.id;
-                let type = Number(that.groupType);
+                let isAloneBuy = Boolean(that.isAloneBuy);
                 let groupSuitType = that.groupSuitType;
                 let suitNum = that.suitNum;
                 let groupMyId = that.groupMyId === 'undefined' ? null : Number(that.groupMyId);
@@ -374,7 +382,7 @@
 
                 // 开团
                 if (!groupMyId) {
-                    openGroup(suitId, type, groupSuitType, suitNum, groupMyId).then((res) => {
+                    openGroup(suitId, isAloneBuy, groupSuitType, suitNum, groupMyId).then((res) => {
                         // 开团失败时
                         if (res.errno !== 0) {
                             that.showErrMsg(res.errmsg);
@@ -429,7 +437,7 @@
                                 that.payButton = false;
                                 console.log(res.err_msg)
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                    if (that.groupType === 1) {
+                                    if (!that.isAloneBuy) {
                                         window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
                                         // that.$router.push('/groupMy/' + groupMyId);
                                     } else {
@@ -560,6 +568,7 @@
                 this.reComputePrice();
             },
             reComputePrice() {
+                let that = this
                 this.goodsPrice = 0;
                 this.totalPrice = 0;
 
@@ -570,10 +579,9 @@
                         this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
                     } else {
                         // 开团根据拼团的类型计算不同的套装价格
-                        let that = this
-                        if (that.groupType === 0) {
-                            this.packPrice = that.groupSuit.suitPrice;
-                            this.goodsPrice += that.groupSuit.suitPrice * this.suitNum;
+                        if (this.isAloneBuy) {
+                            this.packPrice = this.groupSuit.suitPrice;
+                            this.goodsPrice += this.groupSuit.suitPrice * this.suitNum;
                         } else {
                             this.suitTypes.forEach(suitType => {
                                 if (suitType.type === this.groupSuitType) {
@@ -587,34 +595,53 @@
 
                     }
                 } else if (this.groupSuit.type === 2) { // 自定义拼团
-                    // 参团
-                    if (this.groupMy) {
-                        // 代表不同拼团类型，groupType=0表示同一地址，1不同地址
-                        this.groupType = this.groupMy.groupSuitType === 1 ? 0 : 1;
-                    }
-                    // 根据拼团的类型计算不同的套装价格
-                    let that = this
-                    if (that.groupType === 0) {
+
+                    this.buyNum = 0;
+                    // 单独购买
+                    if (this.isAloneBuy) {
                         this.productList.forEach(pro => {
                             pro.groupProductPrice.forEach(productPrice => {
-                                if (productPrice.buyType === 3) {
+                                if (productPrice.buyType === 1) {
                                     pro.realProductPrice = productPrice.presentPrice;
                                     that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                    that.buyNum += pro.buyNum;
                                 }
                             })
                         })
                     } else {
-                        this.productList.forEach(pro => {
-                            pro.groupProductPrice.forEach(productPrice => {
-                                if (productPrice.buyType === 2) {
-                                    pro.realProductPrice = productPrice.presentPrice;
-                                    that.goodsPrice += pro.buyNum * productPrice.presentPrice;
-                                }
+                        // 参团
+                        if (this.groupMy) {
+                            this.groupSuitType = this.groupMy.groupSuitType;
+                        }
+                        // 根据拼团的类型计算不同的套装价格
+
+                        if (this.groupSuitType === 1) { //普通拼团，不同地址
+                            this.productList.forEach(pro => {
+                                pro.groupProductPrice.forEach(productPrice => {
+                                    if (productPrice.buyType === 2) {
+                                        pro.realProductPrice = productPrice.presentPrice;
+                                        that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                        that.buyNum += pro.buyNum;
+                                    }
+                                })
                             })
-                        })
+                        } else { // 同一地址拼团
+                            this.productList.forEach(pro => {
+                                pro.groupProductPrice.forEach(productPrice => {
+                                    if (productPrice.buyType === 3) {
+                                        pro.realProductPrice = productPrice.presentPrice;
+                                        that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                        that.buyNum += pro.buyNum;
+                                    }
+                                })
+                            })
+                        }
                     }
                 }
 
+                if (this.buyNum > 0) {
+                    this.suitNum = this.buyNum;
+                }
 
                 this.totalPrice = this.goodsPrice;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
@@ -637,9 +664,18 @@
                 this.reComputePrice();
             },
             addProNum(productId,number) {
+                let that = this
                 this.productList.forEach(item =>{
                     if(item.productId === productId){
-                        item.buyNum+= number
+                        if (item.buyNum <= (item.minimum ? item.minimum : 0) && number <= 0) {
+                            if (item.minimum > 0) {
+                                that.showErrMsg('该商品至少购买' + item.minimum + '份');
+                            }
+                            return
+                        }
+
+                        item.buyNum += number
+
                     }
                 })
                 this.reComputePrice();
