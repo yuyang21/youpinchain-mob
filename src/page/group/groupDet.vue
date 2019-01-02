@@ -79,7 +79,7 @@
                 </div>
             </div>
             <!-- 拼团商品 -->
-            <div class="goods_info">
+            <div class="goods_info" v-if="groupSuit.type == 2">
                 <div class="panel_title">拼团商品</div>
                 <ul class="goodslistul clear">
                     <li v-for="(item, index) in suitDet" :key="item.id">
@@ -112,9 +112,9 @@
             </div>
         </div>
         <div class="add_cart_container" v-if="endTimeDown>0 && startTimeDown<1">
-            <div class="cart_btn right" v-if="groupMyId" @click="toSubmitOrder(1)">￥{{groupMy.discountPrice}} <br> 参与拼团</div>
-            <div class="cart_btn right" v-else @click="toSubmitOrder(1)">￥{{groupPrice}} <br> 发起拼团</div>
-            <div class="cart_btn_alone right" @click="toSubmitOrder(0)">￥{{groupSuit.suitPrice}} <br> 立即支付</div>
+            <div :class="groupSuit.type == 2?'cart_btn right cart_btn_center':'cart_btn right'" v-if="groupMyId" @click="toSubmitOrder(1)"><template v-if="groupSuit.type != 2">￥{{groupMy.discountPrice}} <br></template> 参与拼团</div>
+            <div :class="groupSuit.type == 2?'cart_btn right cart_btn_center':'cart_btn right'" v-else @click="toSubmitOrder(1)"><template v-if="groupSuit.type != 2">￥{{groupPrice}} <br></template> 发起拼团</div>
+            <div :class="groupSuit.type == 2?'cart_btn_alone right cart_btn_center':'cart_btn_alone right'" @click="toSubmitOrder(0)"><template v-if="groupSuit.type != 2">￥{{groupSuit.suitPrice}} <br></template> 立即支付</div>
         </div>
         <div class="add_cart_container activityEnd_btns" v-if="endTimeDown <= 0">
             <div class="cart_btn right" @click="toSubmitOrder(1)">{{!groupMyId ? '我要开团' : '查看其他拼团'}}</div>
@@ -453,6 +453,9 @@
                 padding: .07rem 0;
                 line-height: 1.25;
                 @include sc(0.15rem, $fc);
+            }
+            .cart_btn_center {
+                line-height: 2.25;
             }
             .cart_btn {
                 background-color: $red;
