@@ -162,6 +162,7 @@ html,body{
 body.modal-open{
     position:fixed;
     width:100%;
+    top: 0 !important;
 }
 
 .invite, .user_center, .invite_landing {
