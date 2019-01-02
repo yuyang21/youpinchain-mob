@@ -105,7 +105,7 @@
     } from "src/config/mUtils";
     import {
         groupMy,
-        groupDet,
+        groupSuit,
         groupMyAddress,
         groupMembers,
         systemTime
@@ -214,7 +214,7 @@
                     countDown(that.endTimeDown, time => {
                         that.endTimeDown = time
                     })
-                    groupDet(that.groupMy.groupSuitId).then(res => {
+                    groupSuit(that.groupMy.groupSuitId).then(res => {
                         that.groupSuit = res.data.groupSuit;
                         var shareLink = process.env.DOMAIN + '/groupDet/' + that.groupSuit.id + '?groupMyId=' + that.groupMyId;
                         let sessionUserInfo = sessionStorage.getItem("userInfo");
