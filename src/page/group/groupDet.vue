@@ -251,15 +251,15 @@
              * 到提交订单页面
              */
             toSubmitOrder(type) {
-                let isNum = 0;
                 if (this.groupSuit.type === 2) {
+                    let isNum = 0;
                     this.suitDet.forEach(s => {
                         isNum += s.buyNum
                     })
-                }
-                if (isNum < 1) {
-                    this.$parent.showErrMsg('至少选择一件');
-                    return;
+                    if (isNum < 1) {
+                        this.$parent.showErrMsg('至少选择一件');
+                        return;
+                    }
                 }
                 if (this.groupMyId && this.endTimeDown <= 0) {
                     this.$router.push('/group');
