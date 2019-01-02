@@ -101,10 +101,10 @@
                                 <span class="add" @click="addProNum(item.productId,1)"></span>
                             </div>
                         </li>
-                        <transition name="fade">
-                            <div v-if="showTotal" class="load_more" @click="loadAllProducts();">共{{productList.length}}件
-                                <img src="../../images/path-2.png" width="4%"></div>
-                        </transition>
+                        <!--<transition name="fade">-->
+                            <!--<div v-if="showTotal" class="load_more" @click="loadAllProducts();">共{{productList.length}}件-->
+                                <!--<img src="../../images/path-2.png" width="4%"></div>-->
+                        <!--</transition>-->
                     </ul>
                     <div class="purchase_num" v-if="groupSuit.type === 1">
                         <p class="left">购买数量</p>
