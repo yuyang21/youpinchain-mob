@@ -96,9 +96,14 @@
                                 <span class="num">x {{item.suitNumber}}</span>
                             </div>
                             <div class="cart_btns2" v-else>
-                                <span class="subduction" @click="addProNum(item.productId,-1)"></span>
-                                <span class="num">{{item.buyNum ? item.buyNum: 0}}</span>
-                                <span class="add" @click="addProNum(item.productId,1)"></span>
+                                <template v-if="item.productStock > 0">
+                                    <span class="subduction" @click="addProNum(item.productId,-1)"></span>
+                                    <span class="num">{{item.buyNum ? item.buyNum: 0}}</span>
+                                    <span class="add" @click="addProNum(item.productId,1)"></span>
+                                </template>
+                                <template v-else>
+                                    <p class="desr">卖光了</p>
+                                </template>
                             </div>
                         </li>
                         <!--<transition name="fade">-->

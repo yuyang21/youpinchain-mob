@@ -92,10 +92,13 @@
                                     item.productNetContent}}*1{{item.productPacking}}</p>
                                 <!--<p class="desr">{{item.productDescribe}}</p>-->
                                 <!--<p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>-->
-                                <div class="cart_btns right">
+                                <div class="cart_btns right" v-if="item.productStock > 0">
                                     <span class="subduction" @click="addNumber(index, -1)"><img src="../../images/sub-icon.png"/></span>
                                     <span class="num">{{item.buyNum}}</span>
                                     <span class="add" @click="addNumber(index, 1)"><img src="../../images/add-icon.png"/></span>
+                                </div>
+                                <div class="cart_btns right" v-else>
+                                    <p class="desr">卖光了</p>
                                 </div>
                             </div>
                         </div>
