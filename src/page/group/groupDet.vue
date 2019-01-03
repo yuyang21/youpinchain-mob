@@ -89,7 +89,7 @@
                                 :class="{'noImage': !item.productThumbnailPic}">
                             <div class="left goods_li">
                                 <p class="name">{{item.productName + ' ' +
-                                    item.productNetContent}}*1{{item.productPacking}}</p>
+                                    item.productNetContent}}</p>
                                 <!--<p class="desr">{{item.productDescribe}}</p>-->
                                 <!--<p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>-->
                                 <div class="cart_btns right" v-if="item.productStock > 0">

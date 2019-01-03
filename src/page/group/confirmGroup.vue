@@ -89,7 +89,7 @@
                         <li v-for="item in productList" :key="item.id">
                             <img :src="item.productThumbnailPic" alt="" class="img">
                             <div class="goods_info">
-                                <p class="name">{{item.productName}}</p>
+                                <p class="name">{{item.productName + ' ' + item.productNetContent}}</p>
                                 <p class="price"><span class="RMB">￥</span>{{item.realProductPrice}}</p>
                             </div>
                             <div class="cart_btns" v-if="groupSuit.type === 1">
