@@ -38,8 +38,8 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.title
     }
     // localStorage.setItem("X-youpinchain-Token", "D06EAEA76CC5B0C96769A0E8FB2CA2FD");
+    let token = to.query.T
     if (localStorage.getItem('X-youpinchain-Token') == undefined) {
-        let token = to.query.T
         if (token) {
             localStorage.setItem("X-youpinchain-Token", token)
             let query = Object.assign({}, to.query)
@@ -49,7 +49,9 @@ router.beforeEach((to, from, next) => {
             WechatShareUtils.redirectToAuth(to.fullPath)
         }
     } else {
-
+        if (token) {
+            localStorage.setItem("X-youpinchain-Token", token)
+        }
         userInfo().then(res => {
             if (res.errno === 401) {
                 WechatShareUtils.redirectToAuth(to.fullPath)
