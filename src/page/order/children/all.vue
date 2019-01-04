@@ -268,5 +268,5 @@
 
 <style lang="scss" scoped>
     @import '../../../static/mescroll/mescroll.min.css';
-    @import '../../../style/order';
+    // @import '../../../style/order';
 </style>
