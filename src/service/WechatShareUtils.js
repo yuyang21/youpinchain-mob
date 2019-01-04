@@ -5,7 +5,7 @@ import {congigJsApi} from './getData'
 let WechatShareUtils = {
     redirectToAuth: function (toPath) {
         let url = encodeURIComponent(process.env.DOMAIN + toPath);
-        let redirect_uri = encodeURIComponent(process.env.REDIRECT + "?backUrl=" + url + "&historyMode=true");
+        let redirect_uri = encodeURIComponent(process.env.REDIRECT + "?backUrl=" + url + "&historyMode=false");
         window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
             "appid=" + process.env.WECHAT_APPID +
             "&redirect_uri=" + redirect_uri +
