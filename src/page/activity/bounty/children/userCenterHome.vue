@@ -68,7 +68,6 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import '../../../../style/mixin';
   .user_center{
     background-color: $bc;
     min-height: 100vh;

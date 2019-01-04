@@ -1,4 +1,3 @@
-@import '/mixin';
 .order_list_ul {
     padding-bottom: .5rem;
     background-color: $f5;
@@ -96,7 +95,29 @@
         font-weight:bold;
     }
 }
-
+.order_page{
+    background-color: #f1f1f1;
+    margin-bottom: .39rem;
+    p, span, h4{
+        font-family: Helvetica Neue,Tahoma,Arial;
+    }
+}
+.nav_tab{
+    @include wh(100%,.45rem);
+    @include sc(.15rem,$g6);
+    background: $fc;
+    line-height: .45rem;
+    display: flex;
+    margin-bottom: .16rem;
+    li{
+        flex: 1;
+        text-align: center;
+    }
+    .active{
+        color: $red;
+        border-bottom: .02rem solid $red; 
+    }
+}
 .loading-enter-active,
 .loading-leave-active {
     transition: opacity .7s

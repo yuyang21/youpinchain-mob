@@ -44,7 +44,6 @@
     }
 </script>
 <style scoped lang="scss">
-    @import '../../../../style/mixin';
     .sharingLanding {
         padding-bottom: .49rem;
         img {

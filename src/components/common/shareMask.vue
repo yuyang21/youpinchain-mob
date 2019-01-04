@@ -28,7 +28,6 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import 'src/style/mixin';
   .share_mask {
     background-color: rgba(0,0,0,.9);
     position: fixed;

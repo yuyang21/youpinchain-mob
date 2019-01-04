@@ -1,0 +1,176 @@
+.traceability{
+    background: #fff;
+    .top{
+      @include wh(100%, 3.285rem);
+      @include bis('../../images/store/traceability_banner.png');
+      text-align: center;
+      @include sc(.21rem, #fff);
+      line-height: 3.285rem;
+    }
+    .part_1{
+      ul{
+        padding: .4rem .47rem .35rem;
+        li{
+          margin-top: .3rem;
+          border-top: 1px solid $gd;
+          padding-top: .1rem;
+          @include sc(.13rem, $g6);
+          text-align: justify;
+        }
+        li:first-child{
+          margin-top: 0rem;
+        }
+      }
+    }
+    .growth {
+      background: $bc;
+      padding-bottom: .375rem;
+      .text {
+        @include sc(.13rem,$g6);
+        line-height: 1.38;
+        text-align: justify;
+        margin: 0 auto;
+      }
+      .part{
+        background: $bc;
+      }
+      .header {
+        padding: 0rem 0 .25rem;
+        position: relative;
+        .text {
+          width: 85%;
+          line-height: 1.54;
+        }
+        img {
+          position: relative;
+          z-index: 1;
+          margin-bottom: .3rem;
+        }
+        &:before {
+          content: '';
+          display: block;
+          border-width: 5px;
+          position: absolute;
+          top: .2rem;
+          right: 48%;
+          border-style: solid dashed dashed;
+          border-color: transparent transparent $gd;
+          z-index: 0;
+        }
+        &:after {
+          content: '';
+          display: block;
+          border-width: 5px;
+          position: absolute;
+          top: .21rem;
+          right: 48%;
+          border-style: solid dashed dashed;
+          border-color: transparent transparent $fc;
+          font-size: 0;
+          line-height: 0;
+          z-index: 0;
+        }
+      }
+      .part1{
+        .title {
+          @include sc(.2rem,$g3);
+          text-align: center;
+          padding-bottom: .3rem;
+        }
+        .text{
+          margin-bottom: .34rem;
+        }
+      }
+      .part6, .part7, .part8 {
+        overflow: hidden;
+        background: $f7 !important;
+        .text {
+          width: 44%;
+          margin-top: .63rem;
+          text-align: center
+        }
+        .multiline{
+          margin-top: .46rem;
+          padding: 0 .2rem;
+          text-align: left;
+        }
+      }
+      .part7 {
+        background: #fcfbfc !important;
+      }
+    }
+    .source{
+      .title{
+        @include sc(.2rem, #333333);
+        padding: .3rem 0;
+        text-align: center;
+      }
+      ul{
+        padding: 0 .385rem .2rem .12rem;
+        li{
+          overflow: hidden;
+          margin-bottom: .255rem;
+          img{
+            @include wh(1.5rem, .98rem);
+            float: left;
+          }
+          div{
+            width: 1.56rem;
+            height: 1rem;
+            float: right;
+            position: relative;
+            p:first-child{
+              @include sc(.15rem, #333333);
+              margin-top: .04rem;
+            }
+            p:last-child{
+              @include sc(.13rem, #666666);
+              position: absolute;
+              bottom: 0;
+              line-height: 1.38;
+            }
+          }
+        }
+      }
+    }
+    .part_bottom{
+      .part{
+        background: #fff;
+        padding-bottom: .6rem;
+        .title{
+          font-size: 0.2rem;
+          color: #333;
+          text-align: center;
+          padding: .3rem 0;
+        }
+        img{
+          width: 3.06rem;
+          margin: 0 auto;
+          display: block;
+          margin-bottom: .255rem;
+        }
+        p{
+          @include sc(.13rem, #666666);
+          padding: 0 .35rem;
+        }
+      }
+      .part:first-child{
+        background: $bc;
+      }
+    }
+  }
+  .border_bg{
+    position: relative;
+    &:before{
+      content: '';
+      @include wh(.06rem, .06rem);
+      position: absolute;
+      border-top: 1px solid $gd;
+      border-left: 1px solid $gd;
+      background: $fc;
+      transform:rotate(45deg);
+      left: 50%;
+      top: -.04rem;
+      z-index: 1;
+    }
+  }

@@ -78,7 +78,6 @@
 <script>
     import computeTime from 'src/components/common/computeTime'
     import loading from 'src/components/common/loading'
-    import {loadMore} from 'src/components/common/mixin'
     import alertTip from 'src/components/common/alertTip'
     import {getOrderList, cancelOrder, confirmOrder, refundOrder} from "../../../service/getData";
     import refundOrderTip from "src/components/common/refundOrderTip";
@@ -103,7 +102,6 @@
         },
         created() {
         },
-        mixins: [loadMore],
         components: {
             loading,
             computeTime,

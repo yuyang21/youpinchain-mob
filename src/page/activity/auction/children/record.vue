@@ -100,7 +100,6 @@
     }
 </script>
 <style scoped lang="scss">
-    @import '../../../../style/mixin';
     .bid_record {
         background: #06020a url('../../../../images/bounty-plan/starry_sky_bg1.png') no-repeat;
         background-size: 100% 52%;

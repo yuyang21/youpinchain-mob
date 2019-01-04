@@ -49,8 +49,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/mixin';
-
   #foot_guide{
     background-color: #f7f7fa;
     position: fixed;

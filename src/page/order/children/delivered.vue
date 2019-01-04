@@ -57,7 +57,6 @@
 <script>
     import computeTime from 'src/components/common/computeTime'
     import loading from 'src/components/common/loading'
-    import {loadMore} from 'src/components/common/mixin'
     import alertTip from 'src/components/common/alertTip'
     import {getOrderList, cancelOrder, confirmOrder} from "../../../service/getData";
     import MeScroll from '../../../static/mescroll/mescroll.min.js'
@@ -78,7 +77,6 @@
         },
         created() {
         },
-        mixins: [loadMore],
         components: {
             loading,
             computeTime,

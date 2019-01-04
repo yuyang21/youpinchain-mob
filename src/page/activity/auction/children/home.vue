@@ -368,7 +368,6 @@
   }
 </script>
 <style scoped lang="scss">
-  @import '../../../../style/mixin';
   .auction_home{
     padding-bottom: .5rem;
     position: relative;
