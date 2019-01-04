@@ -199,12 +199,12 @@ export default new Router({
       ]
     },
     {
-      path: 'address',
+      path: '/address',
       component: address,  //地址管理
       name: 'addressList'
     },
     {
-      path: 'add',
+      path: '/add',
       component: add,     //编辑地址
       name: 'editAddress'
     },
@@ -215,11 +215,11 @@ export default new Router({
     },
     //订单列表页
     {
-      path: 'orderTrack/:expNo/:expCode',
+      path: '/orderTrack/:expNo/:expCode',
       component: orderTrack
     },
     {
-      path: 'orderDetail/:orderId', //订单详情页
+      path: '/orderDetail/:orderId', //订单详情页
       component: orderDetail
     },
     {
