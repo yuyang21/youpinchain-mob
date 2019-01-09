@@ -11,7 +11,7 @@
                 <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="0" v-else>
                     <swipe-item v-for="(item,index) in headPic" :key="index">
                         <div class="header_image">
-                            <video-player class="video-player vjs-custom-skin show" ref="videoPlayer" :playsinline="false" :options="playerOptions" v-show="item.indexOf('mp4') != -1"></video-player>
+                            <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="false" :options="playerOptions" v-show="item.indexOf('mp4') != -1"></video-player>
                             <!-- <video :src="item" id="videoPlay" v-show="item.indexOf('mp4') != -1" class="show" @click="playVideo()"></video> -->
                             <img :src="item" v-show="item.indexOf('mp4') == -1" width="100%" class="show">
                         </div>
