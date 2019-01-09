@@ -66,7 +66,7 @@
                     <div class="box" v-else>
                         <div class="groupMyInfo">
                             <p :class="{'padd-t': groupMy.groupSuitType === 1}"><strong>{{leaderAddress.consignee}}</strong>邀请您参加{{!sex ? '' : sex === '女' ? '她的' : '他的'}}团购</p>
-                            <p v-if="groupMy.groupSuitType === 2" class="ellipsis">同一收货地址：{{leaderAddress.address}}</p>
+                            <p v-if="sameAddressPrice" class="ellipsis">同一收货地址：{{leaderAddress.address}}</p>
                         </div>
                         <div class="header">
                             <img src="../../images/group/icon_share.png" alt="" class="icon_head">
@@ -80,9 +80,9 @@
                             <div class="left">
                                 <div class="title ellipsis">{{groupSuit.suitName}}</div>
                                 <p class="content">{{groupSuit.describe}}</p>
-                                <p class="discountPrice">同一地址团购：<span>¥</span>{{sameAddressPrice}}</p>
+                                <p class="discountPrice" v-if="sameAddressPrice">同一地址团购：<span>¥</span>{{sameAddressPrice}}</p>
                                 <!--<p class="tips" v-if="groupMy.groupSuitType === 2">(团长发起，并享劳动鼓励金)</p>-->
-                                <p class="originalPrice">不同地址团购：<span>¥</span>{{diffetentAddressPrice}}</p>
+                                <p class="originalPrice" v-if="diffetentAddressPrice">不同地址团购：<span>¥</span>{{diffetentAddressPrice}}</p>
                                 <p class="originalPrice">单买价：<span>¥</span>{{groupSuit.suitPrice}}</p>
                             </div>
                             <div class="right">
@@ -139,8 +139,8 @@
                 shareLink: '',
                 qrcode: Object,
                 output: null,
-                sameAddressPrice: 0,
-                diffetentAddressPrice: 0,
+                sameAddressPrice: null,
+                diffetentAddressPrice: null,
                 sex: '',
                 showLoading: true
             };
