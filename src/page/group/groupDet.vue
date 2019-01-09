@@ -358,5 +358,7 @@
 
 <style lang="scss" scoped>
     @import '../../static/swipe/swipe.min.css';
+    @import '../../static/video-js/video-js.css';
+    @import '../../static/video-js/custom-theme.css';
     @import "../../style/groupDet";
 </style>
