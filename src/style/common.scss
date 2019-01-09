@@ -195,3 +195,14 @@ body.modal-open{
         margin-top: -.15rem;
     }
 }
+
+.video-js .video-js:hover .vjs-big-play-button,
+.video-js .vjs-custom-skin > .video-js .vjs-big-play-button:focus,
+.video-js .vjs-custom-skin > .video-js .vjs-big-play-button:active {
+    background-color: rgba(0,0,0,0.45) !important;
+}
+.vjs-custom-skin > .video-js .vjs-big-play-button {
+    width: 2em;
+    margin-left: -1em !important;
+    background-color: rgba(0,0,0,0.45) !important;
+}
