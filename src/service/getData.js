@@ -557,3 +557,10 @@ export const groupMembers = (suitId, groupMyId, page, pageSize) => fetch('/group
  * 运费查询
  */
 export const expressCost = (expressCostId) => fetch('/express/' + expressCostId, {})
+
+/**
+ * 根据套装id获取brandId
+ * @param suitId
+ * @returns {Promise<*>}
+ */
+export const getBrandId = (suitId) => fetch('/groups/' + suitId + '/getBrandId', {});

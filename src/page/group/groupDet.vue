@@ -78,6 +78,15 @@
                     <p class="mode">模式二：<span>同一地址拼团，团长选择收货地址，团员线下与团长进行后续收货服务。团长获得劳动鼓励金。</span></p><br>
                 </div>
             </div>
+
+            <div class="assembling_process" v-if="brandId">
+                <div class="panel_title">检测报告</div>
+                <div class="content">
+                    <router-link tag="li" :to="{path:'/introduce/'+ brandId}">
+                        <img style="width: 40px;margin: 5px 5px 5px 15px;height: 40px;" src="../../images/store/credentials_2.png" alt="">
+                    </router-link>
+                </div>
+            </div>
             <!-- 拼团商品 -->
             <div class="goods_info" v-if="groupSuit.type == 2">
                 <div class="panel_title">拼团商品</div>
@@ -139,7 +148,8 @@
     import {
         groupMyAddress,
         groupSuit,
-        groupPro
+        groupPro,
+        getBrandId
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -163,7 +173,8 @@
                 startTimeDown: null,
                 timer: null,
                 headPic: [],
-                footPic: []
+                footPic: [],
+                brandId: null
             };
         },
         watch: {
@@ -249,6 +260,14 @@
                         })
                     });
                 }
+                getBrandId(that.groupSuitId).then(res => {
+                    if (res.errno !== 0) {
+                        return;
+                    }
+                    if (res.data && res.data.length === 1){
+                        that.brandId = res.data[0]
+                    }
+                });
             },
             /**
              * 到提交订单页面
