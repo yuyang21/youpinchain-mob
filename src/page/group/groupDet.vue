@@ -8,10 +8,12 @@
                 <div v-if="headPic && headPic.length <= 0">
                     <img :src="groupSuit.normalPic" alt="" class="show">
                 </div>
-                <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="1500" v-else>
+                <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="0" v-else>
                     <swipe-item v-for="(item,index) in headPic" :key="index">
                         <div class="header_image">
-                            <img :src="item" alt="" width="100%" class="show">
+                            <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="false" :options="playerOptions" v-show="item.indexOf('mp4') != -1"></video-player>
+                            <!-- <video :src="item" id="videoPlay" v-show="item.indexOf('mp4') != -1" class="show" @click="playVideo()"></video> -->
+                            <img :src="item" v-show="item.indexOf('mp4') == -1" width="100%" class="show">
                         </div>
                     </swipe-item>
                 </swipe>
@@ -74,8 +76,17 @@
                             <p class="text">等待发货</p>
                         </li>
                     </ul>
-                    <p class="mode">模式一：<span>不同地址拼团，享受价格优惠</span></p>
-                    <p class="mode">模式二：<span>同一地址拼团，团长选择收货地址，团员线下与团长进行后续收货服务。团长获得劳动鼓励金。</span></p><br>
+                    <!--<p class="mode">模式一：<span>不同地址拼团，享受价格优惠</span></p>-->
+                    <!--<p class="mode">模式二：<span>同一地址拼团，团长选择收货地址，团员线下与团长进行后续收货服务。团长获得劳动鼓励金。</span></p><br>-->
+                </div>
+            </div>
+
+            <div class="assembling_process" v-if="brandId">
+                <div class="panel_title">检测报告</div>
+                <div class="content">
+                    <router-link tag="li" :to="{path:'/introduce/'+ brandId}">
+                        <img style="width: 40px;margin: 5px 5px 5px 15px;height: 40px;" src="../../images/store/credentials_2.png" alt="">
+                    </router-link>
                 </div>
             </div>
             <!-- 拼团商品 -->
@@ -139,7 +150,8 @@
     import {
         groupMyAddress,
         groupSuit,
-        groupPro
+        groupPro,
+        getBrandId
     } from "../../service/getData";
     import {
         WechatShareUtils
@@ -163,7 +175,31 @@
                 startTimeDown: null,
                 timer: null,
                 headPic: [],
-                footPic: []
+                footPic: [],
+                brandId: null,
+                playerOptions : {
+                    playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+                    autoplay: false, //如果true,浏览器准备好时开始回放。
+                    muted: false, // 默认情况下将会消除任何音频。
+                    loop: false, // 导致视频一结束就重新开始。
+                    preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+                    language: 'zh-CN',
+                    // aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+                    fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+                    sources: [{
+                        type: "",
+                        src: "" //url地址
+                    }],
+                    // poster: "../../static/images/test.jpg", //你的封面地址
+                    // width: document.documentElement.clientWidth,
+                    notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+                    controlBar: {
+                        timeDivider: false,
+                        durationDisplay: false,
+                        remainingTimeDisplay: false,
+                        fullscreenToggle: false  //全屏按钮
+                    }
+                }
             };
         },
         watch: {
@@ -193,6 +229,10 @@
         computed: {},
         props: ["showErrMsg"],
         methods: {
+            playVideo () {
+                var vdo = document.getElementById("videoPlay");
+                vdo.play();
+            },
             initData() {
                 var that = this;
                 groupSuit(that.groupSuitId).then(res => {
@@ -204,6 +244,13 @@
                     that.suitTypes = res.data.suitTypes;
                     that.headPic = res.data.headPic;
                     that.footPic = res.data.footPic;
+
+                    that.headPic.forEach(img => {
+                        if (img.indexOf('mp4') != -1) {
+                            console.log(img)
+                            that.playerOptions.sources[0].src = img;
+                        }
+                    })
 
                     // that.startTimeDown = res.data.startTimeDown;
                     wx.ready(function () {
@@ -249,6 +296,14 @@
                         })
                     });
                 }
+                getBrandId(that.groupSuitId).then(res => {
+                    if (res.errno !== 0) {
+                        return;
+                    }
+                    if (res.data && res.data.length === 1){
+                        that.brandId = res.data[0]
+                    }
+                });
             },
             /**
              * 到提交订单页面
@@ -303,326 +358,7 @@
 
 <style lang="scss" scoped>
     @import '../../static/swipe/swipe.min.css';
-    @import "src/style/mixin";
-
-    .goods {
-        padding: 0.45rem 0 0.5rem;
-        background-color: $bc;
-        overflow: hidden;
-        .top_main {
-            .show {
-                @include wh(100%, 3.75rem);
-            }
-        }
-        .presell_box {
-            overflow: hidden;
-            padding: 0.08rem 0 0.12rem 0.12rem;
-            background-image: linear-gradient(133deg, #fc5b46, #fa424f);
-            @include wh(100%, 0.64rem);
-            .left_price {
-                .price {
-                    @include sc(0.238rem, $fc);
-                    font-weight: bold;
-                    span {
-                        @include sc(0.15rem, $fc);
-                        font-weight: bold;
-                    }
-                    s {
-                        @include sc(0.12rem, $fc);
-                        font-weight: normal;
-                    }
-                }
-                .price.margin-t-p8 {
-                    margin-top: .08rem;
-                }
-                .tip {
-                    @include sc(0.12rem, $fc);
-                    margin-top: -0.05rem;
-                }
-            }
-            .right_tip {
-                position: relative;
-                width: 1.2rem;
-                text-align: center;
-                background-color: #FB9D1C;
-                height: .64rem;
-                margin-top: -.08rem;
-                p:first-child {
-                    @include sc(0.14rem, $fc);
-                    padding: 0.09rem 0 .05rem;
-                }
-                p:last-child {
-                    @include sc(.14rem, $fc);
-                }
-                &:before {
-                    content: "";
-                    position: absolute;
-                    display: block;
-                    top: .28rem;
-                    left: -.05rem;
-                    border-top: .05rem solid transparent;
-                    border-right: .05rem solid #FB9D1C;
-                    border-bottom: .05rem solid transparent;
-                }
-                .shadow_box {
-                    @include wh(.18rem, .18rem);
-                    @include sc(.14rem, $fc);
-                    background-color: #912714;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: .025rem;
-                }
-            }
-            .right_tip.activityEnd {
-                background-color: $g9;
-                &:before {
-                    border-right: .05rem solid $g9;
-                }
-                p {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100%;
-                }
-            }
-        }
-        .title {
-            background-color: $fc;
-            padding: 0.1rem 0.15rem 0.1rem;
-            border-radius: 0.12rem 0.12rem 0 0;
-            .price {
-                @include sc(0.238rem, $red);
-                font-weight: bold;
-                span {
-                    @include sc(0.12rem, $red);
-                    font-weight: normal;
-                }
-                s {
-                    @include sc(0.12rem, $g9);
-                    font-weight: normal;
-                }
-            }
-            .name {
-                @include sc(0.18rem, $g3);
-                padding: 0.01rem 0 0.0rem;
-                .presell_text {
-                    @include sc(0.18rem, $g3);
-                    margin: 0.08rem 0 0 -0.1rem;
-                    display: inline-block;
-                }
-            }
-            .desr {
-                @include sc(0.12rem, $g6);
-            }
-        }
-        .goods_info {
-            background-color: $fc;
-            margin: .15rem 0;
-            .info_content {
-                p {
-                    @include sc(0.13rem, $g6);
-                    line-height: 0.35rem;
-                    border-bottom: 1px solid #f7f7fa;
-                    padding: 0rem 0.21rem;
-                }
-            }
-            .single_price {
-                @include sc(.12rem, $g9);
-            }
-
-            .goodsImgs {
-                img {
-                    width: 100%;
-                    display: block;
-                }
-            }
-        }
-        .add_cart_container {
-            position: fixed;
-            bottom: 0;
-            overflow: hidden;
-            clear: both;
-            @include wh(100%, 0.49rem);
-            .cart_icon_num {
-                @include wh(1.06rem, 0.49rem);
-                background-color: $fc;
-                .icon {
-                    position: relative;
-                    margin: 0.13rem auto;
-                    @include wh(0.245rem, 0.225rem);
-                    @include bis("../../images/tab-buy-normal.png");
-                }
-            }
-            .cart_btn, .cart_btn_alone {
-                height: 0.49rem;
-                text-align: center;
-                padding: .07rem 0;
-                line-height: 1.25;
-                @include sc(0.15rem, $fc);
-            }
-            .cart_btn_center {
-                line-height: 2.25;
-            }
-            .cart_btn {
-                background-color: $red;
-                width: 60%;
-            }
-            .cart_btn_alone {
-                background-color: #FF9FA2;
-                width: 40%;
-            }
-        }
-        .add_cart_container.activityEnd_btns {
-            .cart_btn_alone {
-                background-color: $g9;
-                line-height: .35rem;
-            }
-            .cart_btn {
-                line-height: .35rem;
-            }
-        }
-        .assembling_process {
-            background-color: $fc;
-            margin: .15rem 0;
-            .process {
-                overflow: hidden;
-                margin: .335rem auto .25rem;
-                text-align: center;
-                width: 86%;
-                li {
-                    float: left;
-                    width: 25%;
-                    position: relative;
-                    &:before {
-                        content: '';
-                        display: block;
-                        position: absolute;
-                        right: -.22rem;
-                        top: .18rem;
-                        @include wh(.45rem, .01rem);
-                        background-color:#E9EAEB;
-                    }
-                }
-                li:last-child {
-                    &:before {
-                        content: '';
-                        display: none;
-                    }
-                }
-                img {
-                    @include wh(.335rem, .35rem);
-                    border: .01rem dashed $g3;
-                }
-                .text {
-                    @include sc(.14rem, $g3);
-                }
-            }
-            .mode {
-                width: 85%;
-                margin: 0 auto .12rem;
-                overflow: hidden;
-                clear: both;
-                @include sc(.13rem, $g6);
-                span {
-                    float: right;
-                    width: 82.3%;
-                    text-align: justify;
-                    @include sc(.13rem, $g6);
-                }
-            }
-        }
-    }
-
-    .goodslistul {
-        padding: .25rem .15rem 0rem;
-        img.left {
-            margin-right: .12rem;
-            width: .95rem;
-            height: .95rem;
-            border-radius: 5px;
-        }
-        img.noImage {
-            background-color: #000;
-        }
-        li {
-            width: 100%;
-            clear: both;
-            overflow: hidden;
-            margin-bottom: .12rem;
-            position: relative;
-            border-bottom: 1px solid #f8f8f8;
-            padding-bottom: .15rem;
-        }
-        li:last-child {
-            margin-bottom: 0;
-        }
-        .goods_li {
-            width: 55%;
-            .name {
-                @include sc(.15rem, $g3);
-                padding: .02rem 0 .03rem;
-            }
-            .desr {
-                @include sc(.12rem, $g6);
-            }
-            .coupon {
-                border-radius: 10px;
-                display: inline-block;
-                transform: scale(0.82) translateX(-8px);
-                margin: .2rem 0 .1rem;
-                padding: 0 .05rem;
-            }
-            .useCoupon {
-                @include sc(.12rem, $red);
-                border: 1px solid $red;
-            }
-            .unuseCoupon {
-                @include sc(.12rem, $g9);
-                border: 1px solid $g9;
-            }
-            .price {
-                // margin-top: .6rem;
-                @include sc(.18rem, $red);
-                font-weight: bold;
-                s {
-                    @include sc(.12rem, $g9);
-                    font-weight: normal;
-                }
-            }
-            .cart_btns {
-                position: absolute;
-                right: .2rem;
-                bottom: .2rem;
-                .subduction img,
-                .num,
-                .add img {
-                    width: .2rem;
-                    height: .2rem;
-                    display: inline-flex;
-                    flex: 1;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .num {
-                    font-size: .18rem;
-                    color: #e4372e;
-                    vertical-align: top;
-                    margin: 0 .05rem;
-                }
-                .subduction,
-                .add {
-                    display: inline-flex;
-                    flex: 1;
-                    align-items: center;
-                    justify-content: center;
-                }
-            }
-        }
-    }
-    .scrollBox {
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
-        z-index: 1;
-    }
+    @import '../../static/video-js/video-js.css';
+    @import '../../static/video-js/custom-theme.css';
+    @import "../../style/groupDet";
 </style>

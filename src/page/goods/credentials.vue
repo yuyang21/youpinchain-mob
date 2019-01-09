@@ -87,7 +87,6 @@
   }
 </script>
 <style scoped lang="scss">
-  @import '../../style/mixin';
   .credentials {
     #anchor0, #anchor1, #anchor2 {
       background-color: $bc;

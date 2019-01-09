@@ -82,7 +82,6 @@
 <script>
     import computeTime from "src/components/common/computeTime";
     import loading from "src/components/common/loading";
-    import {loadMore} from "src/components/common/mixin";
     import alertTip from "src/components/common/alertTip";
     import refundOrderTip from "src/components/common/refundOrderTip";
     import {
@@ -116,7 +115,6 @@
         },
         created() {
         },
-        mixins: [loadMore],
         components: {
             loading,
             computeTime,

@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import routes from './router/router'
+import App from './App.vue'
+// import VueRouter from 'vue-router'
+import router from './router/router'
 import store from './store/'
 import wx from 'weixin-js-sdk'
 import {
@@ -15,33 +16,19 @@ import VueClipboard from 'vue-clipboard2'
 import { Swipe, SwipeItem } from 'c-swipe';
 Vue.component('swipe', Swipe);
 Vue.component('swipe-item', SwipeItem);
+import VideoPlayer from 'vue-video-player'
+Vue.use(VideoPlayer)
 import { userInfo } from './service/getData'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
+Vue.use(wx)
+
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function () {
         FastClick.attach(document.body);
     }, false);
 }
 
-Vue.use(VueRouter, wx)
-const router = new VueRouter({
-    routes,
-    hashbang: true, // 将路径格式化为#!开头
-    history: true, // use history=false when testing
-    mode: 'history',
-    strict: process.env.NODE_ENV !== 'production',
-    scrollBehavior(to, from, savedPosition) {
-        if (savedPosition) {
-            return savedPosition
-        } else {
-            if (from.meta.keepAlive) {
-                from.meta.savedPosition = document.body.scrollTop;
-            }
-            return { x: 0, y: to.meta.savedPosition || 0 }
-        }
-    }
-})
 router.beforeEach((to, from, next) => {
     WechatShareUtils.configJsApi(window.location.href)
     wx.error(function () {
@@ -53,8 +40,8 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.title
     }
     // localStorage.setItem("X-youpinchain-Token", "D06EAEA76CC5B0C96769A0E8FB2CA2FD");
+    let token = to.query.T
     if (localStorage.getItem('X-youpinchain-Token') == undefined) {
-        let token = to.query.T
         if (token) {
             localStorage.setItem("X-youpinchain-Token", token)
             let query = Object.assign({}, to.query)
@@ -64,7 +51,9 @@ router.beforeEach((to, from, next) => {
             WechatShareUtils.redirectToAuth(to.fullPath)
         }
     } else {
-
+        if (token) {
+            localStorage.setItem("X-youpinchain-Token", token)
+        }
         userInfo().then(res => {
             if (res.errno === 401) {
                 WechatShareUtils.redirectToAuth(to.fullPath)
@@ -77,6 +66,8 @@ router.beforeEach((to, from, next) => {
 })
 
 new Vue({
+    el: '#app',
     router,
     store,
-}).$mount('#app')
+    render: h => h(App)
+})

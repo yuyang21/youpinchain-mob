@@ -252,7 +252,6 @@
     }
 </script>
 <style scoped lang="scss">
-    @import '../../../../style/mixin';
     .lottery {
         background: $bc;
         overflow-x: hidden;

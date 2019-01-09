@@ -75,42 +75,5 @@
 </script>
 <style lang="scss" scoped>
   @import '../../../static/mescroll/mescroll.min.css';
-  @import "src/style/mixin";
-  .income_details {
-    .no_list {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 3rem;
-      color: $g9;
-    }
-    ul {
-      overflow: hidden;
-      background-color: $fc;
-      width: 100%;
-      clear: both;
-      li {
-        @include wh(100%, .55rem);
-        border-bottom: .01rem solid $bc;
-        line-height: .55rem;
-        padding: 0 .12rem;
-        clear: both;
-        overflow: hidden;
-        // box-sizing: content-box;
-        p {
-          float: left;
-          @include sc(.15rem, $g6);
-          width: 32%;
-        }
-        p:nth-child(2) {
-          width: 48%;
-        }
-        p:last-child {
-          color: $red;
-          text-align: right;
-          width: 20%;
-        }
-      }
-    }
-  }
+  @import "../../../style/incomeDetail";
 </style>

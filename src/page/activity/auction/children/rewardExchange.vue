@@ -76,7 +76,6 @@
     }
 </script>
 <style scoped lang="scss">
-    @import '../../../../style/mixin';
     .reward_exchange {
         background: $fc;
         padding-bottom: .49rem;

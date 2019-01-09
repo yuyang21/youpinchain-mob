@@ -66,7 +66,6 @@
 </script>
 
 <style lang="scss" scoped>
-    @import 'src/style/mixin';
 	.page{
         display: inline-block;
         border-radius: .16rem;

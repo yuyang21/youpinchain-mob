@@ -1,0 +1,176 @@
+.introduce {
+    padding-top: .45rem;
+    .tabs {
+        @include wh(100%,.45rem);
+        @include sc(.15rem,$g6);
+        line-height: .45rem;
+        background: $fc;
+        position: fixed;
+        top: 0;
+        z-index: 9;
+        li {
+            float: left;
+            @include wh(33.33%,.45rem);
+            border-bottom: 1px solid $ge;
+            text-align: center;
+        }
+        li.active {
+            color: #e73525;
+            font-weight: 500;
+            position: relative;
+            &:after {
+                content: '';
+                display: block;
+                @include wh(.36rem,.03rem);
+                border-radius: 1.5px;
+                background-color: #e73525;
+                position: absolute;
+                bottom: -2px;
+                left: 33%;
+            }
+        }
+    }
+}
+.introduceHome {
+    background: $fc;
+    .part_1{
+        ul{
+            padding: .3rem .47rem .35rem;
+            li{
+                margin-top: .3rem;
+                border-top: 1px solid $gd;
+                padding-top: .1rem;
+                @include sc(.13rem, $g6);
+                text-align: justify;
+            }
+            li:first-child{
+                margin-top: 0rem;
+            }
+        }
+    }
+    .part_2{
+        padding-bottom: .5rem;
+        background-color: $bc;
+        .load_more{
+            border-top: 1px solid #f8f8f8;
+            padding: .2rem 0;
+            background: $fc;
+            button{
+                width: 35%;
+                height: 0.28rem;
+                font-size: 0.14rem;
+                color: #e4372e;
+                background-color: #fff;
+                margin: 0rem auto;
+                text-align: center;
+                line-height: .28rem;
+                border-radius: 15px;
+                border: 1px solid #e4372e;
+                display: block;
+            }
+        }
+        .goods{
+            @include wh(100%, 5.8rem);
+            @include bis('../../../images/store/introduce_bg.png');
+            background-color: $bc;
+            background-position: 0 .4rem;
+            background-size: 100% auto;
+            text-align: center;
+            img{
+                @include wh(2.2rem, 2.2rem);
+                display: block;
+                margin: 0 auto;
+                padding-top: .9rem;
+            }
+            .abstract{
+                @include sc(.2rem ,#fcfbfc);
+                padding-top: .4rem;
+                font-weight: bold;
+                line-height: .5rem;
+                strong{
+                    font-size: .4rem;
+                    vertical-align: middle;
+                    line-height: 0.5rem;
+                }
+            }
+            p{
+                margin-bottom: .04rem;
+            }
+            p:nth-child(3){
+                padding-top: .2rem;
+                @include sc(.2rem, $g3);
+            }
+            p:nth-child(4){
+                @include sc(.15rem, $g9);
+            }
+            p:nth-child(5){
+                @include sc(.17rem, $g3);
+                span{
+                    font-size: .25rem;
+                }
+            }
+            p:last-child{
+                border-radius: .15rem;
+                background-color: #e73525;
+                line-height: .325rem;
+                height: .325rem;
+                width: 1rem;
+                margin: 0 auto;
+                @include sc(.15rem, $fc);
+                margin-top: .12rem;
+            }
+        }
+
+    }
+    .part_3{
+        background: $fc;
+        padding-bottom: .3rem;
+        ul{
+            li:nth-child(even){
+                background: $bc;
+            }
+            li:nth-child(2){
+                img{
+                    width: 100%;
+                    display: block;
+                }
+                p:last-child{
+                    padding-bottom: .4rem;
+                    margin-bottom: 0;
+                }
+            }
+            li{
+                background: $fc;
+                p{
+                    @include sc(.13rem, $g6);
+                    padding: 0 .29rem;
+                    margin-bottom: .1rem;
+                    text-align: justify;
+                }
+                p:last-child{
+                    margin-bottom: .25rem;
+                }
+            }
+        }
+        .title{
+            @include sc(.2rem, $g3);
+            text-align: center;
+            padding: .3rem 0;
+        }
+    }
+}
+.border_bg{
+    position: relative;
+    &:before{
+        content: '';
+        @include wh(.06rem, .06rem);
+        position: absolute;
+        border-top: 1px solid $gd;
+        border-left: 1px solid $gd;
+        background: $fc;
+        transform:rotate(45deg);
+        left: 50%;
+        top: -.04rem;
+        z-index: 1;
+    }
+}

@@ -61,7 +61,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'src/style/mixin';
 .mask-common {
     position: fixed;
     top: 0;
