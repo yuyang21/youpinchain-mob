@@ -16,6 +16,10 @@ import VueClipboard from 'vue-clipboard2'
 import { Swipe, SwipeItem } from 'c-swipe';
 Vue.component('swipe', Swipe);
 Vue.component('swipe-item', SwipeItem);
+import VideoPlayer from 'vue-video-player'
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+Vue.use(VideoPlayer)
 import { userInfo } from './service/getData'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
