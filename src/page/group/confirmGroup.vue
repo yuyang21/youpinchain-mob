@@ -90,7 +90,7 @@
                             <img :src="item.productThumbnailPic" alt="" class="img">
                             <div class="goods_info">
                                 <p class="name">{{item.productName + ' ' + item.productNetContent}}</p>
-                                <p class="price"><span class="RMB">￥</span>{{item.realProductPrice}}</p>
+                                <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
                             </div>
                             <div class="cart_btns" v-if="groupSuit.type === 1">
                                 <span class="num">x {{item.suitNumber}}</span>
@@ -278,6 +278,7 @@
             this.productList = JSON.parse(
                 sessionStorage.getItem(this.$route.query.suitKey)
             );
+            console.info(this.productList)
             this.groupSuit = JSON.parse(
                 sessionStorage.getItem(this.$route.query.groupKey)
             );
@@ -295,7 +296,9 @@
                 }
 
             });
-
+            if (this.suitTypes.length === 1){
+                this.groupSuitType = this.suitTypes[0].type
+            }
 
             // 最低起售份数
             this.suitNum = this.groupSuit.minimum;
