@@ -8,12 +8,11 @@
                 <div v-if="headPic && headPic.length <= 0">
                     <img :src="groupSuit.normalPic" alt="" class="show">
                 </div>
-                <swipe ref="swipe" :speed="500" :loop="true" :autoplayTime="0" v-else>
+                <swipe ref="swipe" :speed="500" :autoplayTime="0" :pagination="headPic.length > 1" v-else>
                     <swipe-item v-for="(item,index) in headPic" :key="index">
                         <div class="header_image">
-                            <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="false" :options="playerOptions" v-show="item.indexOf('mp4') != -1"></video-player>
-                            <!-- <video :src="item" id="videoPlay" v-show="item.indexOf('mp4') != -1" class="show" @click="playVideo()"></video> -->
-                            <img :src="item" v-show="item.indexOf('mp4') == -1" width="100%" class="show">
+                            <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="false" :options="playerOptions" v-if="item.indexOf('mp4') != -1"></video-player>
+                            <img :src="item" v-if="item.indexOf('mp4') == -1" width="100%" class="show">
                         </div>
                     </swipe-item>
                 </swipe>
@@ -247,8 +246,9 @@
 
                     that.headPic.forEach(img => {
                         if (img.indexOf('mp4') != -1) {
-                            console.log(img)
                             that.playerOptions.sources[0].src = img;
+                        } else {
+                            that.playerOptions = null;
                         }
                     })
 

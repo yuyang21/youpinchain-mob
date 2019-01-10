@@ -180,7 +180,8 @@
         margin: .15rem 0;
         .process {
             overflow: hidden;
-            margin: .335rem auto .25rem;
+            margin: .335rem auto 0;
+            padding-bottom: .25rem;
             text-align: center;
             width: 86%;
             li {

@@ -111,12 +111,12 @@
         todayProfit().then(function (res) {
           that.todayInfo = res.data
         })
-        rewardGrade().then((res) => {
-          that.level = res.data.sortNo
-        })
-        rewardGrades().then(res => {
-          that.levels = res.data.data
-        })
+        // rewardGrade().then((res) => {
+        //   that.level = res.data.sortNo
+        // })
+        // rewardGrades().then(res => {
+        //   that.levels = res.data.data
+        // })
       },
       withdraws (amount) {
         var that = this;
