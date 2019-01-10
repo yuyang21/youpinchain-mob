@@ -99,7 +99,7 @@ export default {
         that.$refs.mescroll.style.maxHeight = document.body.offsetHeight - parseInt(document.getElementsByTagName('html')[0].style.fontSize) * 0.49 + 'px';
         wx.ready(function () {
             var shareLink = window.location.href
-            WechatShareUtils.onMenuShareAppMessage('区块苏淮猪，不含抗生素，农业大学的优质猪肉，限量预售！', '仲秋钜惠，全场6.8折！', shareLink, 'https://mmbiz.qpic.cn/mmbiz_png/puDuBHDXJkwPdHoIeZJneedu9tqjA7cVVbZpCOfEtor98FNCibhzZBqE0fbY9IVMLepDaxnVM3q3RvZ8apibiaFicA/0?wx_fmt=png')
+            WechatShareUtils.onMenuShareAppMessage('链上臻品！', '优质商品精心臻选！', shareLink, 'https://mmbiz.qpic.cn/mmbiz_jpg/jV5hZicRoCyPicial3ca4gicOUOETlqX0koqEcDxNC9mUkmFzbdq801Wwu2U335MWicZxI1Zlqnfa9hbxciayOFeB94w/0?wx_fmt=jpeg')
         })
 
     },
@@ -178,123 +178,5 @@ export default {
 <style lang="scss" scoped>
 @import '../../static/swipe/swipe.min.css';
 @import '../../static/mescroll/mescroll.min.css';
-@import '../../style/mixin';
-.header_image {
-    height: 4.1rem;
-}
-
-.move_dot {
-    position: fixed;
-    bottom: .32rem;
-    left: 52.7%;
-    background: $red;
-    display: block;
-    border-radius: 50%;
-    @include wh(.15rem, .15rem);
-}
-.home {
-    padding-bottom: .5rem;
-}
-
-.product_nav {
-    overflow: hidden;
-    clear: both;
-    text-align: center;
-    background-color: $fc;
-    @include wh(100%, .575rem);
-    line-height: .575rem;
-    li {
-        float: left;
-        @include wh(33.333%, .575rem);
-        @include sc(.15rem, $g6);
-    }
-    li.active {
-        background-color: $red;
-        color: $fc;
-    }
-}
-
-#hot_goods {
-    background-color: $fc; // margin-top: .15rem;
-    padding: .2rem 0 0;
-    .goods_title {
-        text-align: center;
-        margin: 0 auto;
-        display: block;
-        line-height: .41rem;
-        text-shadow: 0px 1px 5px rgba(118, 176, 252, 0.67);
-        @include wh(42%, .41rem);
-        @include sc(.15rem, $fc);
-        @include bis('../../images/home-bg-rmsp-normol.png');
-    }
-    .goodslistul {
-        padding: .25rem .15rem 0rem;
-        img {
-            margin-right: .12rem;
-            width: 1.4rem;
-            height: 1.4rem;
-            border-radius: 5px;
-        }
-        img.noImage {
-            background-color: #000;
-        }
-        li {
-            width: 100%;
-            clear: both;
-            overflow: hidden;
-            margin-bottom: .12rem;
-            position: relative;
-            border-bottom: 1px solid #f8f8f8;
-            padding-bottom: .15rem;
-        }
-        li:last-child {
-          margin-bottom: 0;
-        }
-        .goods_info {
-            width: 55%;
-            .name {
-                @include sc(.15rem, $g3);
-                padding: .05rem 0 .03rem;
-            }
-            .desr {
-                @include sc(.12rem, $g6);
-                height: .75rem;
-            }
-            .coupon {
-                border-radius: 10px;
-                display: inline-block;
-                transform: scale(0.82) translateX(-8px);
-                margin: .2rem 0 .1rem;
-                padding: 0 .05rem;
-            }
-            .useCoupon {
-                @include sc(.12rem, $red);
-                border: 1px solid $red;
-            }
-            .unuseCoupon {
-                @include sc(.12rem, $g9);
-                border: 1px solid $g9;
-            }
-            .price {
-                // margin-top: .6rem;
-                @include sc(.18rem, $red);
-                font-weight: bold;
-                s {
-                    @include sc(.12rem, $g9);
-                    font-weight: normal;
-                }
-            }
-        }
-        .shopping_cart, .shopping_cart_disabled {
-            position: absolute;
-            right: 0;
-            bottom: .25rem;
-            @include wh(.315rem, .315rem);
-            @include bis('../../images/shopping_cart.png');
-        }
-        .shopping_cart_disabled {
-            @include bis('../../images/shopping_cart_disabled.png');
-        }
-    }
-}
+@import '../../style/home'
 </style>

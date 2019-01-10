@@ -45,25 +45,34 @@
                     </div>
                     <div class="address_info" v-else>
                         <div class="address-detail">
-                            <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.provinceName +
+                            <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">
+                                {{choosedAddress.provinceName +
                                 choosedAddress.cityName + choosedAddress.areaName +
                                 choosedAddress.address}}</p>
                             <p :class="{'line-through': groupMy && groupMy.groupSuitType === 2}">{{choosedAddress.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{choosedAddress.mobile}}</p>
-                            <div v-if="groupMyId === 'undefined' && groupType === '1'" class="label"
-                                 :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
-                                 :key="index" @click="selectSuitType(item.type)">{{item.text}}
+                            <!-- 拼团方式 -->
+                            <ul class="groupSuitType" v-if="!groupMy && !isAloneBuy">
+                                <li class="left">拼团方式</li>
+                                <li class="right" @click="suitTypeBox = true;showTipsBox();">
+                                    <span>{{!groupSuitType ? '请选择拼团方式': groupSuitType === 1 ? '不同地址拼团': '同一地址拼团(推荐)'}}</span>
+                                    <img src="../../images/path.png" alt="">
+                                </li>
+                            </ul>
+                            <div class="tips" v-if="!groupMy && groupSuitType === 2 && !isAloneBuy">
+                                选择同一地址拼团，支持“大美乡村计划”—扶持农业，收获健康，感谢您选择更环保·更温暖的生活方式。<br>
+                                <span class="left">团长职责：</span><span class="left">邀请您附近伙伴拼团，团长统一收货并组织团员取货。</span>
+                                <span class="left">大美奖励：</span><span class="left">订单结束后团长获得鼓励金</span>
                             </div>
-                            <div class="tips" v-if="!groupMy && groupSuitType === 2">
-                                您的地址及电话会展示给您的团员 <br>
-                                <span class="left">团长职责：</span><span class="left">负责团员的货物，保证团员及时收货物 </span>
-                                <span class="left">奖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;励：</span><span class="left">根据您的头衔计算相应奖励</span>
+                            <div class="tips" v-if="!groupMy && groupSuitType === 1 && !isAloneBuy">
+                                快来邀请好友分享美味吧~<br>
+                                <span>3人即可成团享受优惠价格，如收货地址相同推荐选择“同一地址拼团”更划算，更温暖。</span>
                             </div>
                             <div v-if="groupMy && groupMy.groupSuitType === 2">
                                 <br>
                                 <div class="position-re">
                                     <p class="left address-tuan">{{tuanAddress.address}}</p>
                                     <img src="../../images/group/icon.png" class="icon" @click="showTipsBox">
-                                    <span class="tip_box" v-if="showTip">因为您参与的是社区拼团，所以您的商品会寄送到此地址（团长地址）</span>
+                                    <span class="tip_box" v-if="showTip">因为您参与的是同一地址拼团，所以您的商品会寄送到此地址（团长地址）</span>
                                 </div>
                                 <p class="clear"><span>{{tuanAddress.consignee}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>{{tuanAddress.mobile}}</span>
                                 </p>
@@ -80,19 +89,29 @@
                         <li v-for="item in productList" :key="item.id">
                             <img :src="item.productThumbnailPic" alt="" class="img">
                             <div class="goods_info">
-                                <p class="name">{{item.productName}}</p>
+                                <p class="name">{{item.productName + ' ' + item.productNetContent}}</p>
                                 <p class="price"><span class="RMB">￥</span>{{item.productPresentPrice}}</p>
                             </div>
-                            <div class="cart_btns">
+                            <div class="cart_btns" v-if="groupSuit.type === 1">
                                 <span class="num">x {{item.suitNumber}}</span>
                             </div>
+                            <div class="cart_btns2" v-else>
+                                <template v-if="item.productStock > 0">
+                                    <span class="subduction" @click="addProNum(item.productId,-1)"></span>
+                                    <span class="num">{{item.buyNum ? item.buyNum: 0}}</span>
+                                    <span class="add" @click="addProNum(item.productId,1)"></span>
+                                </template>
+                                <template v-else>
+                                    <p class="desr">卖光了</p>
+                                </template>
+                            </div>
                         </li>
-                        <transition name="fade">
-                            <div v-if="showTotal" class="load_more" @click="loadAllProducts();">共{{productList.length}}件
-                                <img src="../../images/path-2.png" width="4%"></div>
-                        </transition>
+                        <!--<transition name="fade">-->
+                            <!--<div v-if="showTotal" class="load_more" @click="loadAllProducts();">共{{productList.length}}件-->
+                                <!--<img src="../../images/path-2.png" width="4%"></div>-->
+                        <!--</transition>-->
                     </ul>
-                    <div class="purchase_num">
+                    <div class="purchase_num" v-if="groupSuit.type === 1">
                         <p class="left">购买数量</p>
                         <div class="cart_btns right">
                             <!--:class="{'disabled': suitNum <= groupSuit.minimum}"-->
@@ -102,7 +121,7 @@
                             <span class="add" @click="addNumber(suitNum, groupSuit.stepSize)"></span>
                         </div>
                     </div>
-                    <div class="right totalPrice red">
+                    <div class="right totalPrice red" v-if="groupSuit.type === 1">
                         套装单价
                         <p><span class="RMB">￥</span>{{packPrice | number}}</p>
                     </div>
@@ -113,11 +132,11 @@
                             <p>商品总价</p>
                             <p><span class="RMB">￥</span>{{goodsPrice | number}}</p>
                         </li>
-                        <router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">
-                            <p>优惠价格</p>
-                            <p class="RMB coupon">-￥{{coupon ? coupon.money : 0 | number}}</p>
-                            <!-- <p class="coupon" v-else>不使用</p> -->
-                        </router-link>
+                        <!--<router-link :to="{name: 'couponList', query:{path: 'confirmOrder'}}" tag="li">-->
+                            <!--<p>优惠价格</p>-->
+                            <!--<p class="RMB coupon">-￥{{coupon ? coupon.money : 0 | number}}</p>-->
+                            <!--&lt;!&ndash; <p class="coupon" v-else>不使用</p> &ndash;&gt;-->
+                        <!--</router-link>-->
                         <li>
                             <p>运费{{fareInfo}}</p>
                             <p><span class="RMB">￥</span>{{fare}}</p>
@@ -149,7 +168,21 @@
             <li @click="paymentCall()">去付款</li>
             <li>付款 &nbsp;<span class="red"><span class="RMB">￥</span>{{(totalPrice + fare) | number}}</span></li>
         </ul>
-        <div class="mask_box" v-show="showTip" @click="showTip = false;"></div>
+        <div class="mask_box" v-show="showTip" @click="showTipsBox"></div>
+        <div class="suitTypeBox" v-show="suitTypeBox">
+            <div class="title">
+                拼团方式
+                <p class="right" @click="suitTypeBox = false;showTip = false;">
+                    <img src="../../images/close.png" alt="">
+                </p>
+            </div>
+            <ul class="levels">
+                <li class="label"
+                    :class="{'selected': groupSuitType === item.type}" v-for="(item,index) in suitTypes"
+                    :key="index" @click="selectSuitType(item.type)">{{item.text}}
+                </li>
+            </ul>
+        </div>
         <transition name="loading">
             <loading v-show="showLoading"></loading>
         </transition>
@@ -203,19 +236,21 @@
                 },
                 orderId: 0,
                 message: '',
-                groupType: '',
+                isAloneBuy: false,
                 groupMyId: null,
                 groupMy: null,
                 payButton: false,
                 coupon: '',
                 couponId: '',
                 suitNum: 1,
+                buyNum: 0,
                 showTip: false,
-                groupSuitType: 1,
+                groupSuitType: 2, // 默认推荐同一地址
                 suitTypes: [],
                 tuanAddress: {},
                 expressCostData: null,
-                showLoading: false
+                showLoading: false,
+                suitTypeBox: false
             }
         },
         props: ['showErrMsg'],
@@ -243,6 +278,7 @@
             this.productList = JSON.parse(
                 sessionStorage.getItem(this.$route.query.suitKey)
             );
+            console.info(this.productList)
             this.groupSuit = JSON.parse(
                 sessionStorage.getItem(this.$route.query.groupKey)
             );
@@ -251,24 +287,25 @@
             );
             this.suitTypes.forEach(t => {
                 if (t.type === 1) {
-                    t.text = '普通拼团';
+                    t.text = '不同地址拼团';
                 } else if (t.type === 2) {
-                    t.text = '社区拼团';
+                    t.text = '同一地址拼团';
                 }
                 if (t.type === this.groupSuitType && this.groupSuit.id === t.productId) {
                     this.packPrice = t.discountPrice;
                 }
 
             });
-
-
+            if (this.suitTypes.length === 1){
+                this.groupSuitType = this.suitTypes[0].type
+            }
 
             // 最低起售份数
             this.suitNum = this.groupSuit.minimum;
-            this.groupType = this.$route.query.type
+            this.isAloneBuy = this.$route.query.isAloneBuy === 'true'
             this.groupMyId = this.$route.query.groupMyId
             this.showTotal = this.productList.length > 2;
-            this.groupMyId !== 'undefined' ? this.getGroupMyAddress() : null;
+            this.groupMyId !== 'undefined' && this.groupMyId ? this.getGroupMyAddress() : null;
             // 运费
             var that = this
             expressCost(this.groupSuit.expressCostId).then(res => {
@@ -281,6 +318,7 @@
                 }
 
             })
+
         },
         methods: {
             getGroupMyAddress() {
@@ -294,7 +332,10 @@
                 })
             },
             showTipsBox() {
-                this.showTip = true;
+                if (this.suitTypeBox && this.showTip) {
+                    return
+                }
+                this.showTip = !this.showTip;
                 document.querySelector('.mask_box').style.height = document.documentElement.clientHeight + 'px';
             },
             // ...mapMutations(["CHOOSE_ADDRESS"]),
@@ -303,12 +344,27 @@
 
             },
             async paymentCall() {
+
+                // 自定义购买商品判断
+                if (this.groupSuit.type === 2 && this.buyNum <= 0) {
+                    this.showErrMsg('请至少选择一件商品！')
+                    return
+                }
+
                 var that = this;
+                if (!that.groupSuitType) {
+                    that.suitTypeBox = true;
+                    that.showTipsBox();
+                    return;
+                }
                 if (that.payButton) {
                     return;
                 }
                 that.payButton = true;
                 this.showLoading = true;
+                setTimeout(function () {
+                    that.showLoading = false;
+                }, 3000);
                 if (!that.choosedAddress) {
                     if (!that.checkAddress(that.address)) {
                         that.payButton = false;
@@ -326,38 +382,39 @@
                 let that = this;
                 let suitId = that.groupSuit.id
                 let addressId = that.choosedAddress.id;
-                let type = Number(that.groupType);
+                let isAloneBuy = Boolean(that.isAloneBuy);
                 let groupSuitType = that.groupSuitType;
                 let suitNum = that.suitNum;
                 let groupMyId = that.groupMyId === 'undefined' ? null : Number(that.groupMyId);
+                let products = that.productList
 
                 // 开团
                 if (!groupMyId) {
-                    openGroup(suitId, type, groupSuitType, suitNum, groupMyId).then((res) => {
+                    openGroup(suitId, isAloneBuy, groupSuitType, suitNum, groupMyId).then((res) => {
                         // 开团失败时
                         if (res.errno !== 0) {
                             that.showErrMsg(res.errmsg);
                             return;
                         }
                         groupMyId = res.data;
-                        submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
+                        submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId,products).then(res => {
                             if (res.errno !== 0) {
                                 that.showErrMsg(res.errmsg)
                                 that.payButton = false;
                                 return;
                             }
-                            that.orderId = res.data.orderId;
+                            that.orderId = res.data;
                             that.doPay(that.orderId, groupMyId);
                         })
                     })
                 } else { // 参团
-                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId).then(res => {
+                    submitGroup(suitId, addressId, that.couponId, that.message, suitNum, groupMyId,products).then(res => {
                         if (res.errno !== 0) {
                             that.showErrMsg(res.errmsg)
                             that.payButton = false;
                             return;
                         }
-                        that.orderId = res.data.orderId;
+                        that.orderId = res.data;
                         that.doPay(that.orderId, groupMyId);
                     })
                 }
@@ -373,7 +430,7 @@
                     that.showLoading = false;
                     that.payButton = false;
                     if (resp.errno === 403) {
-                        this.showErrMsg("订单不可支付")
+                        this.showErrMsg(resp.errmsg)
                     } else {
                         WeixinJSBridge.invoke(
                             'getBrandWCPayRequest', {
@@ -386,9 +443,15 @@
                             },
                             function (res) {
                                 that.payButton = false;
+                                console.log(res.err_msg)
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                    window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
-                                    // that.$router.push('/groupMy/' + groupMyId);
+                                    if (!that.isAloneBuy) {
+                                        window.location.href = process.env.DOMAIN + '/groupMy/' + groupMyId;
+                                        // that.$router.push('/groupMy/' + groupMyId);
+                                    } else {
+                                        window.location.href = process.env.DOMAIN + '/order';
+                                    }
+
                                 }
                                 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                             }
@@ -513,31 +576,89 @@
                 this.reComputePrice();
             },
             reComputePrice() {
+                let that = this
                 this.goodsPrice = 0;
                 this.totalPrice = 0;
 
-                // 参团
-                if (this.groupMy) {
-                    this.packPrice = this.groupMy.discountPrice;
-                    this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
-                } else {
-                    // 开团根据拼团的类型计算不同的套装价格
-                    this.suitTypes.forEach(suitType => {
-                        if (suitType.type === this.groupSuitType) {
-                            if (this.groupSuit.id === suitType.productId) {
-                                this.packPrice = suitType.discountPrice;
-                                this.goodsPrice += suitType.discountPrice * this.suitNum;
-                            }
+                if (this.groupSuit.type === 1) {
+                    // 参团
+                    if (this.groupMy) {
+                        this.packPrice = this.groupMy.discountPrice;
+                        this.goodsPrice += this.groupMy.discountPrice * this.suitNum;
+                    } else {
+                        // 开团根据拼团的类型计算不同的套装价格
+                        if (this.isAloneBuy) {
+                            this.packPrice = this.groupSuit.suitPrice;
+                            this.goodsPrice += this.groupSuit.suitPrice * this.suitNum;
+                        } else {
+                            this.suitTypes.forEach(suitType => {
+                                if (suitType.type === this.groupSuitType) {
+                                    if (this.groupSuit.id === suitType.productId) {
+                                        this.packPrice = suitType.discountPrice;
+                                        this.goodsPrice += suitType.discountPrice * this.suitNum;
+                                    }
+                                }
+                            })
                         }
-                    })
+
+                    }
+                } else if (this.groupSuit.type === 2) { // 自定义拼团
+
+                    this.buyNum = 0;
+                    // 单独购买
+                    if (this.isAloneBuy) {
+                        this.productList.forEach(pro => {
+                            pro.groupProductPrice.forEach(productPrice => {
+                                if (productPrice.buyType === 1) {
+                                    pro.realProductPrice = productPrice.presentPrice;
+                                    that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                    that.buyNum += pro.buyNum;
+                                }
+                            })
+                        })
+                    } else {
+                        // 参团
+                        if (this.groupMy) {
+                            this.groupSuitType = this.groupMy.groupSuitType;
+                        }
+                        // 根据拼团的类型计算不同的套装价格
+
+                        if (this.groupSuitType === 1) { //普通拼团，不同地址
+                            this.productList.forEach(pro => {
+                                pro.groupProductPrice.forEach(productPrice => {
+                                    if (productPrice.buyType === 2) {
+                                        pro.realProductPrice = productPrice.presentPrice;
+                                        that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                        that.buyNum += pro.buyNum;
+                                    }
+                                })
+                            })
+                        } else { // 同一地址拼团
+                            this.productList.forEach(pro => {
+                                pro.groupProductPrice.forEach(productPrice => {
+                                    if (productPrice.buyType === 3) {
+                                        pro.realProductPrice = productPrice.presentPrice;
+                                        that.goodsPrice += pro.buyNum * productPrice.presentPrice;
+                                        that.buyNum += pro.buyNum;
+                                    }
+                                })
+                            })
+                        }
+                    }
                 }
 
+                let buyNum = 0;
+                if (this.groupSuit.type === 2) {
+                    buyNum = this.buyNum;
+                } else {
+                    buyNum = this.suitNum
+                }
                 this.totalPrice = this.goodsPrice;
                 sessionStorage.setItem('goodsPrice', JSON.stringify(this.goodsPrice));
                 this.fare = this.expressCostData.expressPrice;
                 if (this.expressCostData.freeExpress === 1 && this.goodsPrice >= this.expressCostData.freeExpressValue) { // 金额包邮
                     this.fare = 0;
-                } else if (this.expressCostData.freeExpress === 2 && this.suitNum >= this.expressCostData.freeExpressValue) { // 数量包邮
+                } else if (this.expressCostData.freeExpress === 2 && buyNum >= this.expressCostData.freeExpressValue) { // 数量包邮
                     this.fare = 0;
                 }
 
@@ -551,6 +672,23 @@
                 }
                 this.suitNum += number
                 this.reComputePrice();
+            },
+            addProNum(productId,number) {
+                let that = this
+                this.productList.forEach(item =>{
+                    if(item.productId === productId){
+                        if (item.buyNum <= (item.minimum ? item.minimum : 0) && number <= 0) {
+                            if (item.minimum > 0) {
+                                that.showErrMsg('该商品至少购买' + item.minimum + '份');
+                            }
+                            return
+                        }
+
+                        item.buyNum += number
+
+                    }
+                })
+                this.reComputePrice();
             }
         },
         components: {
@@ -561,378 +699,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "src/style/mixin";
-
-    .fade-enter-active,
-    .fade-leave-active {
-        transition: opacity 0.5s;
-    }
-
-    .fade-enter,
-    .fade-leave-to
-        /* .fade-leave-active below version 2.1.8 */
-
-    {
-        opacity: 0;
-    }
-
-    .confirmOrderContainer {
-        padding-bottom: 0.49rem;
-    }
-
-    .line-through {
-        text-decoration: line-through;
-    }
-
-    .mask_box {
-        background-color: rgba(0, 0, 0, 0.3);
-        @include wh(100%, 0rem);
-        position: fixed;
-        top: 0;
-        z-index: 3;
-    }
-
-    .shop_list_container {
-        background-color: $bc;
-        .swiper-container {
-            padding-bottom: 0.15rem;
-            .topBG {
-                @include wh(100%, 0.83rem);
-                @include bis("../../images/gwc-bg.png");
-            }
-            .address_info {
-                background-color: $fc;
-                width: 95%;
-                margin: -0.48rem auto 0;
-                padding: 0.2rem 0.15rem 0.2rem 0.57rem;
-                @include fj(space-between);
-                border-radius: 10px;
-                box-shadow: 0px 1px 13.9px 0.6px rgba(181, 184, 188, 0.51);
-                .address-detail {
-                    position: relative;
-                    width: 84%;
-                    p {
-                        line-height: 1.6;
-                        @include sc(0.15rem, $g3);
-                        span {
-                            display: inline-block;
-                            @include sc(0.15rem, $g3);
-                        }
-                    }
-                    p:nth-of-type(1) {
-                        margin-bottom: 0.15rem;
-                    }
-                    .label {
-                        @include wh(.625rem, .24rem);
-                        @include sc(.13rem, $g9);
-                        border: .01rem solid $g9;
-                        border-radius: .025rem;
-                        margin: .12rem .22rem .12rem 0;
-                        text-align: center;
-                        line-height: .23rem;
-                        float: left;
-                    }
-                    .label.selected {
-                        @include sc(.13rem, $red);
-                        border: .01rem solid $red;
-                    }
-                    .tips {
-                        @include sc(.13rem, $g9);
-                        line-height: 1.9;
-                        overflow: hidden;
-                        clear: both;
-                        span {
-                            @include sc(.13rem, $g9);
-                        }
-                        span:nth-child(odd) {
-                            width: 69%;
-                        }
-                    }
-                    .address-tuan {
-                        width: 93%;
-                    }
-                    .icon {
-                        width: .165rem;
-                        float: left;
-                        margin-top: .03rem;
-                    }
-                    .tip_box {
-                        @include wh(2.8rem, .67rem);
-                        @include sc(.12rem, $red);
-                        display: block;
-                        padding: .1rem .12rem;
-                        background: url('../../images/group/tip_box.png') no-repeat 0 0;
-                        background-size: 100% 100%;
-                        box-sizing: border-box;
-                        line-height: 1.45;
-                        position: absolute;
-                        top: -.57rem;
-                        right: -.2rem;
-                        z-index: 4;
-                        pointer-events: none;
-                    }
-                }
-                .address-detail:before {
-                    content: "";
-                    position: absolute;
-                    left: -0.28rem;
-                    top: 0rem;
-                    @include bis("../../images/gwc-icon-add.png");
-                    @include wh(0.16rem, 0.22rem);
-                }
-                .deletesite {
-                    display: flex;
-                    padding-top: 0.1rem;
-                    width: .35rem;
-                    justify-content: flex-end;
-                    span {
-                        display: block;
-                        @include wh(0.1rem, 0.175rem);
-                        @include bis("../../images/path.png");
-                    }
-                }
-            }
-            .no_address {
-                .adddetail {
-                    margin-top: 0.11rem;
-                    @include borderRadius(10px);
-                    background: $fc;
-                }
-                .ui-padding-block {
-                    .add-detail {
-                        display: block;
-                    }
-                    .input-new {
-                        @include wh(100%, 0.45rem);
-                        padding: 0 0 0 0.12rem;
-                        display: flex;
-                        @include sc(0.15rem, $g6);
-                        border-bottom: 1px solid $bc;
-                        span {
-                            width: 0.7rem;
-                            line-height: 0.45rem;
-                            margin-right: 0.14rem;
-                        }
-                        input {
-                            display: flex;
-                            width: 2.7rem;
-                            font-size: 0.15rem;
-                        }
-                        .verifies {
-                            border-color: #ea3106;
-                        }
-                        p {
-                            @include sc(0.08rem, #ea3106);
-                            padding-left: 0.1rem;
-                            margin-top: 0.04rem;
-                        }
-                    }
-                    .input-new:nth-of-type(4) {
-                        height: 0.9rem;
-                        textarea {
-                            padding: 0.15rem 0 0 0;
-                            width: 2.7rem;
-                            font-size: 0.15rem;
-                        }
-                    }
-                }
-                .addbutton {
-                    margin: 0.15rem auto;
-                    width: 3.5rem;
-                    button {
-                        width: 100%;
-                        @include sc(0.15rem, $fc);
-                        line-height: 0.45rem;
-                        background: $red;
-                        font-weight: 700;
-                        @include borderRadius(0.23rem);
-                    }
-                    .butopacity {
-                        transition: all 0.4s;
-                        opacity: 1;
-                    }
-                }
-            }
-        }
-        .shop_info {
-            margin: 0.15rem auto 0;
-            width: 95%;
-            background-color: $fc;
-            padding: 0.2rem 0;
-            border-radius: 10px;
-            overflow: hidden;
-            .goods {
-                padding: 0 .15rem;
-                li {
-                    position: relative;
-                    margin-bottom: 0.26rem;
-                }
-                .img {
-                    display: inline-block;
-                    border-radius: 5px;
-                    @include wh(0.95rem, 0.945rem);
-                    background-color: #000;
-                    vertical-align: middle;
-                    margin-left: 0.05rem;
-                }
-                .goods_info {
-                    display: inline-block;
-                    .name {
-                        @include sc(0.15rem, $g3);
-                        top: -0.1rem;
-                        position: relative;
-                    }
-                    .price {
-                        @include sc(0.18rem, $red);
-                        font-weight: bold;
-                        position: relative;
-                        top: 0.38rem;
-                    }
-                }
-                .cart_btns {
-                    position: absolute;
-                    right: 0.2rem;
-                    bottom: 0.25rem;
-                    .num {
-                        display: inline-block;
-                        text-align: center;
-                        @include wh(0.345rem, 0.245rem);
-                        @include sc(0.18rem, $g9);
-                        vertical-align: top;
-                        font-weight: bold;
-                    }
-                }
-            }
-            .payment_info {
-                overflow: hidden;
-                clear: both;
-                margin: 0 .15rem;
-                padding-bottom: .15rem;
-                border-bottom: 1px solid $gd;
-                li {
-                    @include wh(100%, 0.35rem);
-                    line-height: 0.35rem;
-                    display: flex;
-                    p {
-                        @include sc(0.15rem, $g6);
-                    }
-                    p:nth-child(odd) {
-                        float: left;
-                    }
-                    p:nth-child(even) {
-                        flex: 4;
-                        text-align: right;
-                    }
-                    p.coupon {
-                        color: $g9;
-                    }
-                }
-            }
-            .totalPrice {
-                margin: 0.12rem .15rem 0 0;
-                color: $g6;
-                p {
-                    display: inline-block;
-                    @include sc(0.2rem, $g3);
-                    font-weight: bold;
-                }
-            }
-            .totalPrice.red {
-                p {
-                    color: $red;
-                }
-            }
-            .purchase_num {
-                @include wh(100%, .49rem);
-                @include sc(.15rem, $g6);
-                background-color: $f7;
-                padding: 0 .13rem;
-                line-height: .49rem;
-                .cart_btns {
-                    margin-top: .15rem;
-                    display: flex;
-                    .subduction,
-                    .num,
-                    .add {
-                        @include wh(0.2rem, 0.2rem);
-                        display: inline-flex;
-                        flex: 1;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    .num {
-                        @include sc(0.18rem, $red);
-                        vertical-align: top;
-                        margin: 0 0.05rem;
-                    }
-                    .subduction {
-                        @include bis("../../images/sub-icon.png");
-                    }
-                    .subduction.disabled {
-                        @include bis("../../images/sub-disable-icon.png");
-                    }
-                    .add {
-                        @include bis("../../images/add-icon.png");
-                    }
-                }
-            }
-            .input-new {
-                padding: 0 .15rem;
-            }
-        }
-    }
-
-    .settlement {
-        position: fixed;
-        bottom: 0;
-        line-height: 0.49rem;
-        background-color: $fc;
-        border-top: solid 1px $bc;
-        @include wh(100%, 0.49rem);
-        overflow: hidden;
-        li {
-            float: right;
-            text-align: center;
-        }
-        li:nth-child(2) {
-            text-align: left;
-            padding-right: 0.12rem;
-            @include sc(0.15rem, $g6);
-            .red {
-                @include sc(0.18rem, $red);
-                font-weight: 600;
-            }
-        }
-        li:nth-child(1) {
-            width: 30.33%;
-            @include sc(0.15rem, $fc);
-            background-color: $red;
-        }
-        .unselected {
-            border-radius: 50%;
-            display: inline-block;
-            border: 1.5px solid $g9;
-            @include wh(0.19rem, 0.19rem);
-            vertical-align: text-bottom;
-        }
-        .selectAll {
-            @include bis("../../images/selected.png");
-            display: inline-block;
-            @include wh(0.19rem, 0.19rem);
-            vertical-align: text-bottom;
-        }
-    }
-
-    .load_more {
-        @include wh(100%, 0.36rem);
-        @include sc(0.15rem, $g6);
-        background-color: $f7;
-        text-align: center;
-        line-height: 0.36rem;
-    }
-
-
-    .shop_info.margin-t-p3 {
-        margin-top: .3rem;
-    }
+    @import "../../style/confirmGroup";
 </style>

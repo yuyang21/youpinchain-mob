@@ -46,13 +46,13 @@
                         </section>
                         <div class="order_item_bottom">
                         <span class="order_text">实际支付<b class="red"><span class="RMB">￥</span><strong
-                                style="font-size:.2rem;font-weight:bold;">{{item.actualPrice}}</strong></b></span>
+                                class="order_price_size">{{item.actualPrice}}</strong></b></span>
                             <div class="order_button_border_grey" @click="showAlertTip = !showAlertTip">联系客服</div>
                             <div class="order_again">
                                 <compute-time v-if="item.handleOption.pay" :time="item.expiryTime"
                                               @click.native="toPay(item.id)"></compute-time>
-                                <span class="order_button_border_red" @click="cancelOrder(item.id)"
-                                      v-if="item.handleOption.cancel">取消订单</span>
+                                <!--<span class="order_button_border_red" @click="cancelOrder(item.id)"-->
+                                      <!--v-if="item.handleOption.cancel">取消订单</span>-->
                                 <span class="order_button_border_red" @click="refundCom(item.id)"
                                       v-if="item.handleOption.refund">申请退款</span>
                                 <router-link :to="{path:'/orderTrack/' + item.expNo + '/' + item.expCode}" tag="span"
@@ -82,7 +82,6 @@
 <script>
     import computeTime from "src/components/common/computeTime";
     import loading from "src/components/common/loading";
-    import {loadMore} from "src/components/common/mixin";
     import alertTip from "src/components/common/alertTip";
     import refundOrderTip from "src/components/common/refundOrderTip";
     import {
@@ -116,7 +115,6 @@
         },
         created() {
         },
-        mixins: [loadMore],
         components: {
             loading,
             computeTime,
@@ -186,7 +184,7 @@
                 var that = this;
                 prepayOrder(orderId).then(resp => {
                     if (resp.errno === 403) {
-                        this.$parent.showErrMsg("订单不可支付")
+                        this.$parent.showErrMsg(resp.errmsg)
                     } else {
                         WeixinJSBridge.invoke(
                             'getBrandWCPayRequest', {

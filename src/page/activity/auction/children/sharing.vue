@@ -115,7 +115,6 @@
     }
 </script>
 <style scoped lang="scss">
-    @import '../../../../style/mixin';
     .sharing {
         background: $bc;
         padding-bottom: .49rem;
@@ -229,7 +228,6 @@
                         img {
                             @include wh(.52rem,.52rem);
                             border-radius: .05rem;
-                            background-color: #000000;
                             margin-bottom: .15rem;
                         }
                     }

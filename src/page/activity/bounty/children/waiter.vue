@@ -48,7 +48,6 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import '../../../../style/mixin';
   .waiter{
     background-color: #06020a;
     min-height: 100vh;

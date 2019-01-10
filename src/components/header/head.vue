@@ -32,7 +32,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/mixin';
 
   #head_top{
     background-color: $fc;

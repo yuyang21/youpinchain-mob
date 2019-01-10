@@ -22,6 +22,5 @@
     }
 </script>
 <style scoped lang="scss">
-    @import '../../../../style/mixin';
     .my_auction {}
 </style>

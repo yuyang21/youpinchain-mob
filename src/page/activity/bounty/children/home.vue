@@ -314,7 +314,6 @@
     }
 </script>
 <style lang="scss" scoped>
-  @import '../../../../style/mixin';
    .bounty_home {
        overflow: hidden;
        width: 100%;

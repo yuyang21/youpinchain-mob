@@ -101,7 +101,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    @import '../../../../style/mixin';
     .invite {
         background-color: #06020a;
         position: relative;

@@ -8,27 +8,27 @@
       </li>
       <li>
         <p>下单人数</p>
-        <p>{{profileInfo.inviteOrderNum}}人</p>
+        <p>{{profileInfo.invitePayNum}}人</p>
       </li>
     </ul>
-    <div class="royalty_ratio">
-      <div class="panel_title">当前邀请用户奖励提成比</div>
-      <div class="content">
-        <div class="tips">
-          <u>如何提高</u>
-          <img src="../../../images/group/icon.png" alt="">
-        </div>
-        <ul class="img">
-          <li v-for="(item,index) in levels" :key="index" :class="{'level': level === item.sortNo}"></li>
-          <hr color="#FCC931" width="88%" height=".025rem">
-        </ul>
-        <ul class="levels">
-          <li v-for="(item,index) in levels" :key="index"
-            :style="{width: 100 / levels.length + '%'}">{{item.name}}</li>
-        </ul>
-        <p class="text">奖励：<br> 用户下单金额*(有效下单人数提成比+邀请用户提成比)</p>
-      </div>
-    </div>
+    <!--<div class="royalty_ratio">-->
+      <!--<div class="panel_title">当前邀请用户奖励提成比</div>-->
+      <!--<div class="content">-->
+        <!--&lt;!&ndash;<div class="tips">&ndash;&gt;-->
+          <!--&lt;!&ndash;<u>如何提高</u>&ndash;&gt;-->
+          <!--&lt;!&ndash;<img src="../../../images/group/icon.png" alt="">&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--<ul class="img">-->
+          <!--<li v-for="(item,index) in levels" :key="index" :class="{'level': level === item.sortNo}"></li>-->
+          <!--<hr color="#FCC931" width="88%" height=".025rem">-->
+        <!--</ul>-->
+        <!--<ul class="levels">-->
+          <!--<li v-for="(item,index) in levels" :key="index"-->
+            <!--:style="{width: 100 / levels.length + '%'}">{{item.name}}</li>-->
+        <!--</ul>-->
+        <!--<p class="text">奖励：<br> 用户下单金额*(有效下单人数提成比+邀请用户提成比)</p>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="myincome">
       <div class="title">
         <p class="left"><img src="../../../images/mine-income.png" alt="">我的收益</p>
@@ -111,12 +111,12 @@
         todayProfit().then(function (res) {
           that.todayInfo = res.data
         })
-        rewardGrade().then((res) => {
-          that.level = res.data.sortNo
-        })
-        rewardGrades().then(res => {
-          that.levels = res.data.data
-        })
+        // rewardGrade().then((res) => {
+        //   that.level = res.data.sortNo
+        // })
+        // rewardGrades().then(res => {
+        //   that.levels = res.data.data
+        // })
       },
       withdraws (amount) {
         var that = this;
@@ -148,212 +148,5 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import "src/style/mixin";
-  .income {
-    background-color: $bc;
-    padding-bottom: .48rem;
-    .number_statistics {
-      overflow: hidden;
-      background-color: $fc;
-      margin-bottom: .15rem;
-      li {
-        overflow: hidden;
-        height: .55rem;
-        line-height: .55rem;
-        padding: 0 .15rem;
-        p:first-child {
-          float: left;
-          @include sc(.15rem, $g6);
-          text-align: left;
-        }
-        p:last-child {
-          float: right;
-          @include sc(.15rem, $red);
-          text-align: right;
-        }
-      }
-      li:first-child {
-        border-bottom: .01rem solid $bc;
-      }
-    }
-    .royalty_ratio {
-      .content {
-        overflow: hidden;
-        clear: both;
-        width: 100%;
-        background-color: $fc;
-        padding: .15rem .2rem;
-        margin: 0 auto;
-        .tips {
-          float: right;
-          @include sc(.13rem, $g6);
-          img {
-            @include wh(.165rem, .165rem);
-            vertical-align: sub;
-            margin-left: .03rem;
-          }
-        }
-        .levels {
-          overflow: hidden;
-          width: 100%;
-          text-align: center;
-          .img {
-            margin: .15rem 0 .0;
-          }
-          li {
-            float: left;
-            width: 20%;
-            @include sc(.14rem, $g3);
-          }
-        }
-        .text {
-          @include sc(.13rem, $g6);
-          text-align: left;
-          line-height: 1.7;
-          padding: .15rem 0 0.07rem .1rem;
-        }
-        .img {
-          overflow: hidden;
-          clear: both;
-          position: relative;
-          height: 1.2rem;
-          hr {
-            margin-top: 1.12rem;
-          }
-          li {
-            float: left;
-            background-color: #FDE749;
-            width: .29rem;
-            position: absolute;
-            bottom: 0.15rem;
-            border-radius: .025rem;
-          }
-          li:nth-child(1) {
-            height: .28rem;
-            left: 6%;
-          }
-          li:nth-child(2) {
-            height: .38rem;
-            left: 26%;
-          }
-          li:nth-child(3) {
-            height: .48rem;
-            left: 46%;
-          }
-          li:nth-child(4) {
-            height: .58rem;
-            left: 66%;
-          }
-          li:nth-child(5) {
-            height: .68rem;
-            left: 86%;
-          }
-          li.level{
-            &:before {
-              content: '';
-              display: block;
-              @include wh(.24rem,.24rem);
-              background: url('../../../images/profile/icon.png') no-repeat 0 0;
-              background-size: 100% 100%;
-              position: absolute;
-              top: -.28rem;
-              left: .015rem;
-            }
-          }
-        }
-      }
-      .panel_title {
-        padding-left: .1rem;
-      }
-    }
-    .myincome {
-      background-color: $fc;
-      margin-top: .15rem;
-      border-radius: .1rem .1rem 0 0;
-      .title {
-        @include wh(100%,.55rem);
-        overflow: hidden;
-        line-height: .55rem;
-        padding: 0 .13rem;
-        .left {
-          @include sc(.15rem,$g6);
-          img {
-            @include wh(.29rem,.29rem);
-            vertical-align: middle;
-            margin: -.03rem .15rem 0 0;
-          }
-        }
-        .right {
-          @include sc(.13rem,$g6);
-          img {
-            @include wh(.1rem,.175rem);
-            vertical-align: text-bottom;
-            margin-left: .15rem;
-          }
-        }
-      }
-      .content {
-        overflow: hidden;
-        border-top: .01rem solid $bc;
-        li {
-          float: left;
-          @include wh(50%,.715rem);
-          p:first-child {
-            @include sc(.24rem, $red);
-            margin: .12rem 0 .06rem .12rem;
-            height: .28rem;
-            span {
-              font-size: .18rem;
-              margin-right: .05rem;
-              font-weight: normal;
-            }
-          }
-          p:last-child {
-            @include sc(.13rem,$g9);
-            margin-left: .12rem;
-          }
-          .btn {
-            @include wh(1.085rem,.3rem);
-            @include sc(.13rem,$fc);
-            background-color: $red;
-            text-align: center;
-            line-height: .3rem;
-            border-radius: .15rem;
-            margin: .2075rem 0 0 .05rem;
-          }
-          .btn.disabled {
-            background-color: #999;
-          }
-        }
-        li:nth-child(even) {
-          border-left: .01rem solid $bc;
-          border-bottom: .01rem solid $bc;
-        }
-        li:nth-child(odd) {
-          border-bottom: .01rem solid $bc;
-        }
-        li:last-child {
-          border-left: none;
-        }
-      }
-      .tips {
-        @include sc(.13rem, $g6);
-        line-height: 1.9;
-        padding: .15rem .15rem .3rem;
-        p {
-          @include sc(.13rem, $g6);
-          margin-bottom: .12rem;
-          overflow: hidden;
-          span {
-            @include sc(.13rem, $g6);
-            line-height: 1.4;
-          }
-          span:nth-child(even) {
-            width: 95%;
-            padding-left: .05rem;
-          }
-        }
-      }
-    }
-  }
+  @import "../../../style/income";
 </style>

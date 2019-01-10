@@ -1,0 +1,358 @@
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+.goods {
+    border-color: $bc;
+    .invite_btn {
+        @include wh(92%,.45rem);
+        @include sc(.15rem,$fc);
+        text-align: center;
+        line-height: .45rem;
+        margin: 0 auto .15rem;
+        border-radius: .225rem;
+        background-color: $red;
+        padding-bottom: .35rem;
+    }
+    .info_box {
+        background-color: $fc;
+        padding-bottom: .1rem;
+        .group_info {
+            padding: .25rem 0 0rem .15rem;
+            .image {
+                margin-right: .35rem;
+                width: 1.4rem;
+                height: 1.4rem;
+                border-radius: 5px;
+            }
+            img.noImage {
+                background-color: #000;
+            }
+            .goods_info {
+                width: 50%;
+                .name {
+                    @include sc(.15rem, $g3);
+                    padding: .0rem 0 .03rem;
+                    span {
+                        color: $red;
+                        font-weight: bold;
+                    }
+                }
+                .desr {
+                    @include sc(.12rem, $g6);
+                }
+                .price {
+                    @include sc(.18rem, $red);
+                    font-weight: bold;
+                    .RMB {
+                        font-size: .13rem;
+                        font-weight: bold;
+                    }
+                }
+                .right_tip {
+                    position: relative;
+                    width: .9rem;
+                    text-align: center;
+                    background-color: #FB9D1C;
+                    height: .64rem;
+                    margin: .05rem 0 .06rem;
+                    p:first-child {
+                        @include sc(0.14rem, $fc);
+                        padding: 0.09rem 0 .05rem;
+                    }
+                    p:last-child {
+                        @include sc(.14rem, $fc);
+                    }
+                    p.activityEnd {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;
+                        @include sc(.18rem, $g3);
+                    }
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        display: block;
+                        top: .28rem;
+                        left: -.05rem;
+                        border-top: .05rem solid transparent;
+                        border-right: .05rem solid #FB9D1C;
+                        border-bottom: .05rem solid transparent;
+                    }
+                    .shadow_box {
+                        @include wh(.18rem, .18rem);
+                        @include sc(.14rem, $fc);
+                        background-color: #912714;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: .025rem;
+                    }
+                }
+            }
+        }
+        .aid_friend {
+            .friend_list {
+                overflow: hidden;
+                margin: 0.2rem auto 0;
+                padding: .25rem .3rem .1rem;
+                border-top: .01rem solid #EFEFF4;
+                // display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                li {
+                    float: left;
+                    text-align: center;
+                    width: 20%;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: .15rem;
+                    img {
+                        @include wh(.42rem,.42rem);
+                        border-radius: 50%;
+                    }
+                    p {
+                        @include wh(.74rem,.26rem);
+                        @include sc(.2rem, $fc);
+                        border-radius: .13rem;
+                        background-color: $red;
+                        position: absolute;
+                        bottom: -0.06rem;
+                        transform: scale(.5);
+                    }
+                }
+                li.none {
+                    div {
+                        @include wh(.42rem,.42rem);
+                        margin: 0 auto;
+                        border: .02rem dashed $g9;
+                        border-radius: 50%;
+                        line-height: .42rem;
+                        box-sizing: border-box;
+                        @include sc(.24rem, $g9);
+                        span {
+                            font-size: .12rem;
+                            line-height: 1.4;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin-top: .05rem;
+                        }
+                    }
+                    p {
+                        background-color: $g9;
+                    }
+                }
+            }
+        }
+    }
+    .assembling_process {
+        background-color: $fc;
+        margin: .15rem 0 0;
+        padding-bottom: .1rem;
+        .process {
+            overflow: hidden;
+            margin: .335rem auto .2rem;
+            text-align: center;
+            width: 86%;
+            li {
+                float: left;
+                width: 25%;
+                position: relative;
+                &:before {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    right: -.22rem;
+                    top: .18rem;
+                    @include wh(.45rem, .01rem);
+                    background-color:#E9EAEB;
+                }
+            }
+            li:last-child {
+                &:before {
+                    content: '';
+                    display: none;
+                }
+            }
+            img {
+                @include wh(.3rem, .32rem);
+                // border: .01rem dashed $g3;
+            }
+            .text {
+                @include sc(.14rem, $g3);
+            }
+        }
+        .rules {
+            width: 80%;
+            margin: 0 auto .12rem;
+            overflow: hidden;
+            clear: both;
+            line-height: 2.2;
+            @include sc(.13rem, $g6);
+        }
+    }
+    .poster {
+        position: absolute;
+        top: 0;
+        z-index: 9999;
+        @include wh(100vw,100vh);
+        background: rgba(0, 0, 0, 1);
+        padding-top: .12rem;
+        .text {
+            @include sc(.15rem, $fc);
+            text-align: center;
+            font-weight: bold;
+        }
+        .close_model {
+            position: absolute;
+            bottom: .4rem;
+            left: 47%;
+        }
+        .invite_landing {
+            overflow: hidden;
+            position: relative;
+            top: 0.1rem;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            width: 84%;
+            .box {
+                overflow: auto;
+                width: 100%;
+                max-height: 4.8rem;
+                background-color: $fc;
+                padding: .05rem .15rem .12rem;
+                border-radius: .05rem;
+                .groupMyInfo {
+                    margin: 0.15rem 0 0.0rem .7rem;
+                    text-align: left;
+                    // height: .3rem;
+                    p:first-child {
+                        @include sc(.13rem,$g3B);
+                        line-height: .13rem;
+                        strong {
+                            @include sc(.13rem,$black);
+                            margin-right: .05rem;
+                        }
+                    }
+                    p:nth-child(2) {
+                        @include sc(.12rem,$g3B);
+                        transform: scale(.87) translateX(-.2rem);
+                        width: 113%;
+                    }
+                    p.padd-t {
+                        padding: .05rem 0 .1rem;
+                    }
+                }
+                .header {
+                    border: .03rem solid #A40000;
+                    border-radius: .05rem;
+                    position: relative;
+                    .icon_head {
+                        position: absolute;
+                        top: -.37rem;
+                        left: -.04rem;
+                        @include wh(.61rem,.6rem);
+                    }
+                    .descrInfo {
+                        @include wh(100%,.4rem);
+                        line-height: .45rem;
+                        background-color: #A40000;
+                        overflow: hidden;
+                        padding: 0 .12rem;
+                        .left {
+                            @include sc(.13rem,$fc);
+                            span:first-child {
+                                font-size: .2rem;
+                                font-weight: bold;
+                            }
+                            span:last-child {
+                                font-size: .12rem;
+                            }
+                        }
+                        .right {
+                            @include wh(1rem,.15rem);
+                            @include sc(.12rem,#A40000);
+                            background-color: #FFFF00;
+                            border-radius: .08rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-top: .15rem;
+                        }
+                    }
+                }
+                .boxImg{
+                    display: block;
+                    width: 100%;
+                    height: 1.75rem;
+                    border-radius: .02rem .02rem 0 0;
+                }
+                .container {
+                    overflow: hidden;
+                    padding: .12rem .0rem 0rem .01rem;
+                    .left {
+                        width: 63%;
+                        .title {
+                            @include sc(.15rem, #262424);
+                            max-height: .36rem;
+                            font-weight: bold;
+                        }
+                        .content {
+                            @include sc(.12rem, #434343);
+                            // @include line-ellipsis(2);
+                            max-height: .32rem;
+                            overflow: hidden;
+                        }
+                        .discountPrice {
+                            @include sc(.15rem, #A40000);
+                            font-weight: bold;
+                            margin-top: .05rem;
+                            span {
+                                display: inline-block;
+                                font-weight: bold;
+                                @include sc(.13rem, #A40000);
+                                margin-right: .04rem;
+                            }
+                        }
+                        .tips {
+                            @include sc(.12rem, $black);
+                            font-weight:bold;
+                            margin: .02rem 0;
+                            transform: scale(.9) translateX(-.1rem);
+                        }
+                        .originalPrice {
+                            @include sc(.12rem, $black);
+                            font-weight: bold;
+                            margin-top: .05rem;
+                            span {
+                                display: inline-block;
+                                font-weight: bold;
+                                @include sc(.12rem, $black);
+                                transform: scale(.85) translateY(.01rem);
+                                margin-right: .02rem;
+                            }
+                        }
+                    }
+                    .qrcode {
+                        @include wh(1rem,1rem);
+                        border-radius: .05rem;
+                        background: #000;
+                        margin-top: .1rem;
+                    }
+                }
+            }
+        }
+    }
+}

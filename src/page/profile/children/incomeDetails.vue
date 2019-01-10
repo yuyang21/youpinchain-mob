@@ -1,20 +1,25 @@
 <template>
   <div class="income_details header-top">
     <head-top head-title="收益明细" go-back='true'></head-top>
-    <div ref="mescroll">
-      <ul>
+    <div ref="mescroll" v-show="!showLoading">
+      <ul v-if="detailList.length > 0">
         <li v-for="(item,index) in detailList" :key="index">
           <p>{{item.createTime | dateWithHourMin('.')}}</p>
           <p class="ellipsis" align="center">{{item.describe}}</p>
           <p>{{item.amount > 0 ? '+' : ''}}{{item.amount}}</p>
         </li>
       </ul>
+      <div v-else class="no_list">暂无记录</div>
     </div>
+    <transition name="loading">
+        <loading v-show="showLoading"></loading>
+    </transition>
   </div>
 </template>
 <script>
   import headTop from '../../../components/header/head'
   import MeScroll from '../../../static/mescroll/mescroll.min.js'
+  import loading from "src/components/common/loading"
   import {
     incomeDeals
   } from '../../../service/getData'
@@ -22,7 +27,8 @@
     data () {
       return {
         detailList: [],
-        mescroll: null
+        mescroll: null,
+        showLoading: true
       }
     },
     mounted() {
@@ -46,12 +52,12 @@
     methods: {
       upCallback (page) {
         incomeDeals(page.num, page.size).then(res => {
-          this.showLoading = false;
           let arr = res.data.data;
           if (page.num === 1) this.detailList = [];
           var that = this;
           setTimeout(function () {
             that.detailList = that.detailList.concat(arr);
+            that.showLoading = false;
             that.$nextTick(() => {
               that.mescroll.endSuccess(arr.length, page.num < res.data.totalPages);
             })
@@ -62,41 +68,12 @@
       }
     },
     components: {
-      headTop
+      headTop,
+      loading
     }
   }
 </script>
 <style lang="scss" scoped>
   @import '../../../static/mescroll/mescroll.min.css';
-  @import "src/style/mixin";
-  .income_details {
-    ul {
-      overflow: hidden;
-      background-color: $fc;
-      width: 100%;
-      clear: both;
-      li {
-        @include wh(100%, .55rem);
-        border-bottom: .01rem solid $bc;
-        line-height: .55rem;
-        padding: 0 .12rem;
-        clear: both;
-        overflow: hidden;
-        // box-sizing: content-box;
-        p {
-          float: left;
-          @include sc(.15rem, $g6);
-          width: 32%;
-        }
-        p:nth-child(2) {
-          width: 48%;
-        }
-        p:last-child {
-          color: $red;
-          text-align: right;
-          width: 20%;
-        }
-      }
-    }
-  }
+  @import "../../../style/incomeDetail";
 </style>

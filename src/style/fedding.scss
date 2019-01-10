@@ -1,0 +1,119 @@
+
+.text-right {
+    text-align: right;
+}
+.padding-t-7 {
+    padding-top: .7rem;
+}
+.feeding {
+    .title {
+        @include sc(.2rem,$g3);
+        text-align: center;
+        padding-top: .15rem;
+    }
+    .text {
+        @include sc(.13rem, $g6);
+        line-height: 1.38;
+        text-align: justify;
+        width: 86%;
+        margin: 0.2rem auto;
+    }
+    .header {
+        padding-top: .3rem;
+        background: $fc;
+        .text {
+            line-height: 1.54;
+        }
+        .line {
+            width: 75%;
+            margin: 0 auto;
+            position: relative;
+            border-top: solid 1px $gd;
+            &:before {
+            content: '';
+            display: block;
+            border-width: 5px;
+            position: absolute;
+            top: -.1rem;
+            right: 48%;
+            border-style: solid dashed dashed;
+            border-color: transparent transparent $gd;
+            z-index: 0;
+        }
+        &:after {
+            content: '';
+                display: block;
+                border-width: 5px;
+                position: absolute;
+                top: -.09rem;
+                right: 48%;
+                border-style: solid dashed dashed;
+                border-color: transparent transparent $fc;
+                font-size: 0;
+                line-height: 0;
+                z-index: 0;
+            }
+        }
+        ul {
+            overflow: hidden;
+            li {
+                width: 50%;
+                img {
+                    display: block;
+                }
+            }
+        }
+    }
+    .part1 {
+        background: $bc;
+        ul {
+            margin: 0 auto;
+            text-align: center;
+            li {
+                position: relative;
+                z-index: 1;
+                padding-bottom: .12rem;
+                img {
+                    position: relative;
+                    z-index: 1;
+                }
+            }
+        }
+        .bg {
+            @include wh(100%,1.29rem);
+            background-color: #babdc2;
+            position: absolute;
+            z-index: 0;
+            top: .4rem;
+        }
+    }
+    .part1_2 {
+        .bg {
+            top: 0;
+        }
+    }
+    .part1_3 {
+        padding-bottom: .3rem;
+        ul {
+            overflow: hidden;
+            width: 77%;
+            padding-top: .5rem;
+            li {
+                width: 50%;
+                float: left;
+            }
+        }
+        .text {
+            width: 100%;
+            text-align: center;
+        }
+    }
+    .part2 {
+        background: $fc;
+        margin: 0 auto;
+        text-align: center;
+        img {
+            margin: .25rem auto .35rem;
+        }
+    }
+}

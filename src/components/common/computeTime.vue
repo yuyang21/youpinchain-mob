@@ -66,12 +66,11 @@
 </script>
 
 <style lang="scss" scoped>
-    @import 'src/style/mixin';
 	.page{
         display: inline-block;
         border-radius: .16rem;
         background: $red;
-        margin-left: .1rem;
+        margin-left: .05rem;
         @include wh(.72rem, .25rem);
         text-align: center;
         .rem_time{

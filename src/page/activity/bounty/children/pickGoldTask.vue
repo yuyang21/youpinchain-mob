@@ -163,7 +163,6 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import '../../../../style/mixin';
   .task{
     position: relative;
     .activity_detail{

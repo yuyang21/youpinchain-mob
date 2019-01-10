@@ -82,7 +82,6 @@
   }
 </script>
 <style scoped lang="scss">
-  @import '../../../../style/mixin';
   .gold_record{
     background: $bc;
   }
