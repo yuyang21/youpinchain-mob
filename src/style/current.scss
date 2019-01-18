@@ -94,11 +94,11 @@
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    @include wh(.75rem, .3rem);
+                    @include wh(1rem, .3rem);
                     @include sc(.18rem, #E42826);
                     border: .02rem solid rgba(228,40,38,1);
                     border-radius: .025rem;
-                    transform: scale(.55) translateX(-.3rem);
+                    transform: scale(.55) translateX(-.35rem);
                 }
                 .single_price {
                     @include sc(.12rem, $g9);
@@ -115,8 +115,9 @@
             align-items: center;
             justify-content: center;
             border-radius: .025rem;
-            @include wh(.675rem, .275rem);
+            @include wh(.675rem, .25rem);
             background: #E42826;
+            margin-top: .05rem;
             p {
                 line-height: 1.5;
                 @include sc(0.13rem, $fc);

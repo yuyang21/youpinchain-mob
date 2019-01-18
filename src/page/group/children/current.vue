@@ -23,10 +23,10 @@
                             <p class="desr ellipsis">{{item.describe}}</p>
                             <!-- <p class="tip"><span>固定地址享受超高优惠</span></p> -->
                             <div class="left">
-                                <p class="price"><span class="lable">3人成团</span><span class="RMB">￥</span>{{item.minimumPrice}}</p>
+                                <p class="price"><span class="lable">拼团更划算</span><span class="RMB">￥</span>{{item.minimumPrice}}</p>
                                 <!-- <p class="single_price">单买价<span>￥</span>{{item.suitPrice}}</p> -->
                             </div>
-                            <div class="right shopping_cart"><p>立即拼团</p></div>
+                            <div class="right shopping_cart"><p>抢购</p></div>
                         </div>
                     </router-link>
                 </ul>
