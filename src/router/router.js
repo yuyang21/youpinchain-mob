@@ -67,8 +67,8 @@ export default new Router({
     //首页
     {
       path: '/home',
-      component: current, //拼团进行中
-      name: 'current'
+      component: home, 
+      name: 'home'
     },
     //黑猪溯源
     {
