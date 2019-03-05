@@ -68,7 +68,7 @@
     </div>
     <div class="add_cart_container">
         <router-link class="cart_icon_num left" :to="'/cart'">
-            <div class="icon"><span class="red-points" v-if="cart_num">{{cart_num}}</span></div>
+            <div class="icon"><span class="red-points" v-if="cartNum">{{cartNum}}</span></div>
         </router-link>
         <div class="cart_btn right" @click="addCartList(goods)">加入购物车</div>
     </div>
@@ -94,6 +94,7 @@ import {
     WechatShareUtils
 } from '../../service/WechatShareUtils'
 import wx from 'weixin-js-sdk'
+import { mapGetters, mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -111,14 +112,17 @@ export default {
     },
     mounted() {
         this.goodsid = this.$route.params.goodsid;
+        this.brandId = this.$route.params.brandId;
         this.initData();
-        this.initCartCount();
+        this.$store.dispatch('getCartNum');
     },
     components: {
         shareMask,
         headTop
     },
-    computed: {},
+    computed: mapState({
+      cartNum: state => state.cart_num
+    }),
     props: ["showErrMsg"],
     methods: {
         toCredential(index) {
@@ -143,13 +147,6 @@ export default {
             //开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
             showBack(status => {
                 that.headTitle = status ? that.goods.name : "";
-            });
-        },
-        initCartCount() {
-            cartProductCount().then(res => {
-                if (res.errno == 0) {
-                    this.cart_num = res.data;
-                }
             });
         },
         addCartList(goods) {

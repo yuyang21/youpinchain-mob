@@ -1,7 +1,9 @@
 import {
 	CONFIRM_ADDRESS,
 	CHOOSE_ADDRESS,
-} from './mutation-types.js'
+	GETCARTS,
+	GETCARTNUM
+} from './mutation-types.js';
 
 
 export default {
@@ -16,5 +18,11 @@ export default {
 	}) {
 		state.choosedAddress = address;
 		state.addressIndex = index;
+	},
+	[GETCARTS] (state, items) {
+		state.cartItems = items;
+	},
+	[GETCARTNUM] (state, num) {
+		state.cart_num = num;
 	},
 }

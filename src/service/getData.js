@@ -63,6 +63,11 @@ export const productHotList = (page, size) => fetch('/products/hot', {
     size: size
 });
 
+export const getProducts = (page, size) => fetch('/products', {
+    page: page,
+    size: size
+});
+
 /**
  * 根据商品id查询商品详情
  * @param {商品id} proId

@@ -12,6 +12,7 @@ const state = {
 	userInfo: {
 		user_id: 1
 	},
+	cartItems: [],
 	cart_num: 0 //购物车中商品种类个数
 }
 

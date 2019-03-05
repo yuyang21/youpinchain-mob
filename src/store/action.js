@@ -1,10 +1,14 @@
 import {
 	getUser,
-	getAddressList
+	getAddressList,
+	findCart,
+	cartProductCount
 } from '../service/getData'
 import {
 	GET_USERINFO,
-	SAVE_ADDRESS
+	SAVE_ADDRESS,
+	GETCARTS,
+	GETCARTNUM
 } from './mutation-types.js'
 
 export default {
@@ -25,5 +29,21 @@ export default {
 
 		let addres = await getAddressList(state.userInfo.user_id);
 		commit(SAVE_ADDRESS, addres);	
+	},
+	async getCarts({
+		commit,
+		state
+	}) {
+		let carts = await findCart(1, 100);
+		carts = carts.data.cart;
+		commit(GETCARTS, carts);	
+	},
+	async getCartNum({
+		commit,
+		state
+	}) {
+		let num = await cartProductCount();
+		num = num.data;
+		commit(GETCARTNUM, num);	
 	},
 }

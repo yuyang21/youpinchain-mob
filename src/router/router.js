@@ -108,7 +108,7 @@ export default new Router({
     },
     //商品详情
     {
-      path: '/goods/:goodsid',
+      path: '/goods/:goodsid/:brandId',
       component: goods
     },
     //拼团详情

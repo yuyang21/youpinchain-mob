@@ -1,10 +1,10 @@
 <template>
     <div>
         <nav class="shop_list_container">
-            <div class="swiper-container" v-if="carts.length">
+            <div class="swiper-container" v-if="cartItems.length > 0">
                 <div class="topBG"></div>
                 <div class="shop_info">
-                    <div v-for="(cartList, index) in carts" :key="index"
+                    <div v-for="(cartList, index) in cartItems" :key="index"
                          :class="{'border-no': index === carts.length - 1}" class="lists">
                         <div class="title">
                             <span :class="[cartList.choose ? 'choose' : 'unselected']"
@@ -20,8 +20,8 @@
                             </div>
                             <div class="right">
                                 <li v-for="item in cartList.cartListDtos" :key="item.cartId">
-                                    <img :src="item.thumbnailPic" alt="" class="img"
-                                         :class="{'noImage': !item.thumbnailPic}">
+                                    <img :src="item.normalPic" alt="" class="img"
+                                         :class="{'noImage': !item.normalPic}">
                                     <div class="goods_info">
                                         <p class="name" style="-webkit-box-orient: vertical;">{{item.productName}}</p>
                                         <p class="price"><span class="RMB">￥</span>{{item.presentPrice}}</p>
@@ -59,17 +59,17 @@
                     </div>
                 </div>
             </div>
-            <div class="no_list" v-else>
+            <!-- <div class="no_list" v-else>
                 <img src="../../images/buy-icon-n-normol.png" alt="您还没有添加任何商品哦～" width="15%">
                 <p>您还没有添加任何商品哦～</p>
-            </div>
+            </div> -->
         </nav>
         <!-- 推荐商品 -->
         <div class="recommend_nav">
             <div class="recommend_header">推荐商品</div>
             <ul class="recommend_list">
                 <li v-for="item in hotgoodslist" :key="item.id">
-                    <router-link tag="div" :to="'/goods/' + item.id"><img :src="item.thumbnailPic" alt="" class="img">
+                    <router-link tag="div" :to="'/goods/' + item.id"><img :src="item.normalPic" alt="" class="img">
                     </router-link>
                     <router-link tag="div" :to="'/goods/' + item.id" class="left">
                         <p class="name">{{item.name + ' ' + item.netContent}}*1{{item.packing}}</p>
@@ -111,7 +111,7 @@
         productHotList,
         addToCart
     } from "../../service/getData";
-
+    import { mapGetters, mapState } from 'vuex'
     export default {
         data() {
             return {
@@ -137,7 +137,8 @@
                 this.hotgoodslist = res.data.productList
                 this.hasMore = res.data.totalPages > this.page
             })
-            this.loadCarts();
+            this.$store.dispatch('getCarts')
+            // this.loadCarts();
         },
         created() {
             this.proIds = JSON.parse(
@@ -147,7 +148,9 @@
         components: {
             footGuide
         },
-        computed: {},
+        computed: mapState({
+            cartItems: state => state.cartItems
+        }),
         methods: {
             loadCarts() {
                 var that = this;
